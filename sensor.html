@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weather Station in Sowparnika Vishnavam Cheruvaikal Sreekaryam</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      if (!savedTheme) localStorage.setItem('theme', 'light');
+    }
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
+
+    // Replace apiKey with your Firebase Web API Key.
+    const firebaseConfig = {
+      apiKey: "AIzaSyBkSChPp-lfTUzBR1zbe7qtbFpJL2pDwGY",
+      authDomain: "dk-radio-e8950.firebaseapp.com",
+      databaseURL: "https://dk-radio-e8950-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "dk-radio-e8950",
+      storageBucket: "dk-radio-e8950.firebasestorage.app",
+      messagingSenderId: "455198043998",
+      appId: "1:455198043998:web:c80bbec47eb4fb71d8e9cf",
+      measurementId: "G-WXVF1F8HQB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const tempEl = document.getElementById("temperature");
+    const humEl = document.getElementById("humidity");
+    const heatEl = document.getElementById("heatIndex");
+    const dewEl = document.getElementById("dewPoint");
+    const rssiEl = document.getElementById("rssi");
+    const uptimeEl = document.getElementById("uptime");
+    const updatedEl = document.getElementById("updated");
+    const ageEl = document.getElementById("age");
+    const statusEl = document.getElementById("status");
+
+    let lastUpdatedEpoch = 0;
+
+    function updateStamp() {
+      const now = new Date();
+      updatedEl.textContent = now.toLocaleString();
+    }
+
+    function updateAge() {
+      if (!lastUpdatedEpoch) {
+        ageEl.textContent = "--";
+        return;
+      }
+      const ageSec = Math.max(0, Math.floor(Date.now() / 1000 - lastUpdatedEpoch));
+      ageEl.textContent = ageSec + " sec";
+    }
+
+    setInterval(updateAge, 1000);
+
+    onValue(ref(db, "sensor/temperature"), (snapshot) => {
+      const value = snapshot.val();
+      tempEl.textContent = typeof value === "number" ? value.toFixed(1) + " C" : "--";
+      updateStamp();
+      statusEl.textContent = "Connected";
+    }, () => {
+      statusEl.textContent = "Read failed (check Firebase config/rules)";
+    });
+
+    onValue(ref(db, "sensor/humidity"), (snapshot) => {
+      const value = snapshot.val();
+      humEl.textContent = typeof value === "number" ? value.toFixed(1) + " %" : "--";
+      updateStamp();
+    }, () => {
+      statusEl.textContent = "Read failed (check Firebase config/rules)";
+    });
+
+    onValue(ref(db, "sensor/heatIndex"), (snapshot) => {
+      const value = snapshot.val();
+      heatEl.textContent = typeof value === "number" ? value.toFixed(1) + " C" : "--";
+    });
+
+    onValue(ref(db, "sensor/dewPoint"), (snapshot) => {
+      const value = snapshot.val();
+      dewEl.textContent = typeof value === "number" ? value.toFixed(1) + " C" : "--";
+    });
+
+    onValue(ref(db, "sensor/updatedAt"), (snapshot) => {
+      const value = snapshot.val();
+      if (typeof value === "number") {
+        lastUpdatedEpoch = value;
+        updatedEl.textContent = new Date(value * 1000).toLocaleString();
+      }
+      updateAge();
+    });
+
+    onValue(ref(db, "device/rssi"), (snapshot) => {
+      const value = snapshot.val();
+      rssiEl.textContent = typeof value === "number" ? value + " dBm" : "--";
+    });
+
+    onValue(ref(db, "device/uptimeSec"), (snapshot) => {
+      const value = snapshot.val();
+      uptimeEl.textContent = typeof value === "number" ? value + " sec" : "--";
+    });
+
+    const themeBtn = document.getElementById('theme-toggle');
+    const sun = document.getElementById('sun-icon');
+    const moon = document.getElementById('moon-icon');
+
+    const updateIcons = () => {
+      if (document.documentElement.classList.contains('dark')) {
+        sun.classList.remove('hidden');
+        moon.classList.add('hidden');
+      } else {
+        moon.classList.remove('hidden');
+        sun.classList.add('hidden');
+      }
+    };
+
+    updateIcons();
+
+    themeBtn?.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      updateIcons();
+    });
+  </script>
+</head>
+  <body class="min-h-screen bg-slate-50 p-6 text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+  <div class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,rgba(59,130,246,0.12),transparent_28%),radial-gradient(circle_at_80%_5%,rgba(20,184,166,0.1),transparent_24%)] dark:bg-[radial-gradient(circle_at_15%_20%,rgba(95,144,166,0.22),transparent_28%),radial-gradient(circle_at_80%_5%,rgba(154,191,208,0.16),transparent_24%),linear-gradient(160deg,#1f3b4d,#274f63,#4f7d93)]"></div>
+
+  <div class="fixed right-6 top-6 z-50">
+    <button id="theme-toggle" class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-lg transition hover:scale-105 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+      <svg id="sun-icon" class="hidden h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+      <svg id="moon-icon" class="hidden h-5 w-5 text-slate-700 dark:text-slate-100" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+  </div>
+
+  <main class="mx-auto w-full max-w-4xl rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-2xl shadow-slate-200/60 backdrop-blur dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-black/30">
+    <header class="mb-6">
+      <h1 class="text-2xl font-black sm:text-3xl">Weather Station in Sowparnika Vishnavam Cheruvaikal Sreekaryam</h1>
+      <p class="mt-2 text-slate-600 dark:text-slate-300">Live values from Firebase Realtime Database paths sensor/temperature and sensor/humidity.</p>
+    </header>
+
+    <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800/70">
+        <div class="mb-2 text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400">Temperature</div>
+        <div class="text-4xl font-black text-orange-500" id="temperature">--</div>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800/70">
+        <div class="mb-2 text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400">Humidity</div>
+        <div class="text-4xl font-black text-sky-500" id="humidity">--</div>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800/70">
+        <div class="mb-2 text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400">Heat Index</div>
+        <div class="text-4xl font-black" id="heatIndex">--</div>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800/70">
+        <div class="mb-2 text-sm uppercase tracking-wider text-slate-500 dark:text-slate-400">Dew Point</div>
+        <div class="text-4xl font-black text-emerald-500" id="dewPoint">--</div>
+      </article>
+    </section>
+
+    <section class="mt-6 grid gap-4 lg:grid-cols-[1.4fr_0.8fr]">
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div class="rounded-xl bg-slate-50 p-4 dark:bg-slate-900/60"><span class="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Status</span><span id="status" class="mt-1 block font-bold">Connecting...</span></div>
+          <div class="rounded-xl bg-slate-50 p-4 dark:bg-slate-900/60"><span class="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Last update</span><span id="updated" class="mt-1 block font-mono text-sm">--</span></div>
+          <div class="rounded-xl bg-slate-50 p-4 dark:bg-slate-900/60"><span class="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Data age</span><span id="age" class="mt-1 block font-mono text-sm">--</span></div>
+          <div class="rounded-xl bg-slate-50 p-4 dark:bg-slate-900/60"><span class="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">WiFi RSSI</span><span id="rssi" class="mt-1 block font-mono text-sm">--</span></div>
+          <div class="rounded-xl bg-slate-50 p-4 sm:col-span-2 dark:bg-slate-900/60"><span class="block text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Device uptime</span><span id="uptime" class="mt-1 block font-mono text-sm">--</span></div>
+        </div>
+      </div>
+
+      <aside class="rounded-2xl border border-slate-200 bg-blue-50 p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800/70">
+        <p class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Quick link</p>
+        <a class="mt-2 inline-flex rounded-xl bg-blue-600 px-4 py-2 font-semibold text-white transition hover:bg-blue-700 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950" href="index.html">Go to Radio</a>
+        <p class="mt-4 text-sm text-slate-600 dark:text-slate-300">This page now follows the same shared light/dark theme as the other ESP32 pages.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="mt-6 border-t border-slate-200 py-6 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-3 px-4">
+      <span>Weather sensor page</span>
+      <span>•</span>
+      <a href="terms.html" class="font-medium text-blue-600 hover:underline dark:text-teal-300">Terms & Conditions</a>
+    </div>
+  </footer>
+</body>
+</html>

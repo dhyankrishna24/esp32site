@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Savvan Project - ESP32 Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      if (!savedTheme) localStorage.setItem('theme', 'light');
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
+  <div class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_20%_0%,rgba(59,130,246,0.14),transparent_35%),radial-gradient(circle_at_100%_0%,rgba(20,184,166,0.12),transparent_28%)] dark:bg-[radial-gradient(circle_at_20%_0%,rgba(102,227,214,0.2),transparent_35%),radial-gradient(circle_at_100%_0%,rgba(96,165,250,0.18),transparent_28%),linear-gradient(180deg,#0a1221_0%,#07111f_50%,#060d18_100%)]"></div>
+
+  <div class="fixed right-5 top-5 z-50">
+    <button id="theme-toggle" class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-lg transition hover:scale-105 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+      <svg id="sun-icon" class="hidden h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+      <svg id="moon-icon" class="hidden h-5 w-5 text-slate-700 dark:text-slate-100" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+  </div>
+
+  <div class="mx-auto w-[min(1180px,calc(100%-2rem))] py-7">
+    <header class="grid gap-5 lg:grid-cols-[1.4fr_0.9fr]">
+      <section class="rounded-3xl border border-slate-200 bg-white p-7 shadow-2xl shadow-slate-200/60 backdrop-blur transition-colors dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-black/30">
+        <span class="inline-flex rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs uppercase tracking-[0.16em] text-blue-700 dark:border-teal-300/25 dark:bg-teal-300/10 dark:text-teal-200">Saavn Project</span>
+        <h1 class="mt-4 text-4xl font-black leading-tight tracking-tight md:text-5xl">Music browser with the weather-station control layout.</h1>
+        <p class="mt-4 max-w-3xl text-slate-600 dark:text-slate-300">This page is the actual project build. It searches the live Saavn API, shows track metadata, and keeps the UI close to the weather-station dashboard so the whole site feels like one system.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a class="rounded-xl bg-blue-600 px-4 py-2.5 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-blue-700 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950" href="index.html">Back to hub</a>
+          <button class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/60 dark:text-slate-100 dark:hover:bg-slate-700" id="load-demo" type="button">Load demo search</button>
+        </div>
+      </section>
+
+      <section class="rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-200/60 backdrop-blur transition-colors dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-black/30">
+        <div class="grid gap-3 sm:grid-cols-2">
+          <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/70"><p class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Static hosting</p><p class="mt-1 font-semibold">Firebase free plan</p></article>
+          <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/70"><p class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">API</p><p class="mt-1 font-semibold">Live browser fetch</p></article>
+          <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/70"><p class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Playback</p><p class="mt-1 font-semibold">Audio element</p></article>
+          <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/70"><p class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Download</p><p class="mt-1 font-semibold">Direct stream link</p></article>
+        </div>
+      </section>
+    </header>
+
+    <main class="mt-5 grid gap-5 lg:grid-cols-[1.3fr_0.7fr]">
+      <section class="grid gap-5">
+        <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-200/60 backdrop-blur transition-colors dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-black/30">
+          <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs uppercase tracking-wider text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300">Live project</span>
+          <h2 class="mt-3 text-3xl font-bold">Savvan</h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300">Search tracks, inspect artists and albums, and launch audio directly from the live Saavn CDN.</p>
+          <div class="mt-4 flex flex-wrap gap-2 text-xs">
+            <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200">Firebase-hostable</span>
+            <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200">Static HTML</span>
+            <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200">Browser-safe CORS</span>
+            <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200">Weather-station UI</span>
+          </div>
+        </section>
+
+        <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-200/60 backdrop-blur transition-colors dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-black/30">
+          <h2 class="text-2xl font-bold">Search</h2>
+          <form class="mt-4 grid gap-2 md:grid-cols-[1fr_auto_auto]" id="search-form">
+            <input id="query" type="text" placeholder="Search songs, albums, or artists" autocomplete="off" class="h-11 rounded-xl border border-slate-300 bg-white px-3 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:ring-teal-300/60">
+            <select id="quality-search" title="Preferred audio quality" class="h-11 rounded-xl border border-slate-300 bg-white px-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:ring-teal-300/60">
+              <option value="320">320 kbps</option>
+              <option value="160">160 kbps</option>
+              <option value="96">96 kbps</option>
+            </select>
+            <button type="submit" class="h-11 rounded-xl bg-blue-600 px-4 font-semibold text-white transition hover:bg-blue-700 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">Search</button>
+          </form>
+
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:hover:bg-slate-700" type="button" data-query="Arijit Singh">Arijit Singh</button>
+            <button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:hover:bg-slate-700" type="button" data-query="Shreya Ghoshal">Shreya Ghoshal</button>
+            <button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:hover:bg-slate-700" type="button" data-query="Anirudh Ravichander">Anirudh Ravichander</button>
+            <button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:hover:bg-slate-700" type="button" data-query="A. R. Rahman">A. R. Rahman</button>
+            <button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:hover:bg-slate-700" type="button" data-query="Pritam">Pritam</button>
+            <button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:hover:bg-slate-700" type="button" data-query="Hindi Hits">Hindi Hits</button>
+          </div>
+
+          <p class="mt-4 text-xl font-semibold" id="status">Ready</p>
+          <div class="mt-3 grid gap-3" id="results"></div>
+        </section>
+
+        <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-200/60 backdrop-blur transition-colors dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-black/30">
+          <h2 class="text-2xl font-bold">Project notes</h2>
+          <div class="mt-4 grid gap-3 md:grid-cols-3">
+            <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/75"><h3 class="font-semibold">Firebase hosting</h3><p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Point the Hosting public folder at esp32site. The page is pure HTML, Tailwind, and JS.</p></article>
+            <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/75"><h3 class="font-semibold">Live API</h3><p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Search hits come straight from https://saavn.sumit.co/api/search/songs.</p></article>
+            <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/75"><h3 class="font-semibold">Why this layout</h3><p class="mt-2 text-sm text-slate-600 dark:text-slate-300">The right-hand control panel mirrors the weather-station page so the site feels consistent.</p></article>
+          </div>
+        </section>
+      </section>
+
+      <aside class="rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-200/60 backdrop-blur transition-colors dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-black/30 lg:sticky lg:top-5 lg:h-fit">
+        <div class="grid gap-4">
+          <div class="grid min-h-64 place-items-center rounded-2xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/75">
+            <img id="now-cover" src="https://placehold.co/640x640/0b1220/66e3d6?text=Saavn" alt="Now playing cover" class="aspect-square w-3/4 max-w-56 rounded-2xl object-cover shadow-2xl">
+          </div>
+
+          <div>
+            <h3 id="now-title" class="text-xl font-bold">No track selected</h3>
+            <p id="now-artist" class="mt-1 text-slate-600 dark:text-slate-300">Use the search box to choose a song</p>
+            <p id="now-album" class="text-slate-500 dark:text-slate-400">Waiting</p>
+            <p id="now-detail" class="text-sm text-slate-500 dark:text-slate-400">Press play on any result</p>
+          </div>
+
+          <div class="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700" aria-hidden="true">
+            <div class="h-full w-0 rounded-full bg-gradient-to-r from-blue-500 to-teal-400 dark:from-teal-300 dark:to-sky-400" id="progress"></div>
+          </div>
+          <div class="text-sm text-slate-500 dark:text-slate-400" id="time">0:00 / 0:00</div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <button class="rounded-xl border border-slate-300 bg-white px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/70 dark:text-slate-100 dark:hover:bg-slate-700" id="prev-track" type="button">Prev</button>
+            <button class="rounded-xl border border-slate-300 bg-white px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/70 dark:text-slate-100 dark:hover:bg-slate-700" id="next-track" type="button">Next</button>
+            <button class="rounded-xl bg-blue-600 px-3 py-2 font-semibold text-white transition hover:bg-blue-700 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950" id="play-toggle" type="button">Play</button>
+            <button class="rounded-xl border border-slate-300 bg-white px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/70 dark:text-slate-100 dark:hover:bg-slate-700" id="download-track" type="button">Download</button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <article class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/75"><p class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Queue</p><p class="font-semibold">Live search</p></article>
+            <article class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/75"><p class="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">Quality</p><p class="font-semibold">320 preferred</p></article>
+          </div>
+
+          <label class="grid gap-1 text-sm text-slate-600 dark:text-slate-300">Preferred stream
+            <select id="quality-control" class="h-11 rounded-xl border border-slate-300 bg-white px-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:ring-teal-300/60">
+              <option value="320">320 kbps</option>
+              <option value="160">160 kbps</option>
+              <option value="96">96 kbps</option>
+            </select>
+          </label>
+
+          <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+            <input id="autoplay" type="checkbox" class="h-4 w-4 rounded border-slate-300 bg-white text-blue-600 focus:ring-blue-300 dark:border-slate-600 dark:bg-slate-800 dark:text-teal-300 dark:focus:ring-teal-300">
+            <span>Autoplay next track: disabled</span>
+          </label>
+
+          <audio id="player" preload="none" class="w-full"></audio>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <footer class="mt-6 border-t border-slate-200 py-6 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-3 px-4">
+      <span>Jio Savvan API app</span>
+      <span>•</span>
+      <a href="terms.html" class="font-medium text-blue-600 hover:underline dark:text-teal-300">Terms & Conditions</a>
+    </div>
+  </footer>
+  <script>
+    const themeButton = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+
+    const updateIcons = () => {
+      if (document.documentElement.classList.contains('dark')) {
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      } else {
+        moonIcon.classList.remove('hidden');
+        sunIcon.classList.add('hidden');
+      }
+    };
+
+    updateIcons();
+
+    themeButton?.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      updateIcons();
+    });
+  </script>
+</body>
+</html>

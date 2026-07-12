@@ -1,0 +1,148 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>D K Radio | Premium Stream</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+		tailwind.config = { darkMode: 'class' };
+		const savedTheme = localStorage.getItem('theme');
+		if (savedTheme === 'dark') {
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.classList.remove('dark');
+			if (!savedTheme) localStorage.setItem('theme', 'light');
+		}
+	</script>
+</head>
+<body class="min-h-screen bg-slate-50 p-6 text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+	<div class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,rgba(59,130,246,0.12),transparent_28%),radial-gradient(circle_at_80%_5%,rgba(20,184,166,0.1),transparent_24%)] dark:bg-[radial-gradient(circle_at_15%_20%,rgba(95,144,166,0.22),transparent_28%),radial-gradient(circle_at_80%_5%,rgba(154,191,208,0.16),transparent_24%),linear-gradient(160deg,#1f3b4d,#274f63,#4f7d93)]"></div>
+	<div class="fixed right-6 top-6 z-50">
+		<button id="theme-toggle" class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-lg transition hover:scale-105 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+			<svg id="sun-icon" class="hidden h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+			<svg id="moon-icon" class="hidden h-5 w-5 text-slate-700 dark:text-slate-100" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+		</button>
+	</div>
+
+	<main class="mx-auto w-full max-w-4xl rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-2xl shadow-slate-200/60 backdrop-blur dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-black/30">
+		<header class="mb-6 flex flex-wrap items-center justify-between gap-4">
+			<div>
+				<h1 class="text-2xl font-black sm:text-3xl">Radio Portal</h1>
+				<p class="mt-1 text-slate-600 dark:text-slate-300">Premium stream picker </p>
+			</div>
+			<a href="index.html" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/60 dark:text-slate-100 dark:hover:bg-slate-700">Back to hub</a>
+		</header>
+
+		<section id="player-container" class="mb-6 rounded-3xl border border-slate-200 bg-slate-50 p-6 text-center shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-800/70">
+			<span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">Current Stream</span>
+			<h2 id="player_tit" class="mt-4 text-3xl font-black tracking-tight text-slate-900 dark:text-white">Ready to Play</h2>
+			<div class="mx-auto mt-6 max-w-md">
+				<audio id="player" controls class="h-12 w-full opacity-90 hover:opacity-100"></audio>
+			</div>
+		</section>
+
+		<div class="space-y-6">
+			<div class="flex items-center gap-4 px-2">
+				<h3 class="text-sm font-black uppercase tracking-widest text-slate-400">Available Stations</h3>
+				<div class="h-[1px] flex-1 bg-slate-200 dark:bg-slate-800"></div>
+			</div>
+
+			<div id="radio-stations-list" class="grid grid-cols-1 gap-4 sm:grid-cols-2"></div>
+
+			<div id="radioStatus" class="pt-6 text-center text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400 animate-pulse">
+				Connecting to Firebase...
+			</div>
+		</div>
+	</main>
+
+	<footer class="mt-6 border-t border-slate-200 py-6 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
+		<div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-3 px-4">
+			<span>D K Radio</span>
+			<span>•</span>
+			<a href="terms.html" class="font-medium text-blue-600 hover:underline dark:text-teal-300">Terms & Conditions</a>
+		</div>
+	</footer>
+
+	<script type="module">
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+		import { getDatabase, onValue, ref } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
+
+		const firebaseConfig = {
+			apiKey: "AIzaSyBkSChPp-lfTUzBR1zbe7qtbFpJL2pDwGY",
+			authDomain: "dk-radio-e8950.firebaseapp.com",
+			databaseURL: "https://dk-radio-e8950-default-rtdb.asia-southeast1.firebasedatabase.app",
+			projectId: "dk-radio-e8950",
+			storageBucket: "dk-radio-e8950.firebasestorage.app",
+			messagingSenderId: "455198043998",
+			appId: "1:455198043998:web:c80bbec47eb4fb71d8e9cf",
+			measurementId: "G-WXVF1F8HQB"
+		};
+
+		const app = initializeApp(firebaseConfig);
+		const db = getDatabase(app);
+
+		const player = document.getElementById("player");
+		const container = document.getElementById("player-container");
+		const titleBox = document.getElementById("player_tit");
+		const stationList = document.getElementById("radio-stations-list");
+		const statusBox = document.getElementById("radioStatus");
+
+		function playStream(streamUrl, title) {
+			player.src = streamUrl;
+			player.play().catch(() => statusBox.textContent = "Autoplay Blocked");
+			titleBox.textContent = title;
+			container.classList.add('playing-glow');
+			statusBox.textContent = "Now Streaming: " + title;
+		}
+
+		function renderStations(stations) {
+			stationList.innerHTML = "";
+			stations.forEach((station) => {
+				const btn = document.createElement("button");
+				btn.className = "flex items-center gap-4 p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-left hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-xl hover:-translate-y-1 transition-all group";
+				btn.innerHTML = `
+					<div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+						<svg class="w-4 h-4 text-slate-400 group-hover:text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"></path></svg>
+					</div>
+					<div>
+						<div class="text-sm font-bold dark:text-white">${station.title}</div>
+						<div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Stream</div>
+					</div>
+				`;
+				btn.onclick = () => playStream(station.url, station.title);
+				stationList.appendChild(btn);
+			});
+			statusBox.textContent = "Systems Live";
+		}
+
+		onValue(ref(db, "streams"), (snapshot) => {
+			const data = snapshot.val();
+			if (!data) return;
+			const stations = Object.keys(data).map(k => data[k]).filter(s => s.title && s.url);
+			renderStations(stations);
+		});
+
+		// Theme Toggle Logic
+		const themeBtn = document.getElementById('theme-toggle');
+		const sun = document.getElementById('sun-icon');
+		const moon = document.getElementById('moon-icon');
+
+		const updateIcons = () => {
+			if (document.documentElement.classList.contains('dark')) {
+				sun.classList.remove('hidden'); moon.classList.add('hidden');
+			} else {
+				moon.classList.remove('hidden'); sun.classList.add('hidden');
+			}
+		};
+		updateIcons();
+
+		themeBtn.addEventListener('click', () => {
+			document.documentElement.classList.toggle('dark');
+			localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+			updateIcons();
+		});
+	</script>
+</body>
+</html>

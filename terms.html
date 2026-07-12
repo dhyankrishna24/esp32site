@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Terms & Conditions | ESP32 Site</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      if (!savedTheme) localStorage.setItem('theme', 'light');
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-slate-50 p-6 text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+  <div class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_20%_0%,rgba(59,130,246,0.12),transparent_35%),radial-gradient(circle_at_100%_0%,rgba(20,184,166,0.1),transparent_28%)] dark:bg-[radial-gradient(circle_at_20%_0%,rgba(102,227,214,0.16),transparent_35%),radial-gradient(circle_at_100%_0%,rgba(96,165,250,0.14),transparent_28%),linear-gradient(180deg,#0a1221_0%,#07111f_50%,#060d18_100%)]"></div>
+  <div class="fixed right-5 top-5 z-50">
+    <button id="theme-toggle" class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-lg transition hover:scale-105 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+      <svg id="sun-icon" class="hidden h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+      <svg id="moon-icon" class="hidden h-5 w-5 text-slate-700 dark:text-slate-100" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+    </button>
+  </div>
+
+  <main class="mx-auto w-full max-w-5xl rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-2xl shadow-slate-200/60 backdrop-blur dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-black/30">
+    <header class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 dark:border-slate-700">
+      <div>
+        <span class="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-700 dark:bg-amber-400/15 dark:text-amber-300">Legal</span>
+        <h1 class="mt-3 text-3xl font-black">Terms & Conditions</h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-300">Applies to the entire ESP32 site, especially the Jio Savvan music page and the radio page.</p>
+      </div>
+      <a href="index.html" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800/60 dark:text-slate-100 dark:hover:bg-slate-700">Back to hub</a>
+    </header>
+
+    <section class="mt-6 grid gap-4 md:grid-cols-2">
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/70">
+        <h2 class="text-xl font-bold">General use</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">This site is a personal project hub. Use it for testing, learning, and demonstration only. You are responsible for your use of any linked content, streams, or external services.</p>
+      </article>
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/70">
+        <h2 class="text-xl font-bold">No affiliation</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">The Jio Savvan page is not affiliated with, endorsed by, or sponsored by Jio, Saavn, or any related rights holder. Names are used only to describe the source being accessed.</p>
+      </article>
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/70">
+        <h2 class="text-xl font-bold">Music page terms</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">The Savvan page fetches public API results and plays direct CDN links when available. You must comply with all applicable copyright, licensing, and platform rules. Do not use this site to bypass access controls, download restricted content, or violate creator rights.</p>
+      </article>
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/70">
+        <h2 class="text-xl font-bold">Radio page terms</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">The radio page shows streams sourced from Firebase-managed links or other user-provided endpoints. You are responsible for verifying that every stream you publish or play is legal for your use and distribution.</p>
+      </article>
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/70">
+        <h2 class="text-xl font-bold">Service limits</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">The site is provided as-is without warranty. Availability, search results, and playback may change or fail based on third-party services, network conditions, or browser restrictions.</p>
+      </article>
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/70">
+        <h2 class="text-xl font-bold">Acceptable use</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">Do not use the site for unlawful redistribution, scraping that violates service terms, malware, harassment, or any activity that could harm rights holders or other users.</p>
+      </article>
+    </section>
+
+    <section class="mt-6 rounded-2xl border border-slate-200 bg-blue-50 p-5 dark:border-slate-700 dark:bg-slate-800/70">
+      <h2 class="text-xl font-bold">Contact and updates</h2>
+      <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">If you change the site structure or add new streaming sources, update this page to match. The saved theme preference is shared across pages through localStorage.theme.</p>
+    </section>
+  </main>
+
+  <script>
+    const themeButton = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+    const updateIcons = () => {
+      if (document.documentElement.classList.contains('dark')) {
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      } else {
+        moonIcon.classList.remove('hidden');
+        sunIcon.classList.add('hidden');
+      }
+    };
+    updateIcons();
+    themeButton?.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      updateIcons();
+    });
+  </script>
+</body>
+</html>

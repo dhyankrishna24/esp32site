@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details - ESP32 Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        };
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            if (!savedTheme) localStorage.setItem('theme', 'light');
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-slate-50 font-sans pb-20 text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+
+    <div class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_20%_0%,rgba(59,130,246,0.12),transparent_35%),radial-gradient(circle_at_100%_0%,rgba(20,184,166,0.1),transparent_28%)] dark:bg-[radial-gradient(circle_at_20%_0%,rgba(102,227,214,0.16),transparent_35%),radial-gradient(circle_at_100%_0%,rgba(96,165,250,0.14),transparent_28%),linear-gradient(180deg,#0a1221_0%,#07111f_50%,#060d18_100%)]"></div>
+
+    <div class="fixed right-5 top-5 z-50">
+        <button id="theme-toggle" class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-lg transition hover:scale-105 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+            <svg id="sun-icon" class="hidden h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+            <svg id="moon-icon" class="hidden h-5 w-5 text-slate-700 dark:text-slate-100" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+        </button>
+    </div>
+
+    <nav class="p-6">
+        <a href="index.html" class="font-medium text-blue-600 transition hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">&larr; Back to Dashboard</a>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4">
+        <header class="mb-10">
+            <h1 class="text-4xl font-bold text-slate-900 dark:text-white">Smart Home Hub</h1>
+            <p class="mt-2 text-slate-500 dark:text-slate-400">ESP32-based MQTT gateway for centralized device management.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-2 space-y-8">
+                
+                <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-800">
+                    <h2 class="mb-4 border-b border-slate-200 pb-2 text-xl font-semibold dark:border-slate-700">Project Description</h2>
+                    <p class="leading-relaxed text-slate-600 dark:text-slate-300">
+                        This project serves as the central brain for the local IoT network. It connects to the WiFi network and uses 
+                        the PubSubClient library to communicate with a Mosquitto MQTT broker. It handles relay switching for 
+                        high-voltage appliances and monitors ambient light levels using an LDR.
+                    </p>
+                </section>
+
+                <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-800">
+                    <h2 class="mb-4 border-b border-slate-200 pb-2 text-xl font-semibold dark:border-slate-700">Components</h2>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-300">
+                        <li>ESP32 DevKit V1</li>
+                        <li>4-Channel 5V Relay Module</li>
+                        <li>LDR (Light Dependent Resistor)</li>
+                        <li>Hi-Link HLK-PM01 (5V Step-down)</li>
+                        <li>Jumper Wires & Breadboard</li>
+                    </ul>
+                </section>
+
+                <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-md dark:border-slate-700 dark:bg-slate-800">
+                    <h2 class="mb-4 border-b border-slate-200 pb-2 text-xl font-semibold dark:border-slate-700">Main Sketch (.ino)</h2>
+                    <pre class="overflow-x-auto rounded-lg bg-slate-900 p-4 text-cyan-300 dark:bg-slate-950"><code>// Example Snippet
+void setup() {
+  Serial.begin(115200);
+  pinMode(RELAY_PIN, OUTPUT);
+  connectToWiFi();
+}
+
+void loop() {
+  if (!client.connected()) reconnect();
+  client.loop();
+}</code></pre>
+                </section>
+            </div>
+
+            <div class="lg:col-span-1">
+                <div class="sticky top-6 rounded-xl border-2 border-blue-500 bg-white p-6 shadow-lg dark:bg-slate-800">
+                    <h2 class="mb-6 text-center text-xl font-semibold">Live Control</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium text-slate-600 dark:text-slate-300">Main Light</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-11 h-6 bg-slate-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium text-slate-600 dark:text-slate-300">Fan Speed</span>
+                            <input type="range" class="w-24 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-blue-500">
+                        </div>
+
+                        <hr class="border-slate-200 dark:border-slate-700">
+
+                        <div class="grid grid-cols-2 gap-4 text-center">
+                            <div class="rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
+                                <p class="text-xs uppercase text-slate-500">Uptime</p>
+                                <p class="text-lg font-bold text-green-500 dark:text-green-400">14h 22m</p>
+                            </div>
+                            <div class="rounded-lg bg-slate-50 p-3 dark:bg-slate-900">
+                                <p class="text-xs uppercase text-slate-500">RSSi</p>
+                                <p class="text-lg font-bold text-blue-600 dark:text-blue-400">-65 dBm</p>
+                            </div>
+                        </div>
+
+                        <button onclick="alert('Sending Reset Command...')" class="w-full rounded-lg border border-red-200 bg-red-50 py-3 font-semibold text-red-600 transition hover:bg-red-100 dark:border-red-900 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50">
+                            Restart ESP32
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="mt-6 border-t border-slate-200 py-6 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-3 px-4">
+            <span>Project details</span>
+            <span>•</span>
+            <a href="terms.html" class="font-medium text-blue-600 hover:underline dark:text-teal-300">Terms & Conditions</a>
+        </div>
+    </footer>
+
+</body>
+</html>
