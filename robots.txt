@@ -1,2 +1,4 @@
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://dhyankrishna24.github.io/esp32site/sitemap.xml
