@@ -3,47 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP32 Project Hub & Dhyan Krishna M</title>
-    <meta name="description" content="Official project hub and IoT portfolio of Dhyan Krishna M. Explore ESP32 weather stations, smart home systems, web apps, and microcontroller projects.">
+    <title>EduSphere | Academic Knowledge & Seminar Slides Repository</title>
+    <meta name="description" content="Free academic repository for university students, educators, and researchers. Explore, preview, and download seminar presentations, PPT slides, study notes, and formula sheets.">
     <meta name="author" content="Dhyan Krishna M">
-    <meta name="keywords" content="Dhyan Krishna M, Dhyan Krishna, ESP32 Project Hub, IoT Projects, ESP32 Weather Station, Smart Home, Web Developer">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://dhyankrishna24.github.io/esp32site/">
-
+    
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="ESP32 Project Hub & Dhyan Krishna M">
-    <meta property="og:description" content="Official project hub and IoT portfolio of Dhyan Krishna M. Explore ESP32 weather stations, smart home systems, web apps, and microcontroller projects.">
-    <meta property="og:url" content="https://dhyankrishna24.github.io/esp32site/">
-    <meta property="og:site_name" content="Dhyan's Project Dashboard">
+    <meta property="og:title" content="EduSphere | Academic Knowledge & Seminar Slides Repository">
+    <meta property="og:description" content="Explore, preview, and download seminar presentations, PPT slides, study notes, and formula sheets.">
 
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="ESP32 Project Hub & Dhyan Krishna M">
-    <meta name="twitter:description" content="Official project hub and IoT portfolio of Dhyan Krishna M.">
-
-    <!-- Schema.org WebSite & Person Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Dhyan Krishna M - Project Hub",
-      "url": "https://dhyankrishna24.github.io/esp32site/",
-      "author": {
-        "@type": "Person",
-        "name": "Dhyan Krishna M",
-        "url": "https://dhyankrishna24.github.io/esp32site/about.html",
-        "sameAs": [
-          "https://github.com/dhyankrishna24"
-        ]
-      }
-    }
-    </script>
-    <!-- Tailwind CSS CDN (direct versioned URL to prevent crawler redirect error) -->
+    <!-- Tailwind CSS (direct versioned URL for crawler stability) -->
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class'
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
         };
 
         const savedTheme = localStorage.getItem('theme');
@@ -54,150 +40,475 @@
             if (!savedTheme) localStorage.setItem('theme', 'light');
         }
     </script>
+    <style>
+        /* Smooth scrolling and custom scrollbar */
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.7); }
+    </style>
 </head>
-<body class="min-h-screen bg-slate-50 font-sans text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+<body class="min-h-screen bg-slate-50 font-sans text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 selection:bg-blue-500 selection:text-white">
 
-    <div class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_20%_0%,rgba(59,130,246,0.12),transparent_35%),radial-gradient(circle_at_100%_0%,rgba(20,184,166,0.1),transparent_28%)] dark:bg-[radial-gradient(circle_at_20%_0%,rgba(102,227,214,0.16),transparent_35%),radial-gradient(circle_at_100%_0%,rgba(96,165,250,0.14),transparent_28%),linear-gradient(180deg,#0a1221_0%,#07111f_50%,#060d18_100%)]"></div>
+    <!-- Ambient background glows -->
+    <div class="fixed inset-0 -z-10 pointer-events-none bg-[radial-gradient(circle_at_15%_10%,rgba(59,130,246,0.12),transparent_35%),radial-gradient(circle_at_85%_20%,rgba(20,184,166,0.1),transparent_30%)] dark:bg-[radial-gradient(circle_at_15%_10%,rgba(59,130,246,0.18),transparent_40%),radial-gradient(circle_at_85%_20%,rgba(20,184,166,0.14),transparent_35%),linear-gradient(180deg,#0a1120_0%,#060c18_100%)]"></div>
 
-    <!-- Theme Toggle -->
-    <div class="fixed right-5 top-5 z-50">
-        <button id="theme-toggle" class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-lg transition hover:scale-105 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" aria-label="Toggle Theme">
-            <svg id="sun-icon" class="hidden h-5 w-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
-            <svg id="moon-icon" class="hidden h-5 w-5 text-slate-700 dark:text-slate-100" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-        </button>
-    </div>
-
-    <!-- Header & Navigation Bar -->
-    <header class="max-w-6xl mx-auto px-4 pt-10 pb-6">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
-            <div class="text-center md:text-left">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/80 dark:bg-teal-950/60 text-blue-700 dark:text-teal-300 text-xs font-semibold mb-2">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>IoT Engineering & Web Showcase</span>
-                </div>
-                <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-600 dark:text-teal-300">Dhyan's Project Dashboard</h1>
-                <p class="mt-1 text-slate-500 dark:text-slate-400">Control & Monitoring Interface • Embedded Systems • Web Applications</p>
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-md dark:border-slate-800/80 dark:bg-slate-900/80">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
+            
+            <!-- Logo & Brand -->
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-2.5 group">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-md shadow-blue-500/25 transition-transform group-hover:scale-105">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Edu<span class="text-blue-600 dark:text-teal-400">Sphere</span></span>
+                            <span class="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:bg-teal-950 dark:text-teal-300">Academic</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">Seminar Slides & Academic Portal</p>
+                    </div>
+                </a>
             </div>
-            <div class="flex flex-wrap items-center justify-center gap-3">
-                <a href="about.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white font-semibold text-sm shadow-md hover:scale-105 active:scale-95 transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                    <span>About Myself (Portfolio)</span>
+
+            <!-- Desktop Links -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+                <a href="#slides-section" class="transition hover:text-blue-600 dark:hover:text-teal-300">Presentations & PPTs</a>
+                <a href="#formulas-section" class="transition hover:text-blue-600 dark:hover:text-teal-300">Formula Sheets</a>
+                <a href="about.html" class="transition hover:text-blue-600 dark:hover:text-teal-300">About Creator</a>
+                <a href="#iot-lab-section" class="flex items-center gap-1 text-blue-600 dark:text-teal-300 font-semibold hover:underline">
+                    <span>ESP32 Hardware Lab</span>
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
-                <a href="https://github.com/dhyankrishna24" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium text-sm transition">
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    <span>GitHub</span>
-                </a>
+            </nav>
+
+            <!-- Actions: How to add slides + Theme Toggle -->
+            <div class="flex items-center gap-3">
+                <button onclick="openAddSlidesModal()" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-100 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
+                    <svg class="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>Add Slides / PPT</span>
+                </button>
+
+                <!-- Dark / Light Mode Toggle Button -->
+                <button id="theme-toggle" aria-label="Toggle Theme" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:scale-105 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+                    <svg id="sun-icon" class="hidden h-4 w-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+                    <svg id="moon-icon" class="hidden h-4 w-4 text-slate-700 dark:text-slate-100" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 pb-20">
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden py-16 sm:py-24 border-b border-slate-200/60 dark:border-slate-800/60">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
             
-            <!-- Spotlight Card: About Me / Portfolio -->
-            <div class="card rounded-xl border-2 border-blue-500/40 dark:border-teal-400/40 bg-gradient-to-br from-blue-50/70 via-white to-teal-50/60 dark:from-slate-800 dark:via-slate-800/95 dark:to-slate-900 p-6 shadow-xl transition-transform hover:-translate-y-1">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white dark:bg-teal-400 dark:text-slate-950">About Me</span>
-                    <span class="inline-flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Live Profile
-                    </span>
-                </div>
-                <h2 class="text-xl font-bold mb-2 text-slate-900 dark:text-white">Dhyan Krishna M</h2>
-                <p class="mb-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                    Personal website & portfolio. Discover my bio, IoT firmware stack (ESP32, MQTT, C++), web development skills, interactive hardware lab, and contact details.
-                </p>
-                <a href="about.html" class="inline-block w-full rounded-lg bg-gradient-to-r from-blue-600 to-teal-500 py-2.5 text-center font-semibold text-white shadow transition hover:from-blue-700 hover:to-teal-600 dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
-                    Explore My Website &rarr;
-                </a>
+            <!-- Pill Announcement -->
+            <div class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/70 px-4 py-1.5 text-xs font-medium text-blue-700 shadow-sm backdrop-blur dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-300 mb-6">
+                <span class="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span>
+                <span>Open Educational Resource Library</span>
+                <span class="text-blue-400">•</span>
+                <span>Free Seminar Slides & Notes</span>
             </div>
 
-            <!-- Weather Station Card -->
-            <div class="card rounded-xl border border-slate-200 bg-white p-6 shadow-lg transition-transform hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700 dark:bg-green-900 dark:text-yellow-300">Local Link</span>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white">
+                Academic Knowledge & <br class="hidden sm:inline">
+                <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-400 bg-clip-text text-transparent">Seminar Slides Hub</span>
+            </h1>
+
+            <p class="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-slate-600 dark:text-slate-300">
+                A centralized, open-access repository for university seminar presentations, PowerPoint decks, study notes, formula cheat sheets, and practical engineering guides.
+            </p>
+
+            <!-- Search Bar in Hero -->
+            <div class="mx-auto mt-8 max-w-xl">
+                <div class="relative flex items-center">
+                    <input id="hero-search-input" type="text" placeholder="Search seminar topics, algorithms, IoT, physics..." class="w-full rounded-2xl border border-slate-300 bg-white/90 py-4 pl-12 pr-28 text-sm shadow-xl backdrop-blur focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/90 dark:text-white dark:focus:border-teal-400 dark:focus:ring-teal-400/10">
+                    <div class="pointer-events-none absolute left-4 text-slate-400">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <button onclick="document.getElementById('slides-section').scrollIntoView({behavior: 'smooth'})" class="absolute right-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-md transition hover:bg-blue-700 dark:bg-gradient-to-r dark:from-teal-400 dark:to-blue-500 dark:text-slate-950">
+                        Explore
+                    </button>
                 </div>
-                <h2 class="text-xl font-semibold mb-2">Weather Station</h2>
-                <p class="mb-4 text-sm text-slate-500 dark:text-slate-400">BME280 sensor data served via WebServer library. Visualized using Chart.js.</p>
-                <a href="weather_station.html" class="inline-block w-full rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-500 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
-                    Open Project &rarr;
-                </a>
             </div>
 
-            <!-- JioSaavn Music App Card -->
-            <div class="card rounded-xl border border-slate-200 bg-white p-6 shadow-lg transition-transform hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700 dark:bg-green-900 dark:text-yellow-300">Local Link</span>
+            <!-- Quick Stats -->
+            <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4 max-w-3xl mx-auto">
+                <div class="rounded-xl border border-slate-200/80 bg-white/60 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/40">
+                    <div class="text-2xl font-black text-blue-600 dark:text-teal-400" id="stat-slides-count">10+</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Seminar Slide Decks</div>
                 </div>
-                <h2 class="text-xl font-semibold mb-2">JioSavvan API app</h2>
-                <p class="mb-4 text-sm text-slate-500 dark:text-slate-400">Search songs, play tracks, inspect metadata, and open direct stream links from a fully static UI.</p>
-                <a href="savvan.html" class="inline-block w-full rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-500 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
-                    Open Project &rarr;
-                </a>
-            </div>
-
-            <!-- GitHub Card -->
-            <div class="card rounded-xl border border-slate-200 bg-white p-6 shadow-lg transition-transform hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700 dark:bg-green-900 dark:text-yellow-300">Local Link</span>
+                <div class="rounded-xl border border-slate-200/80 bg-white/60 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/40">
+                    <div class="text-2xl font-black text-indigo-600 dark:text-indigo-400">5</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Core Disciplines</div>
                 </div>
-                <h2 class="text-xl font-semibold mb-2">My Github</h2>
-                <p class="mb-4 text-sm text-slate-500 dark:text-slate-400">Public repositories, microcontroller code, and open source projects.</p>
-                <a href="https://github.com/dhyankrishna24" target="_blank" rel="noopener noreferrer" class="inline-block w-full rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-500 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
-                    Open Project &rarr;
-                </a>
-            </div>
-
-            <!-- ESP32 LED Control -->
-            <div class="card rounded-xl border border-slate-200 bg-white p-6 shadow-lg transition-transform hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700 dark:bg-green-900 dark:text-yellow-300">Local Link</span>
+                <div class="rounded-xl border border-slate-200/80 bg-white/60 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/40">
+                    <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400">100%</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Free & Open Access</div>
                 </div>
-                <h2 class="text-xl font-semibold mb-2">Esp32 led control</h2>
-                <p class="mb-4 text-sm text-slate-500 dark:text-slate-400">Esp32 remote led control using web server library and a simple web interface with buttons to toggle the led state.</p>
-                <a href="led_control.html" class="inline-block w-full rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-500 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
-                    Open Project &rarr;
-                </a>
-            </div>
-
-            <!-- Smart Home Hub -->
-            <div class="card rounded-xl border border-slate-200 bg-white p-6 shadow-lg transition-transform hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-500 dark:bg-slate-700 dark:text-slate-300">Architecture</span>
+                <div class="rounded-xl border border-slate-200/80 bg-white/60 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/40">
+                    <div class="text-2xl font-black text-amber-600 dark:text-amber-400">Instant</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">In-Browser Preview</div>
                 </div>
-                <h2 class="text-xl font-semibold mb-2">Smart Home Hub</h2>
-                <p class="mb-4 text-sm text-slate-500 dark:text-slate-400">ESP32-based MQTT gateway for controlling living room lighting, fans, and sensors.</p>
-                <a href="details.html" class="inline-block w-full rounded-lg bg-blue-600 py-2 text-center font-medium text-white transition hover:bg-blue-500 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
-                    View Details &rarr;
-                </a>
-            </div>
-
-            <!-- Security Camera -->
-            <div class="card rounded-xl border border-slate-200 bg-white p-6 shadow-lg transition-transform hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-500 dark:bg-slate-700 dark:text-slate-300">Development</span>
-                </div>
-                <h2 class="text-xl font-semibold mb-2">Security Camera</h2>
-                <p class="mb-4 text-sm text-slate-500 dark:text-slate-400">ESP32-CAM stream with face detection and motion alerts via Telegram.</p>
-                <a href="#" class="inline-block w-full cursor-not-allowed rounded-lg bg-slate-200 py-2 text-center font-medium text-slate-500 dark:bg-slate-700 dark:text-slate-300">
-                    Offline
-                </a>
             </div>
 
         </div>
+    </section>
+
+    <!-- Practical IoT & ESP32 Lab Spotlight Banner -->
+    <section id="iot-lab-section" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div class="relative overflow-hidden rounded-3xl border border-blue-200/80 bg-gradient-to-br from-blue-500/10 via-teal-500/5 to-indigo-500/10 p-6 sm:p-8 shadow-xl dark:border-slate-700/80 dark:bg-gradient-to-br dark:from-slate-900 dark:via-blue-950/20 dark:to-slate-900">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+                <div class="space-y-2 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-1.5 rounded-full bg-teal-100 px-3 py-1 text-xs font-bold text-teal-800 dark:bg-teal-900/40 dark:text-teal-300">
+                        <span class="h-2 w-2 rounded-full bg-teal-500"></span>
+                        Hands-On Hardware Engineering Lab
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+                        Connect Theory to Practice: <span class="text-blue-600 dark:text-teal-300">ESP32 IoT Hub</span>
+                    </h2>
+                    <p class="max-w-2xl text-sm sm:text-base text-slate-600 dark:text-slate-300">
+                        Explore our live microcontroller subpage featuring real-time Firebase telemetry, weather station sensor metrics, remote LED controllers, and IoT experiments.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <a href="esp32/index.html" class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition hover:bg-blue-700 hover:scale-105 active:scale-95 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
+                        <span>Launch ESP32 Project Hub</span>
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                    <a href="esp32/weather_station.html" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white/80 px-4 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-200 dark:hover:bg-slate-700">
+                        <span>Live Weather Telemetry</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Presentations / Slides Section -->
+    <main id="slides-section" class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-teal-400">Presentation Library</span>
+                <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Seminar Slides & Presentations</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Browse, search, inspect topic outlines, and preview or download slides for your classes and seminars.</p>
+            </div>
+            
+            <div id="results-count" class="text-xs font-medium text-slate-500 dark:text-slate-400">
+                Loading presentations...
+            </div>
+        </div>
+
+        <!-- Filter Controls Toolbar -->
+        <div class="mt-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            
+            <!-- Subject Category Filters -->
+            <div class="flex flex-wrap items-center gap-2" id="category-filters">
+                <button data-category="All" class="category-btn active rounded-xl bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm transition dark:bg-teal-400 dark:text-slate-950">
+                    All Categories
+                </button>
+                <button data-category="Computer Science" class="category-btn rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600">
+                    Computer Science & Cyber
+                </button>
+                <button data-category="Biology & Health" class="category-btn rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600">
+                    Biology & Health
+                </button>
+                <button data-category="Economics & Social Studies" class="category-btn rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600">
+                    Economics & Finance
+                </button>
+                <button data-category="Geography & Social Studies" class="category-btn rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600">
+                    Geography & Rivers
+                </button>
+                <button data-category="Electronics & IoT" class="category-btn rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600">
+                    Electronics & IoT
+                </button>
+                <button data-category="Study Notes" class="category-btn rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600">
+                    Study Notes & Speeches
+                </button>
+            </div>
+
+            <!-- Format Dropdown & Secondary Search -->
+            <div class="flex items-center gap-3">
+                <select id="format-filter" class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                    <option value="All">All Formats</option>
+                    <option value="PPTX">PowerPoint (PPTX)</option>
+                    <option value="Interactive HTML">Interactive HTML / SmartBoard</option>
+                    <option value="PDF">PDF Documents</option>
+                </select>
+                
+                <div class="relative w-full sm:w-60">
+                    <input id="secondary-search-input" type="text" placeholder="Filter current list..." class="w-full rounded-xl border border-slate-200 bg-white py-1.5 pl-8 pr-3 text-xs shadow-sm focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    <svg class="pointer-events-none absolute left-2.5 top-2 h-3.5 w-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Presentation Cards Grid -->
+        <div id="slides-grid" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamic cards injected here by JavaScript -->
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div id="empty-state" class="hidden mt-12 text-center py-12 rounded-3xl border border-dashed border-slate-300 dark:border-slate-800">
+            <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h3 class="mt-4 text-base font-bold text-slate-900 dark:text-white">No matching presentations found</h3>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Try adjusting your search terms or category filters.</p>
+            <button onclick="resetFilters()" class="mt-4 inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                Clear Filters
+            </button>
+        </div>
+
     </main>
 
-    <footer class="border-t border-slate-200 py-8 text-center text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
-        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-3 px-4">
-            <span>&copy; 2026 ESP32 Control Center</span>
-            <span>•</span>
-            <a href="about.html" class="font-medium text-blue-600 hover:underline dark:text-teal-300">About Myself</a>
-            <span>•</span>
-            <a href="terms.html" class="font-medium text-blue-600 hover:underline dark:text-teal-300">Terms & Conditions</a>
+    <!-- Formula Sheets & Academic Tools Section -->
+    <section id="formulas-section" class="border-t border-slate-200/80 bg-slate-100/50 py-16 dark:border-slate-800/80 dark:bg-slate-900/30">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-teal-400">Quick Reference Toolkit</span>
+                <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mt-1">Academic Formulas & Principles</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Essential engineering, electronics, computer science, and mathematics formulas for quick review.</p>
+            </div>
+
+            <div id="formulas-grid" class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically populated from slides-data.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Seminar Presentation Best Practice Guide -->
+    <section class="py-16 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Presentation Masterclass: 4 Keys to a 10/10 Seminar</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Recommended guidelines when presenting slides in classrooms, conferences, or college seminars.</p>
+                </div>
+                <button onclick="openAddSlidesModal()" class="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>Upload / Add Your PPT Deck</span>
+                </button>
+            </div>
+
+            <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600 font-bold dark:bg-blue-900/50 dark:text-blue-300">01</div>
+                    <h4 class="mt-3 font-bold text-slate-900 dark:text-white">The 1-Minute Rule</h4>
+                    <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Allocate an average of 1 to 1.5 minutes per slide. A 15-minute seminar should have roughly 10-15 content slides.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-100 text-teal-600 font-bold dark:bg-teal-900/50 dark:text-teal-300">02</div>
+                    <h4 class="mt-3 font-bold text-slate-900 dark:text-white">Visuals Over Walls of Text</h4>
+                    <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Avoid full paragraphs. Use architecture diagrams, bullet takeaways, and clear schematics to guide your audience.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 font-bold dark:bg-indigo-900/50 dark:text-indigo-300">03</div>
+                    <h4 class="mt-3 font-bold text-slate-900 dark:text-white">Anchor Problem & Solution</h4>
+                    <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Start by framing the real-world engineering challenge within 60 seconds before diving into theoretical details.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600 font-bold dark:bg-amber-900/50 dark:text-amber-300">04</div>
+                    <h4 class="mt-3 font-bold text-slate-900 dark:text-white">Mastering Q&A</h4>
+                    <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">If you don't know an answer, acknowledge it transparently and explain how you would scientifically investigate it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide Preview Modal -->
+    <div id="slide-preview-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm transition-opacity sm:p-6 md:p-10">
+        <div class="relative mx-auto w-full max-w-5xl rounded-3xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900">
+            
+            <!-- Modal Header -->
+            <div class="flex items-start justify-between border-b border-slate-200 p-6 dark:border-slate-800">
+                <div class="pr-6">
+                    <div class="flex items-center gap-2">
+                        <span id="modal-category" class="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700 dark:bg-teal-900/40 dark:text-teal-300">Category</span>
+                        <span id="modal-type" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">PPTX</span>
+                        <span id="modal-slides-count" class="text-xs text-slate-400">30 Slides</span>
+                    </div>
+                    <h3 id="modal-title" class="mt-2 text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Presentation Title</h3>
+                    <p id="modal-summary" class="mt-1 text-sm text-slate-600 dark:text-slate-400">Summary description goes here.</p>
+                </div>
+                <button onclick="closeSlideModal()" class="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Modal Body: Interactive Presentation Outline & Viewer -->
+            <div class="p-6 space-y-6">
+                
+                <!-- Topic Breakdown -->
+                <div>
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">Slide Agenda & Key Topics</h4>
+                    <div id="modal-topics" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <!-- Injected dynamically -->
+                    </div>
+                </div>
+
+                <!-- Slide Viewer / Embed Frame -->
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-semibold text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                            Interactive Slide Viewer
+                        </span>
+                        <a id="modal-open-tab" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-blue-600 dark:text-teal-400 hover:underline inline-flex items-center gap-1">
+                            <span>Open in Full Tab</span>
+                            <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        </a>
+                    </div>
+                    
+                    <div class="relative w-full aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-900 flex items-center justify-center">
+                        <iframe id="modal-iframe" src="" class="w-full h-full border-0" allowfullscreen></iframe>
+                        <div id="modal-fallback" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-slate-900 text-white">
+                            <svg class="h-12 w-12 text-blue-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            <h5 class="text-lg font-bold">Slide Preview Ready</h5>
+                            <p class="text-xs text-slate-400 max-w-md mt-1 mb-4">Click below to open or download this presentation directly to your device.</p>
+                            <a id="modal-fallback-btn" href="#" download class="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg hover:bg-blue-500 transition">
+                                Download Presentation
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex items-center justify-between border-t border-slate-200 p-6 dark:border-slate-800">
+                <button onclick="copySlideLink()" id="copy-slide-btn" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                    <svg class="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                    <span>Copy Link</span>
+                </button>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="closeSlideModal()" class="rounded-xl px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+                        Close
+                    </button>
+                    <a id="modal-download-btn" href="#" download class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <span>Download Slide Deck</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- How to Add Slides Modal -->
+    <div id="add-slides-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm transition-opacity sm:p-6 md:p-10">
+        <div class="relative mx-auto w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
+            <div class="flex items-start justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">How to Add Your PPTs & Seminar Slides</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Super simple 2-step setup to host and showcase your presentations.</p>
+                </div>
+                <button onclick="closeAddSlidesModal()" class="rounded-full p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="mt-6 space-y-6 text-sm">
+                <!-- Step 1 -->
+                <div class="flex items-start gap-4">
+                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 font-bold dark:bg-blue-900/50 dark:text-blue-300">1</div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white">Place your slide file in the folder</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                            Save your PowerPoint (<code class="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">.pptx</code>) or PDF document into the <code class="rounded bg-slate-100 px-1 py-0.5 text-blue-600 dark:bg-slate-800 dark:text-blue-400">slides/</code> directory. You can also use a public Google Drive or OneDrive link.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex items-start gap-4">
+                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-teal-100 text-teal-600 font-bold dark:bg-teal-900/50 dark:text-teal-300">2</div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white">Add the entry in <code>slides-data.js</code></h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                            Open <code class="rounded bg-slate-100 px-1 py-0.5 text-blue-600 dark:bg-slate-800 dark:text-blue-400">slides-data.js</code> in your project folder and append this block:
+                        </p>
+                        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-900 p-3.5 text-[11px] font-mono text-slate-200"><code>{
+  id: "my-topic",
+  title: "My Presentation Title",
+  category: "Computer Science",
+  type: "PPTX",
+  slidesCount: "25 Slides",
+  academicLevel: "College Seminar",
+  author: "Your Name",
+  date: "2026",
+  summary: "Brief overview of what the presentation covers...",
+  topicsCovered: ["Point 1", "Point 2", "Point 3"],
+  fileUrl: "slides/my_presentation.pptx"
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex items-start gap-4">
+                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 font-bold dark:bg-indigo-900/50 dark:text-indigo-300">3</div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white">Instant Deployment</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                            Refresh your page or push to GitHub Pages! Your presentation will appear with instant search, category filtering, and preview.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800 text-right">
+                <button onclick="closeAddSlidesModal()" class="rounded-xl bg-blue-600 px-5 py-2 text-xs font-bold text-white shadow-md hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                    Got it!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification element -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden rounded-xl bg-slate-900 px-4 py-3 text-xs font-semibold text-white shadow-2xl transition-all dark:bg-white dark:text-slate-900">
+        Notification message
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 bg-white py-12 text-sm text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-slate-900 dark:text-white">EduSphere Academic Hub</span>
+                        <span class="text-xs rounded bg-slate-100 px-2 py-0.5 text-slate-600 dark:bg-slate-800 dark:text-slate-400">v2.0</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">Empowering students and educators with open academic presentations, seminar materials, and hardware labs.</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-6 text-xs">
+                    <a href="esp32/index.html" class="font-semibold text-blue-600 hover:underline dark:text-teal-400">ESP32 IoT Hub</a>
+                    <a href="esp32/weather_station.html" class="hover:underline">Weather Station</a>
+                    <a href="esp32/led_control.html" class="hover:underline">LED Controller</a>
+                    <a href="esp32/terms.html" class="hover:underline">Terms & Conditions</a>
+                </div>
+            </div>
+
+            <div class="mt-8 border-t border-slate-100 pt-6 text-center text-xs text-slate-400 dark:border-slate-900">
+                &copy; 2026 Dhyan Krishna M • Open Academic Knowledge Platform
+            </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="slides-data.js"></script>
     <script>
+        // State variables
+        let selectedCategory = "All";
+        let selectedFormat = "All";
+        let searchQuery = "";
+        let currentModalSlide = null;
+
+        // Theme Toggle Setup
         const themeButton = document.getElementById('theme-toggle');
         const sunIcon = document.getElementById('sun-icon');
         const moonIcon = document.getElementById('moon-icon');
@@ -211,7 +522,6 @@
                 sunIcon.classList.add('hidden');
             }
         };
-
         updateIcons();
 
         themeButton?.addEventListener('click', () => {
@@ -219,7 +529,317 @@
             localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
             updateIcons();
         });
-    </script>
 
+        // Search inputs sync
+        const heroSearch = document.getElementById('hero-search-input');
+        const secondarySearch = document.getElementById('secondary-search-input');
+
+        heroSearch?.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            if (secondarySearch) secondarySearch.value = e.target.value;
+            renderSlides();
+        });
+
+        secondarySearch?.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            if (heroSearch) heroSearch.value = e.target.value;
+            renderSlides();
+        });
+
+        // Category filter buttons
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryButtons.forEach(b => {
+                    b.classList.remove('active', 'bg-blue-600', 'text-white', 'dark:bg-teal-400', 'dark:text-slate-950');
+                    b.classList.add('border', 'border-slate-200', 'bg-white', 'text-slate-600', 'dark:border-slate-700', 'dark:bg-slate-800', 'dark:text-slate-300');
+                });
+                btn.classList.add('active', 'bg-blue-600', 'text-white', 'dark:bg-teal-400', 'dark:text-slate-950');
+                btn.classList.remove('border', 'border-slate-200', 'bg-white', 'text-slate-600', 'dark:border-slate-700', 'dark:bg-slate-800', 'dark:text-slate-300');
+
+                selectedCategory = btn.getAttribute('data-category');
+                renderSlides();
+            });
+        });
+
+        // Format filter dropdown
+        const formatSelect = document.getElementById('format-filter');
+        formatSelect?.addEventListener('change', (e) => {
+            selectedFormat = e.target.value;
+            renderSlides();
+        });
+
+        // Reset all filters
+        function resetFilters() {
+            selectedCategory = "All";
+            selectedFormat = "All";
+            searchQuery = "";
+            if (heroSearch) heroSearch.value = "";
+            if (secondarySearch) secondarySearch.value = "";
+            if (formatSelect) formatSelect.value = "All";
+            
+            categoryButtons.forEach(b => {
+                if (b.getAttribute('data-category') === 'All') {
+                    b.classList.add('active', 'bg-blue-600', 'text-white', 'dark:bg-teal-400', 'dark:text-slate-950');
+                    b.classList.remove('border', 'border-slate-200', 'bg-white', 'text-slate-600');
+                } else {
+                    b.classList.remove('active', 'bg-blue-600', 'text-white', 'dark:bg-teal-400', 'dark:text-slate-950');
+                    b.classList.add('border', 'border-slate-200', 'bg-white', 'text-slate-600');
+                }
+            });
+
+            renderSlides();
+        }
+
+        // Render Slide Cards
+        function renderSlides() {
+            const grid = document.getElementById('slides-grid');
+            const emptyState = document.getElementById('empty-state');
+            const resultsCount = document.getElementById('results-count');
+            const statSlidesCount = document.getElementById('stat-slides-count');
+
+            if (!grid) return;
+
+            if (statSlidesCount && typeof academicResources !== 'undefined') {
+                statSlidesCount.textContent = `${academicResources.length}+`;
+            }
+
+            const filtered = (typeof academicResources !== 'undefined' ? academicResources : []).filter(item => {
+                // Category match
+                const matchCategory = selectedCategory === "All" || item.category === selectedCategory;
+                // Format match
+                const matchFormat = selectedFormat === "All" || item.type.toUpperCase() === selectedFormat.toUpperCase();
+                // Search query match
+                const matchSearch = !searchQuery || 
+                    item.title.toLowerCase().includes(searchQuery) ||
+                    item.summary.toLowerCase().includes(searchQuery) ||
+                    item.category.toLowerCase().includes(searchQuery) ||
+                    item.tags.some(t => t.toLowerCase().includes(searchQuery)) ||
+                    item.topicsCovered.some(tpc => tpc.toLowerCase().includes(searchQuery));
+
+                return matchCategory && matchFormat && matchSearch;
+            });
+
+            // Update counter
+            if (resultsCount) {
+                resultsCount.textContent = `Showing ${filtered.length} of ${academicResources.length} presentations`;
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState?.classList.remove('hidden');
+                return;
+            }
+
+            emptyState?.classList.add('hidden');
+
+            grid.innerHTML = filtered.map(item => {
+                const badgeColor = item.category.includes('Computer') ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300' :
+                                   item.category.includes('Electronics') ? 'bg-teal-100 text-teal-700 dark:bg-teal-950/60 dark:text-teal-300' :
+                                   item.category.includes('Mathematics') ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300' :
+                                   item.category.includes('Notes') ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' :
+                                   'bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300';
+
+                const topicsHtml = item.topicsCovered.slice(0, 3).map(tpc => `
+                    <li class="flex items-start gap-1.5 text-xs text-slate-600 dark:text-slate-400">
+                        <svg class="h-3.5 w-3.5 shrink-0 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span class="line-clamp-1">${tpc}</span>
+                    </li>
+                `).join('');
+
+                return `
+                    <div class="card group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-400 dark:border-slate-800 dark:bg-slate-900/90 dark:hover:border-teal-400/50">
+                        
+                        <div>
+                            <!-- Header Meta -->
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span class="rounded-full px-2.5 py-0.5 text-[11px] font-bold ${badgeColor}">
+                                    ${item.category}
+                                </span>
+                                <div class="flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                    <span class="rounded bg-slate-100 px-2 py-0.5 font-mono text-[10px] uppercase font-bold dark:bg-slate-800 dark:text-slate-300">${item.type}</span>
+                                    <span>•</span>
+                                    <span>${item.slidesCount}</span>
+                                </div>
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-teal-300 transition-colors">
+                                ${item.title}
+                            </h3>
+
+                            <!-- Author & Level -->
+                            <div class="mt-1 flex items-center gap-2 text-xs text-slate-400">
+                                <span>${item.author}</span>
+                                <span>•</span>
+                                <span>${item.academicLevel}</span>
+                            </div>
+
+                            <!-- Summary -->
+                            <p class="mt-3 text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
+                                ${item.summary}
+                            </p>
+
+                            <!-- Key topics preview -->
+                            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                                <ul class="space-y-1.5">
+                                    ${topicsHtml}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2">
+                            <button onclick="openSlideModal('${item.id}')" class="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
+                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                <span>Preview Slides</span>
+                            </button>
+                            
+                            <a href="${item.fileUrl}" download class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-blue-600 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700" title="Download Presentation">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            </a>
+                        </div>
+
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render Quick Formula Cards
+        function renderFormulas() {
+            const grid = document.getElementById('formulas-grid');
+            if (!grid || typeof academicFormulas === 'undefined') return;
+
+            grid.innerHTML = academicFormulas.map(f => `
+                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <span class="rounded bg-blue-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:bg-teal-950 dark:text-teal-300">
+                        ${f.subject}
+                    </span>
+                    <h3 class="mt-2 text-base font-bold text-slate-900 dark:text-white">${f.title}</h3>
+                    
+                    <div class="mt-3 rounded-xl bg-slate-900 p-3 font-mono text-xs font-semibold text-teal-300 dark:bg-slate-950">
+                        <code>${f.formula}</code>
+                    </div>
+
+                    <p class="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        ${f.description}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        // Slide Modal Functions
+        function openSlideModal(id) {
+            const item = academicResources.find(r => r.id === id);
+            if (!item) return;
+
+            currentModalSlide = item;
+
+            document.getElementById('modal-title').textContent = item.title;
+            document.getElementById('modal-category').textContent = item.category;
+            document.getElementById('modal-type').textContent = item.type;
+            document.getElementById('modal-slides-count').textContent = item.slidesCount;
+            document.getElementById('modal-summary').textContent = item.summary;
+
+            // Topics list
+            const topicsContainer = document.getElementById('modal-topics');
+            topicsContainer.innerHTML = item.topicsCovered.map(t => `
+                <div class="flex items-start gap-2 rounded-xl bg-slate-50 p-2.5 text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    <svg class="h-4 w-4 shrink-0 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>${t}</span>
+                </div>
+            `).join('');
+
+            // Iframe Preview URL
+            const iframe = document.getElementById('modal-iframe');
+            const fallback = document.getElementById('modal-fallback');
+            const openTab = document.getElementById('modal-open-tab');
+            const downloadBtn = document.getElementById('modal-download-btn');
+            const fallbackBtn = document.getElementById('modal-fallback-btn');
+
+            if (item.previewUrl) {
+                iframe.src = item.previewUrl;
+                iframe.classList.remove('hidden');
+                fallback?.classList.add('hidden');
+                openTab.href = item.previewUrl;
+            } else {
+                iframe.src = '';
+                iframe.classList.add('hidden');
+                fallback?.classList.remove('hidden');
+                openTab.href = item.fileUrl;
+            }
+
+            downloadBtn.href = item.fileUrl;
+            downloadBtn.setAttribute('download', item.fileUrl.split('/').pop());
+            if (fallbackBtn) {
+                fallbackBtn.href = item.fileUrl;
+                fallbackBtn.setAttribute('download', item.fileUrl.split('/').pop());
+            }
+
+            document.getElementById('slide-preview-modal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeSlideModal() {
+            const modal = document.getElementById('slide-preview-modal');
+            const iframe = document.getElementById('modal-iframe');
+            modal.classList.add('hidden');
+            if (iframe) iframe.src = '';
+            document.body.classList.remove('overflow-hidden');
+            currentModalSlide = null;
+        }
+
+        // How to add slides modal
+        function openAddSlidesModal() {
+            document.getElementById('add-slides-modal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeAddSlidesModal() {
+            document.getElementById('add-slides-modal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // Copy link to current slide
+        function copySlideLink() {
+            if (!currentModalSlide) return;
+            const url = `${window.location.origin}${window.location.pathname}#${currentModalSlide.id}`;
+            navigator.clipboard.writeText(url).then(() => {
+                showToast("Slide presentation link copied to clipboard!");
+            });
+        }
+
+        // Toast notification
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Listen for ESC key to close modal
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSlideModal();
+                closeAddSlidesModal();
+            }
+        });
+
+        // Initialize on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSlides();
+            renderFormulas();
+
+            // Check if hash matches an ID
+            const hash = window.location.hash.replace('#', '');
+            if (hash && typeof academicResources !== 'undefined') {
+                const match = academicResources.find(r => r.id === hash);
+                if (match) openSlideModal(match.id);
+            }
+        });
+    </script>
 </body>
 </html>
