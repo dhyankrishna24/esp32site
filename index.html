@@ -10,7 +10,7 @@
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="EduSphere | Academic Knowledge & Seminar Slides Repository">
-    <meta property="og:description" content="Explore, preview, and download seminar presentations, PPT slides, study notes, and formula sheets.">
+    <meta property="og:description" content="Explore, preview, and download seminar presentations, PPT slides, study notes, and interactive tools.">
 
     <!-- Tailwind CSS (direct versioned URL for crawler stability) -->
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
@@ -47,6 +47,7 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.7); }
+        .slide-glow { box-shadow: 0 0 50px -10px rgba(59, 130, 246, 0.15); }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 selection:bg-blue-500 selection:text-white">
@@ -55,7 +56,7 @@
     <div class="fixed inset-0 -z-10 pointer-events-none bg-[radial-gradient(circle_at_15%_10%,rgba(59,130,246,0.12),transparent_35%),radial-gradient(circle_at_85%_20%,rgba(20,184,166,0.1),transparent_30%)] dark:bg-[radial-gradient(circle_at_15%_10%,rgba(59,130,246,0.18),transparent_40%),radial-gradient(circle_at_85%_20%,rgba(20,184,166,0.14),transparent_35%),linear-gradient(180deg,#0a1120_0%,#060c18_100%)]"></div>
 
     <!-- Header Navigation -->
-    <header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-md dark:border-slate-800/80 dark:bg-slate-900/80">
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/85 backdrop-blur-md dark:border-slate-800/80 dark:bg-slate-900/85">
         <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
             
             <!-- Logo & Brand -->
@@ -67,7 +68,7 @@
                     <div>
                         <div class="flex items-center gap-1.5">
                             <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Edu<span class="text-blue-600 dark:text-teal-400">Sphere</span></span>
-                            <span class="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:bg-teal-950 dark:text-teal-300">Academic</span>
+                            <span class="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:bg-teal-950 dark:text-teal-300">Hub v2.5</span>
                         </div>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">Seminar Slides & Academic Portal</p>
                     </div>
@@ -76,20 +77,32 @@
 
             <!-- Desktop Links -->
             <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
-                <a href="#slides-section" class="transition hover:text-blue-600 dark:hover:text-teal-300">Presentations & PPTs</a>
-                <a href="#formulas-section" class="transition hover:text-blue-600 dark:hover:text-teal-300">Formula Sheets</a>
+                <a href="#slides-section" class="transition hover:text-blue-600 dark:hover:text-teal-300">Presentations & Slides</a>
+                <a href="#toolkit-section" class="transition hover:text-blue-600 dark:hover:text-teal-300">Study Toolkit & Timer</a>
                 <a href="about.html" class="transition hover:text-blue-600 dark:hover:text-teal-300">About Creator</a>
-                <a href="#iot-lab-section" class="flex items-center gap-1 text-blue-600 dark:text-teal-300 font-semibold hover:underline">
+                <a href="#iot-lab-section" class="flex items-center gap-1.5 text-blue-600 dark:text-teal-300 font-semibold hover:underline">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
+                    </span>
                     <span>ESP32 Hardware Lab</span>
-                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                 </a>
             </nav>
 
-            <!-- Actions: How to add slides + Theme Toggle -->
-            <div class="flex items-center gap-3">
-                <button onclick="openAddSlidesModal()" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-100 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
+            <!-- Actions: How to add slides + Search shortcut + Theme Toggle -->
+            <div class="flex items-center gap-2.5">
+                
+                <!-- Quick Search Trigger -->
+                <button onclick="focusSearch()" title="Press / or Ctrl+K to search" class="hidden sm:inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-500 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <span>Quick Search</span>
+                    <kbd class="rounded bg-white px-1.5 py-0.5 text-[10px] font-mono font-semibold text-slate-400 border border-slate-200 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300">/</kbd>
+                </button>
+
+                <button onclick="openAddSlidesModal()" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-100 hover:text-blue-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
                     <svg class="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    <span>Add Slides / PPT</span>
+                    <span class="hidden sm:inline">Add Slides / PPT</span>
+                    <span class="sm:hidden">Add</span>
                 </button>
 
                 <!-- Dark / Light Mode Toggle Button -->
@@ -102,15 +115,15 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="relative overflow-hidden py-16 sm:py-24 border-b border-slate-200/60 dark:border-slate-800/60">
+    <section class="relative overflow-hidden py-14 sm:py-20 border-b border-slate-200/60 dark:border-slate-800/60">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
             
-            <!-- Pill Announcement -->
-            <div class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/70 px-4 py-1.5 text-xs font-medium text-blue-700 shadow-sm backdrop-blur dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-300 mb-6">
+            <!-- Announcement Badge -->
+            <div class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-4 py-1.5 text-xs font-medium text-blue-700 shadow-sm backdrop-blur dark:border-blue-900/50 dark:bg-blue-950/40 dark:text-blue-300 mb-6">
                 <span class="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span>
-                <span>Open Educational Resource Library</span>
+                <span>Open Educational Repository & Seminar Deck Viewer</span>
                 <span class="text-blue-400">•</span>
-                <span>Free Seminar Slides & Notes</span>
+                <span>Free to Use</span>
             </div>
 
             <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white">
@@ -118,40 +131,50 @@
                 <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-400 bg-clip-text text-transparent">Seminar Slides Hub</span>
             </h1>
 
-            <p class="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-slate-600 dark:text-slate-300">
-                A centralized, open-access repository for university seminar presentations, PowerPoint decks, study notes, formula cheat sheets, and practical engineering guides.
+            <p class="mx-auto mt-5 max-w-2xl text-base sm:text-lg text-slate-600 dark:text-slate-300">
+                A centralized portal to preview full presentation slide decks in-browser, download seminar PowerPoint decks, test interactive simulators, and review academic scripts.
             </p>
 
             <!-- Search Bar in Hero -->
-            <div class="mx-auto mt-8 max-w-xl">
+            <div class="mx-auto mt-8 max-w-2xl">
                 <div class="relative flex items-center">
-                    <input id="hero-search-input" type="text" placeholder="Search seminar topics, algorithms, IoT, physics..." class="w-full rounded-2xl border border-slate-300 bg-white/90 py-4 pl-12 pr-28 text-sm shadow-xl backdrop-blur focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/90 dark:text-white dark:focus:border-teal-400 dark:focus:ring-teal-400/10">
+                    <input id="hero-search-input" type="text" placeholder="Search viruses, allergies, rivers, budgeting, IoT, speeches..." class="w-full rounded-2xl border border-slate-300 bg-white/95 py-4 pl-12 pr-32 text-sm shadow-xl backdrop-blur focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-900/95 dark:text-white dark:focus:border-teal-400 dark:focus:ring-teal-400/10">
                     <div class="pointer-events-none absolute left-4 text-slate-400">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
-                    <button onclick="document.getElementById('slides-section').scrollIntoView({behavior: 'smooth'})" class="absolute right-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-md transition hover:bg-blue-700 dark:bg-gradient-to-r dark:from-teal-400 dark:to-blue-500 dark:text-slate-950">
-                        Explore
+                    <button onclick="document.getElementById('slides-section').scrollIntoView({behavior: 'smooth'})" class="absolute right-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-blue-700 active:scale-95 dark:bg-gradient-to-r dark:from-teal-400 dark:to-blue-500 dark:text-slate-950">
+                        Search Decks
                     </button>
+                </div>
+
+                <!-- Quick Topic Shortcut Pills -->
+                <div class="mt-4 flex flex-wrap items-center justify-center gap-1.5 text-xs">
+                    <span class="text-slate-400 mr-1 text-[11px] font-semibold uppercase tracking-wider">Quick Topics:</span>
+                    <button onclick="quickFilterSearch('viruses')" class="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-slate-600 shadow-sm transition hover:border-blue-400 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-teal-400 dark:hover:text-teal-300">🛡️ Computer Viruses</button>
+                    <button onclick="quickFilterSearch('allergies')" class="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-slate-600 shadow-sm transition hover:border-blue-400 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-teal-400 dark:hover:text-teal-300">🦠 Allergies (Biology)</button>
+                    <button onclick="quickFilterSearch('budgeting')" class="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-slate-600 shadow-sm transition hover:border-blue-400 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-teal-400 dark:hover:text-teal-300">💰 Budgeting Simulator</button>
+                    <button onclick="quickFilterSearch('rivers')" class="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-slate-600 shadow-sm transition hover:border-blue-400 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-teal-400 dark:hover:text-teal-300">🌍 World Rivers</button>
+                    <button onclick="quickFilterSearch('speech')" class="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-slate-600 shadow-sm transition hover:border-blue-400 hover:text-blue-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-teal-400 dark:hover:text-teal-300">🎤 Assembly Speech</button>
                 </div>
             </div>
 
-            <!-- Quick Stats -->
+            <!-- Quick Platform Metrics -->
             <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4 max-w-3xl mx-auto">
-                <div class="rounded-xl border border-slate-200/80 bg-white/60 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/40">
+                <div class="rounded-2xl border border-slate-200/80 bg-white/70 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/50">
                     <div class="text-2xl font-black text-blue-600 dark:text-teal-400" id="stat-slides-count">10+</div>
                     <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Seminar Slide Decks</div>
                 </div>
-                <div class="rounded-xl border border-slate-200/80 bg-white/60 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/40">
-                    <div class="text-2xl font-black text-indigo-600 dark:text-indigo-400">5</div>
-                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Core Disciplines</div>
+                <div class="rounded-2xl border border-slate-200/80 bg-white/70 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/50">
+                    <div class="text-2xl font-black text-indigo-600 dark:text-indigo-400">In-Browser</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Native Slide Carousel</div>
                 </div>
-                <div class="rounded-xl border border-slate-200/80 bg-white/60 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/40">
-                    <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400">100%</div>
-                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Free & Open Access</div>
+                <div class="rounded-2xl border border-slate-200/80 bg-white/70 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/50">
+                    <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400">100% Free</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Open Academic Use</div>
                 </div>
-                <div class="rounded-xl border border-slate-200/80 bg-white/60 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/40">
-                    <div class="text-2xl font-black text-amber-600 dark:text-amber-400">Instant</div>
-                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">In-Browser Preview</div>
+                <div class="rounded-2xl border border-slate-200/80 bg-white/70 p-4 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/50">
+                    <div class="text-2xl font-black text-amber-600 dark:text-amber-400">4 Tools</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Timer, Solvers & Simulator</div>
                 </div>
             </div>
 
@@ -171,7 +194,7 @@
                         Connect Theory to Practice: <span class="text-blue-600 dark:text-teal-300">ESP32 IoT Hub</span>
                     </h2>
                     <p class="max-w-2xl text-sm sm:text-base text-slate-600 dark:text-slate-300">
-                        Explore our live microcontroller subpage featuring real-time Firebase telemetry, weather station sensor metrics, remote LED controllers, and IoT experiments.
+                        Explore our live microcontroller subpage featuring real-time Firebase telemetry, DHT/BME sensor dashboards, remote LED controllers, and embedded FreeRTOS experiments.
                     </p>
                 </div>
                 <div class="flex flex-wrap items-center justify-center gap-3">
@@ -195,21 +218,26 @@
             <div>
                 <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-teal-400">Presentation Library</span>
                 <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Seminar Slides & Presentations</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Browse, search, inspect topic outlines, and preview or download slides for your classes and seminars.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Browse slide decks, inspect agendas, preview slide-by-slide in our built-in player, or download PPTX files.</p>
             </div>
             
-            <div id="results-count" class="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <div id="results-count" class="text-xs font-semibold text-slate-500 dark:text-slate-400">
                 Loading presentations...
             </div>
         </div>
 
         <!-- Filter Controls Toolbar -->
-        <div class="mt-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="mt-6 space-y-4">
             
-            <!-- Subject Category Filters -->
+            <!-- Category Filter Pills -->
             <div class="flex flex-wrap items-center gap-2" id="category-filters">
                 <button data-category="All" class="category-btn active rounded-xl bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm transition dark:bg-teal-400 dark:text-slate-950">
                     All Categories
+                </button>
+                <button data-category="Favorites" id="fav-filter-btn" class="category-btn rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600 flex items-center gap-1.5">
+                    <span class="text-amber-500">★</span>
+                    <span>My Saved</span>
+                    <span id="fav-count-badge" class="rounded-full bg-slate-100 px-1.5 text-[10px] font-bold dark:bg-slate-700">0</span>
                 </button>
                 <button data-category="Computer Science" class="category-btn rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600">
                     Computer Science & Cyber
@@ -231,16 +259,25 @@
                 </button>
             </div>
 
-            <!-- Format Dropdown & Secondary Search -->
-            <div class="flex items-center gap-3">
-                <select id="format-filter" class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                    <option value="All">All Formats</option>
-                    <option value="PPTX">PowerPoint (PPTX)</option>
-                    <option value="Interactive HTML">Interactive HTML / SmartBoard</option>
-                    <option value="PDF">PDF Documents</option>
-                </select>
-                
-                <div class="relative w-full sm:w-60">
+            <!-- Sorting & Secondary Search Toolbar -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-400">Sort By:</span>
+                    <select id="sort-select" class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                        <option value="featured">Featured First</option>
+                        <option value="title-az">Title (A - Z)</option>
+                        <option value="slides-desc">Slide Count (High to Low)</option>
+                    </select>
+
+                    <select id="format-filter" class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                        <option value="All">All Formats</option>
+                        <option value="PPTX">PowerPoint (PPTX)</option>
+                        <option value="Interactive HTML">Interactive HTML / SmartBoard</option>
+                        <option value="PDF">PDF Documents</option>
+                    </select>
+                </div>
+
+                <div class="relative w-full sm:w-64">
                     <input id="secondary-search-input" type="text" placeholder="Filter current list..." class="w-full rounded-xl border border-slate-200 bg-white py-1.5 pl-8 pr-3 text-xs shadow-sm focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white">
                     <svg class="pointer-events-none absolute left-2.5 top-2 h-3.5 w-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
@@ -265,133 +302,267 @@
 
     </main>
 
-    <!-- Formula Sheets & Academic Tools Section -->
-    <section id="formulas-section" class="border-t border-slate-200/80 bg-slate-100/50 py-16 dark:border-slate-800/80 dark:bg-slate-900/30">
+    <!-- Interactive Academic Toolkit & Rehearsal Playground Section -->
+    <section id="toolkit-section" class="border-t border-slate-200/80 bg-slate-100/60 py-16 dark:border-slate-800/80 dark:bg-slate-900/40">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto">
-                <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-teal-400">Quick Reference Toolkit</span>
-                <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mt-1">Academic Formulas & Principles</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Essential engineering, electronics, computer science, and mathematics formulas for quick review.</p>
+            <div class="text-center max-w-3xl mx-auto">
+                <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-teal-400">Interactive Student Suite</span>
+                <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mt-1">Academic Toolkit & Rehearsal Utilities</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Essential interactive tools to rehearse technical seminar speeches, solve circuit equations, calculate speech timings, and compare algorithm complexities.</p>
             </div>
 
-            <div id="formulas-grid" class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Dynamically populated from slides-data.js -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Seminar Presentation Best Practice Guide -->
-    <section class="py-16 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
-                <div>
-                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Presentation Masterclass: 4 Keys to a 10/10 Seminar</h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Recommended guidelines when presenting slides in classrooms, conferences, or college seminars.</p>
-                </div>
-                <button onclick="openAddSlidesModal()" class="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    <span>Upload / Add Your PPT Deck</span>
+            <!-- Toolkit Tab Navigation -->
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-2" id="toolkit-tabs">
+                <button onclick="switchToolTab('timer')" id="tool-tab-timer" class="tool-tab active rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-sm transition dark:bg-teal-400 dark:text-slate-950">
+                    ⏱️ Seminar Rehearsal Timer
+                </button>
+                <button onclick="switchToolTab('ohms')" id="tool-tab-ohms" class="tool-tab rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    ⚡ Ohm's Law & Power Solver
+                </button>
+                <button onclick="switchToolTab('speech')" id="tool-tab-speech" class="tool-tab rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    🎤 Speech Pacing Estimator
+                </button>
+                <button onclick="switchToolTab('bigo')" id="tool-tab-bigo" class="tool-tab rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    📈 Big-O Complexity Benchmarker
                 </button>
             </div>
 
-            <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600 font-bold dark:bg-blue-900/50 dark:text-blue-300">01</div>
-                    <h4 class="mt-3 font-bold text-slate-900 dark:text-white">The 1-Minute Rule</h4>
-                    <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Allocate an average of 1 to 1.5 minutes per slide. A 15-minute seminar should have roughly 10-15 content slides.</p>
+            <!-- Tool Container 1: Seminar Timer -->
+            <div id="tool-pane-timer" class="tool-pane mt-8 max-w-2xl mx-auto rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900 text-center">
+                <div class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 mb-4">
+                    <span>Rehearsal Mode</span>
                 </div>
-                <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-100 text-teal-600 font-bold dark:bg-teal-900/50 dark:text-teal-300">02</div>
-                    <h4 class="mt-3 font-bold text-slate-900 dark:text-white">Visuals Over Walls of Text</h4>
-                    <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Avoid full paragraphs. Use architecture diagrams, bullet takeaways, and clear schematics to guide your audience.</p>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Seminar Presentation Timer</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Keep your presentation strictly within time limits to practice pacing and slide handoffs.</p>
+
+                <!-- Timer Digits -->
+                <div class="my-6">
+                    <div id="timer-display" class="font-mono text-6xl sm:text-7xl font-black text-slate-900 dark:text-white tracking-wider">
+                        10:00
+                    </div>
+                    <div id="timer-status" class="text-xs font-semibold text-slate-400 mt-2 uppercase tracking-wider">
+                        Ready to Begin
+                    </div>
                 </div>
-                <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 font-bold dark:bg-indigo-900/50 dark:text-indigo-300">03</div>
-                    <h4 class="mt-3 font-bold text-slate-900 dark:text-white">Anchor Problem & Solution</h4>
-                    <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Start by framing the real-world engineering challenge within 60 seconds before diving into theoretical details.</p>
+
+                <!-- Timer Preset Buttons -->
+                <div class="flex items-center justify-center gap-2 mb-6">
+                    <button onclick="setTimerMinutes(5)" class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">5 Mins (Lightning)</button>
+                    <button onclick="setTimerMinutes(10)" class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-blue-600 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/50 dark:text-teal-300">10 Mins (Standard)</button>
+                    <button onclick="setTimerMinutes(15)" class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">15 Mins (Defense)</button>
                 </div>
-                <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600 font-bold dark:bg-amber-900/50 dark:text-amber-300">04</div>
-                    <h4 class="mt-3 font-bold text-slate-900 dark:text-white">Mastering Q&A</h4>
-                    <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">If you don't know an answer, acknowledge it transparently and explain how you would scientifically investigate it.</p>
+
+                <!-- Timer Action Controls -->
+                <div class="flex items-center justify-center gap-3">
+                    <button id="timer-toggle-btn" onclick="toggleTimer()" class="rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 hover:bg-blue-700 active:scale-95 dark:bg-teal-400 dark:text-slate-950">
+                        Start Rehearsal
+                    </button>
+                    <button onclick="resetTimer()" class="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        Reset
+                    </button>
                 </div>
             </div>
+
+            <!-- Tool Container 2: Ohm's Law Solver -->
+            <div id="tool-pane-ohms" class="tool-pane hidden mt-8 max-w-2xl mx-auto rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">Ohm's Law & Electrical Power Solver</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Enter any 2 known values to calculate the other electrical quantities automatically.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Voltage (V in Volts)</label>
+                        <input type="number" id="ohm-voltage" placeholder="e.g. 5.0" step="any" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-sm font-mono dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Current (I in Amperes)</label>
+                        <input type="number" id="ohm-current" placeholder="e.g. 0.02" step="any" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-sm font-mono dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Resistance (R in Ohms Ω)</label>
+                        <input type="number" id="ohm-resistance" placeholder="e.g. 250" step="any" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-sm font-mono dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Power (P in Watts)</label>
+                        <input type="number" id="ohm-power" placeholder="e.g. 0.1" step="any" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-sm font-mono dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                </div>
+
+                <div id="ohm-msg" class="mt-4 text-xs font-semibold text-amber-600 dark:text-amber-400 text-center hidden">
+                    Please provide exactly 2 values to compute the remaining 2.
+                </div>
+
+                <div class="mt-6 flex items-center justify-center gap-3">
+                    <button onclick="calculateOhmsLaw()" class="rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                        Solve Variables
+                    </button>
+                    <button onclick="clearOhmsInputs()" class="rounded-xl border border-slate-300 px-4 py-2.5 text-xs font-semibold text-slate-600 dark:border-slate-700 dark:text-slate-300">
+                        Clear
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tool Container 3: Speech Pacing Estimator -->
+            <div id="tool-pane-speech" class="tool-pane hidden mt-8 max-w-2xl mx-auto rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">Speech Pacing & Timing Estimator</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Paste your seminar script or speech text to calculate exact presentation duration.</p>
+                </div>
+
+                <textarea id="speech-text-input" rows="5" placeholder="Paste your presentation script, introduction, or assembly speech here..." class="w-full rounded-2xl border border-slate-300 bg-slate-50 p-4 text-xs leading-relaxed dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none"></textarea>
+
+                <div class="mt-4 grid grid-cols-3 gap-3 text-center">
+                    <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
+                        <div class="text-lg font-black text-blue-600 dark:text-teal-400" id="word-count-stat">0</div>
+                        <div class="text-[11px] text-slate-400">Total Words</div>
+                    </div>
+                    <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
+                        <div class="text-lg font-black text-indigo-600 dark:text-indigo-400" id="formal-pace-stat">0m 00s</div>
+                        <div class="text-[11px] text-slate-400">Formal Pace (130 wpm)</div>
+                    </div>
+                    <div class="rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
+                        <div class="text-lg font-black text-emerald-600 dark:text-emerald-400" id="conversational-pace-stat">0m 00s</div>
+                        <div class="text-[11px] text-slate-400">Brisk Pace (160 wpm)</div>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <button onclick="loadSampleAssemblySpeech()" class="text-xs font-semibold text-blue-600 dark:text-teal-400 hover:underline">
+                        Load Sample School Assembly Script (Dhyan & Johan)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tool Container 4: Big-O Benchmarker -->
+            <div id="tool-pane-bigo" class="tool-pane hidden mt-8 max-w-3xl mx-auto rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">Big-O Algorithmic Growth Comparison</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Adjust the input size slider (N) to observe operations scale exponentially across complexities.</p>
+                </div>
+
+                <!-- Input Size Slider -->
+                <div class="mb-6 flex items-center justify-between gap-4">
+                    <label class="text-xs font-bold uppercase text-slate-600 dark:text-slate-400">Input Size (N):</label>
+                    <input type="range" id="bigo-slider" min="1" max="100" value="16" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700" oninput="updateBigOValues(this.value)">
+                    <span id="bigo-n-val" class="font-mono text-sm font-bold text-blue-600 dark:text-teal-400 w-12 text-right">16</span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="bigo-cards">
+                    <!-- Dynamic values populated by JS -->
+                </div>
+            </div>
+
         </div>
     </section>
 
-    <!-- Slide Preview Modal -->
-    <div id="slide-preview-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm transition-opacity sm:p-6 md:p-10">
-        <div class="relative mx-auto w-full max-w-5xl rounded-3xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900">
+    <!-- IN-BROWSER SLIDE THEATER PLAYER MODAL -->
+    <div id="slide-preview-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/85 p-3 backdrop-blur-md transition-opacity sm:p-6 md:p-8">
+        <div class="relative mx-auto w-full max-w-5xl rounded-3xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900 overflow-hidden flex flex-col max-h-[92vh]">
             
             <!-- Modal Header -->
-            <div class="flex items-start justify-between border-b border-slate-200 p-6 dark:border-slate-800">
-                <div class="pr-6">
-                    <div class="flex items-center gap-2">
-                        <span id="modal-category" class="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700 dark:bg-teal-900/40 dark:text-teal-300">Category</span>
-                        <span id="modal-type" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">PPTX</span>
-                        <span id="modal-slides-count" class="text-xs text-slate-400">30 Slides</span>
-                    </div>
-                    <h3 id="modal-title" class="mt-2 text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Presentation Title</h3>
-                    <p id="modal-summary" class="mt-1 text-sm text-slate-600 dark:text-slate-400">Summary description goes here.</p>
+            <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40">
+                <div class="flex items-center gap-3">
+                    <span id="modal-category" class="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700 dark:bg-teal-900/40 dark:text-teal-300">Category</span>
+                    <span id="modal-type-badge" class="rounded-full bg-slate-200 px-2.5 py-0.5 text-[11px] font-mono font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">PPTX</span>
+                    <span id="modal-slide-counter" class="text-xs font-semibold text-slate-500 dark:text-slate-400">Slide 1 of 9</span>
                 </div>
-                <button onclick="closeSlideModal()" class="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleSlideCarouselMode()" id="carousel-mode-btn" class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200" title="Switch View">
+                        Slide Deck View
+                    </button>
+                    <button onclick="closeSlideModal()" class="rounded-full p-2 text-slate-400 hover:bg-slate-200 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
             </div>
 
-            <!-- Modal Body: Interactive Presentation Outline & Viewer -->
-            <div class="p-6 space-y-6">
+            <!-- Modal Body Container -->
+            <div class="p-6 overflow-y-auto flex-1 space-y-6">
                 
-                <!-- Topic Breakdown -->
+                <!-- Deck Title & Metadata -->
                 <div>
-                    <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">Slide Agenda & Key Topics</h4>
-                    <div id="modal-topics" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        <!-- Injected dynamically -->
+                    <h3 id="modal-title" class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Presentation Title</h3>
+                    <p id="modal-summary" class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Summary description goes here.</p>
+                </div>
+
+                <!-- SLIDE THEATER STAGE (Native Deck Player) -->
+                <div id="native-slide-stage" class="relative rounded-3xl border border-slate-200 bg-gradient-to-b from-slate-50 to-white p-6 sm:p-10 shadow-lg dark:border-slate-800 dark:from-slate-950 dark:to-slate-900">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800/80">
+                        <div class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-teal-400" id="slide-stage-number">Slide 1</div>
+                        <div class="text-xs text-slate-400 font-mono">Use ← / → keys to navigate</div>
+                    </div>
+
+                    <h4 id="slide-stage-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Slide Title</h4>
+                    <p id="slide-stage-subtitle" class="text-sm font-semibold text-slate-500 dark:text-slate-400 mt-1 mb-6">Slide Subtitle</p>
+
+                    <!-- Bullet Cards Container -->
+                    <div id="slide-stage-bullets" class="space-y-3 mb-6">
+                        <!-- Bullets injected dynamically -->
+                    </div>
+
+                    <!-- Highlight Takeaway Box -->
+                    <div id="slide-stage-takeaway-box" class="rounded-2xl border border-blue-200/80 bg-blue-50/60 p-4 dark:border-teal-900/40 dark:bg-teal-950/20">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-teal-400">Core Seminar Takeaway</span>
+                        <p id="slide-stage-takeaway" class="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 mt-0.5">Takeaway text...</p>
+                    </div>
+
+                    <!-- Carousel Controls -->
+                    <div class="mt-8 flex items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                        <button onclick="prevSlide()" id="slide-prev-btn" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                            &larr; Previous Slide
+                        </button>
+                        
+                        <!-- Slide Dots Indicator -->
+                        <div id="slide-dots-indicator" class="flex items-center gap-1.5 overflow-x-auto px-2">
+                            <!-- Dots injected dynamically -->
+                        </div>
+
+                        <button onclick="nextSlide()" id="slide-next-btn" class="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-5 py-2 text-xs font-bold text-white shadow-md transition hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                            Next Slide &rarr;
+                        </button>
                     </div>
                 </div>
 
-                <!-- Slide Viewer / Embed Frame -->
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+                <!-- EMBED / SMARTBOARD SIMULATOR IFRAME CONTAINER (For interactive HTML / PDF) -->
+                <div id="iframe-viewer-container" class="hidden rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs font-semibold text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
-                            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                            Interactive Slide Viewer
+                            <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Live App / SmartBoard Container
                         </span>
-                        <a id="modal-open-tab" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-blue-600 dark:text-teal-400 hover:underline inline-flex items-center gap-1">
-                            <span>Open in Full Tab</span>
-                            <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        <a id="modal-open-tab" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-blue-600 dark:text-teal-400 hover:underline inline-flex items-center gap-1">
+                            <span>Open in Fullscreen Tab &rarr;</span>
                         </a>
                     </div>
                     
-                    <div class="relative w-full aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-900 flex items-center justify-center">
+                    <div class="relative w-full aspect-video rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-900">
                         <iframe id="modal-iframe" src="" class="w-full h-full border-0" allowfullscreen></iframe>
-                        <div id="modal-fallback" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-slate-900 text-white">
-                            <svg class="h-12 w-12 text-blue-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                            <h5 class="text-lg font-bold">Slide Preview Ready</h5>
-                            <p class="text-xs text-slate-400 max-w-md mt-1 mb-4">Click below to open or download this presentation directly to your device.</p>
-                            <a id="modal-fallback-btn" href="#" download class="rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg hover:bg-blue-500 transition">
-                                Download Presentation
-                            </a>
-                        </div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Modal Footer -->
-            <div class="flex items-center justify-between border-t border-slate-200 p-6 dark:border-slate-800">
-                <button onclick="copySlideLink()" id="copy-slide-btn" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                    <svg class="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                    <span>Copy Link</span>
-                </button>
+            <!-- Modal Action Footer -->
+            <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 px-6 py-4 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40">
+                <div class="flex items-center gap-2">
+                    <button onclick="copySlideLink()" id="copy-slide-btn" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                        <svg class="h-3.5 w-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        <span>Share Link</span>
+                    </button>
+                    <button onclick="openCitationModal()" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                        <span>Cite Deck</span>
+                    </button>
+                </div>
 
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
                     <button onclick="closeSlideModal()" class="rounded-xl px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
                         Close
                     </button>
-                    <a id="modal-download-btn" href="#" download class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                    <a id="modal-download-btn" href="#" download class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2 text-xs font-bold text-white shadow-md transition hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        <span>Download Slide Deck</span>
+                        <span>Download Slide File</span>
                     </a>
                 </div>
             </div>
@@ -399,8 +570,45 @@
         </div>
     </div>
 
+    <!-- Citation Modal -->
+    <div id="citation-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6 md:p-10">
+        <div class="relative mx-auto w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
+            <div class="flex items-start justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Academic Citation Format</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Copy pre-formatted references for your college reports or seminar papers.</p>
+                </div>
+                <button onclick="closeCitationModal()" class="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="mt-4 space-y-4">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300">APA Format:</span>
+                        <button onclick="copyCitationText('apa')" class="text-xs text-blue-600 dark:text-teal-400 font-semibold hover:underline">Copy APA</button>
+                    </div>
+                    <div id="citation-apa" class="rounded-xl bg-slate-50 p-3 text-xs font-mono text-slate-800 dark:bg-slate-800 dark:text-slate-200">APA Citation</div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300">IEEE Format:</span>
+                        <button onclick="copyCitationText('ieee')" class="text-xs text-blue-600 dark:text-teal-400 font-semibold hover:underline">Copy IEEE</button>
+                    </div>
+                    <div id="citation-ieee" class="rounded-xl bg-slate-50 p-3 text-xs font-mono text-slate-800 dark:bg-slate-800 dark:text-slate-200">IEEE Citation</div>
+                </div>
+            </div>
+
+            <div class="mt-6 text-right">
+                <button onclick="closeCitationModal()" class="rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white dark:bg-teal-400 dark:text-slate-950">Done</button>
+            </div>
+        </div>
+    </div>
+
     <!-- How to Add Slides Modal -->
-    <div id="add-slides-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm transition-opacity sm:p-6 md:p-10">
+    <div id="add-slides-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6 md:p-10">
         <div class="relative mx-auto w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
             <div class="flex items-start justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
                 <div>
@@ -419,7 +627,7 @@
                     <div>
                         <h4 class="font-bold text-slate-900 dark:text-white">Place your slide file in the folder</h4>
                         <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                            Save your PowerPoint (<code class="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">.pptx</code>) or PDF document into the <code class="rounded bg-slate-100 px-1 py-0.5 text-blue-600 dark:bg-slate-800 dark:text-blue-400">slides/</code> directory. You can also use a public Google Drive or OneDrive link.
+                            Save your PowerPoint (<code class="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">.pptx</code>), HTML app, or PDF document into the <code class="rounded bg-slate-100 px-1 py-0.5 text-blue-600 dark:bg-slate-800 dark:text-blue-400">slides/</code> directory.
                         </p>
                     </div>
                 </div>
@@ -439,23 +647,12 @@
   type: "PPTX",
   slidesCount: "25 Slides",
   academicLevel: "College Seminar",
-  author: "Your Name",
+  author: "Dhyan Krishna M",
   date: "2026",
   summary: "Brief overview of what the presentation covers...",
   topicsCovered: ["Point 1", "Point 2", "Point 3"],
   fileUrl: "slides/my_presentation.pptx"
 }</code></pre>
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="flex items-start gap-4">
-                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 font-bold dark:bg-indigo-900/50 dark:text-indigo-300">3</div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 dark:text-white">Instant Deployment</h4>
-                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                            Refresh your page or push to GitHub Pages! Your presentation will appear with instant search, category filtering, and preview.
-                        </p>
                     </div>
                 </div>
             </div>
@@ -480,12 +677,13 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <span class="font-bold text-slate-900 dark:text-white">EduSphere Academic Hub</span>
-                        <span class="text-xs rounded bg-slate-100 px-2 py-0.5 text-slate-600 dark:bg-slate-800 dark:text-slate-400">v2.0</span>
+                        <span class="text-xs rounded bg-slate-100 px-2 py-0.5 text-slate-600 dark:bg-slate-800 dark:text-slate-400">v2.5</span>
                     </div>
                     <p class="text-xs text-slate-500 mt-1">Empowering students and educators with open academic presentations, seminar materials, and hardware labs.</p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-6 text-xs">
+                    <a href="about.html" class="hover:underline">About Creator</a>
                     <a href="esp32/index.html" class="font-semibold text-blue-600 hover:underline dark:text-teal-400">ESP32 IoT Hub</a>
                     <a href="esp32/weather_station.html" class="hover:underline">Weather Station</a>
                     <a href="esp32/led_control.html" class="hover:underline">LED Controller</a>
@@ -505,8 +703,11 @@
         // State variables
         let selectedCategory = "All";
         let selectedFormat = "All";
+        let sortBy = "featured";
         let searchQuery = "";
         let currentModalSlide = null;
+        let currentDeckIndex = 0;
+        let favorites = JSON.parse(localStorage.getItem('edu_favorites') || '[]');
 
         // Theme Toggle Setup
         const themeButton = document.getElementById('theme-toggle');
@@ -546,6 +747,51 @@
             renderSlides();
         });
 
+        function focusSearch() {
+            heroSearch?.focus();
+            heroSearch?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function quickFilterSearch(tag) {
+            searchQuery = tag.toLowerCase();
+            if (heroSearch) heroSearch.value = tag;
+            if (secondarySearch) secondarySearch.value = tag;
+            renderSlides();
+            document.getElementById('slides-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Keyboard shortcut: Press / to search
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === '/' || (e.ctrlKey && e.key === 'k')) && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                focusSearch();
+            }
+            if (currentModalSlide) {
+                if (e.key === 'ArrowRight') nextSlide();
+                if (e.key === 'ArrowLeft') prevSlide();
+            }
+        });
+
+        // Favorites toggle
+        function toggleFavorite(id, event) {
+            if (event) event.stopPropagation();
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(f => f !== id);
+                showToast("Removed from your saved list");
+            } else {
+                favorites.push(id);
+                showToast("Saved to your favorites ★");
+            }
+            localStorage.setItem('edu_favorites', JSON.stringify(favorites));
+            updateFavoritesBadge();
+            renderSlides();
+        }
+
+        function updateFavoritesBadge() {
+            const badge = document.getElementById('fav-count-badge');
+            if (badge) badge.textContent = favorites.length;
+        }
+
         // Category filter buttons
         const categoryButtons = document.querySelectorAll('.category-btn');
         categoryButtons.forEach(btn => {
@@ -562,10 +808,16 @@
             });
         });
 
-        // Format filter dropdown
+        // Format and Sort filter dropdowns
         const formatSelect = document.getElementById('format-filter');
         formatSelect?.addEventListener('change', (e) => {
             selectedFormat = e.target.value;
+            renderSlides();
+        });
+
+        const sortSelect = document.getElementById('sort-select');
+        sortSelect?.addEventListener('change', (e) => {
+            sortBy = e.target.value;
             renderSlides();
         });
 
@@ -573,10 +825,12 @@
         function resetFilters() {
             selectedCategory = "All";
             selectedFormat = "All";
+            sortBy = "featured";
             searchQuery = "";
             if (heroSearch) heroSearch.value = "";
             if (secondarySearch) secondarySearch.value = "";
             if (formatSelect) formatSelect.value = "All";
+            if (sortSelect) sortSelect.value = "featured";
             
             categoryButtons.forEach(b => {
                 if (b.getAttribute('data-category') === 'All') {
@@ -604,7 +858,11 @@
                 statSlidesCount.textContent = `${academicResources.length}+`;
             }
 
-            const filtered = (typeof academicResources !== 'undefined' ? academicResources : []).filter(item => {
+            let filtered = (typeof academicResources !== 'undefined' ? academicResources : []).filter(item => {
+                // Favorites filter
+                if (selectedCategory === "Favorites") {
+                    return favorites.includes(item.id);
+                }
                 // Category match
                 const matchCategory = selectedCategory === "All" || item.category === selectedCategory;
                 // Format match
@@ -620,6 +878,20 @@
                 return matchCategory && matchFormat && matchSearch;
             });
 
+            // Sorting
+            if (sortBy === "title-az") {
+                filtered.sort((a, b) => a.title.localeCompare(b.title));
+            } else if (sortBy === "slides-desc") {
+                filtered.sort((a, b) => {
+                    const countA = parseInt(a.slidesCount) || 0;
+                    const countB = parseInt(b.slidesCount) || 0;
+                    return countB - countA;
+                });
+            } else {
+                // Featured first
+                filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+            }
+
             // Update counter
             if (resultsCount) {
                 resultsCount.textContent = `Showing ${filtered.length} of ${academicResources.length} presentations`;
@@ -634,10 +906,12 @@
             emptyState?.classList.add('hidden');
 
             grid.innerHTML = filtered.map(item => {
+                const isFav = favorites.includes(item.id);
                 const badgeColor = item.category.includes('Computer') ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300' :
+                                   item.category.includes('Biology') ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' :
+                                   item.category.includes('Economics') ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300' :
+                                   item.category.includes('Geography') ? 'bg-cyan-100 text-cyan-700 dark:bg-cyan-950/60 dark:text-cyan-300' :
                                    item.category.includes('Electronics') ? 'bg-teal-100 text-teal-700 dark:bg-teal-950/60 dark:text-teal-300' :
-                                   item.category.includes('Mathematics') ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300' :
-                                   item.category.includes('Notes') ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' :
                                    'bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300';
 
                 const topicsHtml = item.topicsCovered.slice(0, 3).map(tpc => `
@@ -647,19 +921,25 @@
                     </li>
                 `).join('');
 
+                const tagsHtml = item.tags.slice(0, 3).map(t => `
+                    <button onclick="quickFilterSearch('${t}')" class="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-600 dark:bg-slate-800 dark:text-slate-300">#${t}</button>
+                `).join(' ');
+
                 return `
-                    <div class="card group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-400 dark:border-slate-800 dark:bg-slate-900/90 dark:hover:border-teal-400/50">
+                    <div class="card group flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-400 dark:border-slate-800 dark:bg-slate-900/90 dark:hover:border-teal-400/50">
                         
                         <div>
-                            <!-- Header Meta -->
+                            <!-- Header Meta + Bookmark -->
                             <div class="flex items-center justify-between gap-2 mb-3">
                                 <span class="rounded-full px-2.5 py-0.5 text-[11px] font-bold ${badgeColor}">
                                     ${item.category}
                                 </span>
-                                <div class="flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
+
+                                <div class="flex items-center gap-2">
                                     <span class="rounded bg-slate-100 px-2 py-0.5 font-mono text-[10px] uppercase font-bold dark:bg-slate-800 dark:text-slate-300">${item.type}</span>
-                                    <span>•</span>
-                                    <span>${item.slidesCount}</span>
+                                    <button onclick="toggleFavorite('${item.id}', event)" title="${isFav ? 'Remove from Saved' : 'Save Presentation'}" class="text-sm p-1 rounded-lg transition hover:scale-125 ${isFav ? 'text-amber-500' : 'text-slate-300 dark:text-slate-600 hover:text-amber-500'}">
+                                        ★
+                                    </button>
                                 </div>
                             </div>
 
@@ -668,11 +948,12 @@
                                 ${item.title}
                             </h3>
 
-                            <!-- Author & Level -->
+                            <!-- Author & Details -->
                             <div class="mt-1 flex items-center gap-2 text-xs text-slate-400">
                                 <span>${item.author}</span>
                                 <span>•</span>
-                                <span>${item.academicLevel}</span>
+                                <span>${item.slidesCount}</span>
+                                ${item.fileSize ? `<span>•</span><span>${item.fileSize}</span>` : ''}
                             </div>
 
                             <!-- Summary -->
@@ -686,16 +967,21 @@
                                     ${topicsHtml}
                                 </ul>
                             </div>
+
+                            <!-- Tags -->
+                            <div class="mt-3 flex flex-wrap gap-1">
+                                ${tagsHtml}
+                            </div>
                         </div>
 
                         <!-- Action Buttons -->
                         <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2">
                             <button onclick="openSlideModal('${item.id}')" class="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
                                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                <span>Preview Slides</span>
+                                <span>Slide Deck View</span>
                             </button>
                             
-                            <a href="${item.fileUrl}" download class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-blue-600 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700" title="Download Presentation">
+                            <a href="${item.fileUrl}" download class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-blue-600 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700" title="Download Slide Deck">
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                             </a>
                         </div>
@@ -705,79 +991,114 @@
             }).join('');
         }
 
-        // Render Quick Formula Cards
-        function renderFormulas() {
-            const grid = document.getElementById('formulas-grid');
-            if (!grid || typeof academicFormulas === 'undefined') return;
-
-            grid.innerHTML = academicFormulas.map(f => `
-                <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                    <span class="rounded bg-blue-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:bg-teal-950 dark:text-teal-300">
-                        ${f.subject}
-                    </span>
-                    <h3 class="mt-2 text-base font-bold text-slate-900 dark:text-white">${f.title}</h3>
-                    
-                    <div class="mt-3 rounded-xl bg-slate-900 p-3 font-mono text-xs font-semibold text-teal-300 dark:bg-slate-950">
-                        <code>${f.formula}</code>
-                    </div>
-
-                    <p class="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                        ${f.description}
-                    </p>
-                </div>
-            `).join('');
-        }
-
-        // Slide Modal Functions
+        // ==========================================
+        // SLIDE MODAL & NATIVE CAROUSEL THEATER LOGIC
+        // ==========================================
         function openSlideModal(id) {
             const item = academicResources.find(r => r.id === id);
             if (!item) return;
 
             currentModalSlide = item;
+            currentDeckIndex = 0;
 
             document.getElementById('modal-title').textContent = item.title;
             document.getElementById('modal-category').textContent = item.category;
-            document.getElementById('modal-type').textContent = item.type;
-            document.getElementById('modal-slides-count').textContent = item.slidesCount;
+            document.getElementById('modal-type-badge').textContent = item.type;
             document.getElementById('modal-summary').textContent = item.summary;
 
-            // Topics list
-            const topicsContainer = document.getElementById('modal-topics');
-            topicsContainer.innerHTML = item.topicsCovered.map(t => `
-                <div class="flex items-start gap-2 rounded-xl bg-slate-50 p-2.5 text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                    <svg class="h-4 w-4 shrink-0 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>${t}</span>
-                </div>
-            `).join('');
-
-            // Iframe Preview URL
+            const nativeStage = document.getElementById('native-slide-stage');
+            const iframeContainer = document.getElementById('iframe-viewer-container');
             const iframe = document.getElementById('modal-iframe');
-            const fallback = document.getElementById('modal-fallback');
             const openTab = document.getElementById('modal-open-tab');
             const downloadBtn = document.getElementById('modal-download-btn');
-            const fallbackBtn = document.getElementById('modal-fallback-btn');
-
-            if (item.previewUrl) {
-                iframe.src = item.previewUrl;
-                iframe.classList.remove('hidden');
-                fallback?.classList.add('hidden');
-                openTab.href = item.previewUrl;
-            } else {
-                iframe.src = '';
-                iframe.classList.add('hidden');
-                fallback?.classList.remove('hidden');
-                openTab.href = item.fileUrl;
-            }
 
             downloadBtn.href = item.fileUrl;
             downloadBtn.setAttribute('download', item.fileUrl.split('/').pop());
-            if (fallbackBtn) {
-                fallbackBtn.href = item.fileUrl;
-                fallbackBtn.setAttribute('download', item.fileUrl.split('/').pop());
+
+            // If it's an interactive HTML app, allow both native iframe and slide overview
+            if (item.type === 'Interactive HTML' || item.fileUrl.endsWith('.html')) {
+                iframeContainer.classList.remove('hidden');
+                iframe.src = item.fileUrl;
+                openTab.href = item.fileUrl;
+            } else {
+                iframeContainer.classList.add('hidden');
+                iframe.src = '';
             }
+
+            renderCurrentSlideStage();
 
             document.getElementById('slide-preview-modal').classList.remove('hidden');
             document.body.classList.add('overflow-hidden');
+        }
+
+        function renderCurrentSlideStage() {
+            if (!currentModalSlide || !currentModalSlide.slidesDeck) return;
+            const deck = currentModalSlide.slidesDeck;
+            const total = deck.length;
+            if (currentDeckIndex >= total) currentDeckIndex = total - 1;
+            if (currentDeckIndex < 0) currentDeckIndex = 0;
+
+            const slide = deck[currentDeckIndex];
+
+            // Counter
+            document.getElementById('modal-slide-counter').textContent = `Slide ${currentDeckIndex + 1} of ${total}`;
+            document.getElementById('slide-stage-number').textContent = `Slide ${currentDeckIndex + 1}: ${slide.subtitle || ''}`;
+            document.getElementById('slide-stage-title').textContent = slide.title;
+            document.getElementById('slide-stage-subtitle').textContent = slide.subtitle || '';
+
+            // Bullets
+            const bulletsEl = document.getElementById('slide-stage-bullets');
+            bulletsEl.innerHTML = (slide.bullets || []).map(b => `
+                <div class="flex items-start gap-3 rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-teal-950 dark:text-teal-400">
+                        <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <span class="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed">${b}</span>
+                </div>
+            `).join('');
+
+            // Takeaway
+            const takeawayBox = document.getElementById('slide-stage-takeaway-box');
+            const takeawayText = document.getElementById('slide-stage-takeaway');
+            if (slide.takeaway) {
+                takeawayBox.classList.remove('hidden');
+                takeawayText.textContent = slide.takeaway;
+            } else {
+                takeawayBox.classList.add('hidden');
+            }
+
+            // Dots
+            const dotsEl = document.getElementById('slide-dots-indicator');
+            dotsEl.innerHTML = deck.map((_, i) => `
+                <button onclick="jumpToSlide(${i})" class="h-2 rounded-full transition-all ${i === currentDeckIndex ? 'w-6 bg-blue-600 dark:bg-teal-400' : 'w-2 bg-slate-300 dark:bg-slate-700'}" title="Go to Slide ${i+1}"></button>
+            `).join('');
+
+            // Prev / Next button state
+            document.getElementById('slide-prev-btn').disabled = currentDeckIndex === 0;
+            document.getElementById('slide-prev-btn').classList.toggle('opacity-50', currentDeckIndex === 0);
+            document.getElementById('slide-next-btn').disabled = currentDeckIndex === total - 1;
+            document.getElementById('slide-next-btn').classList.toggle('opacity-50', currentDeckIndex === total - 1);
+        }
+
+        function nextSlide() {
+            if (!currentModalSlide || !currentModalSlide.slidesDeck) return;
+            if (currentDeckIndex < currentModalSlide.slidesDeck.length - 1) {
+                currentDeckIndex++;
+                renderCurrentSlideStage();
+            }
+        }
+
+        function prevSlide() {
+            if (!currentModalSlide || !currentModalSlide.slidesDeck) return;
+            if (currentDeckIndex > 0) {
+                currentDeckIndex--;
+                renderCurrentSlideStage();
+            }
+        }
+
+        function jumpToSlide(index) {
+            currentDeckIndex = index;
+            renderCurrentSlideStage();
         }
 
         function closeSlideModal() {
@@ -787,6 +1108,48 @@
             if (iframe) iframe.src = '';
             document.body.classList.remove('overflow-hidden');
             currentModalSlide = null;
+        }
+
+        function toggleSlideCarouselMode() {
+            const nativeStage = document.getElementById('native-slide-stage');
+            const iframeContainer = document.getElementById('iframe-viewer-container');
+            if (iframeContainer.classList.contains('hidden') && currentModalSlide?.fileUrl.endsWith('.html')) {
+                iframeContainer.classList.remove('hidden');
+            } else if (!iframeContainer.classList.contains('hidden')) {
+                iframeContainer.classList.add('hidden');
+            }
+        }
+
+        // ==========================================
+        // CITATION MODAL LOGIC
+        // ==========================================
+        function openCitationModal() {
+            if (!currentModalSlide) return;
+            const apa = currentModalSlide.citation?.apa || `${currentModalSlide.author}. (2026). ${currentModalSlide.title}.`;
+            const ieee = currentModalSlide.citation?.ieee || `${currentModalSlide.author}, "${currentModalSlide.title}," 2026.`;
+            document.getElementById('citation-apa').textContent = apa;
+            document.getElementById('citation-ieee').textContent = ieee;
+            document.getElementById('citation-modal').classList.remove('hidden');
+        }
+
+        function closeCitationModal() {
+            document.getElementById('citation-modal').classList.add('hidden');
+        }
+
+        function copyCitationText(type) {
+            const text = document.getElementById(`citation-${type}`).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`Copied ${type.toUpperCase()} citation to clipboard!`);
+            });
+        }
+
+        // Copy link to current slide
+        function copySlideLink() {
+            if (!currentModalSlide) return;
+            const url = `${window.location.origin}${window.location.pathname}#${currentModalSlide.id}`;
+            navigator.clipboard.writeText(url).then(() => {
+                showToast("Slide presentation link copied to clipboard!");
+            });
         }
 
         // How to add slides modal
@@ -800,15 +1163,6 @@
             document.body.classList.remove('overflow-hidden');
         }
 
-        // Copy link to current slide
-        function copySlideLink() {
-            if (!currentModalSlide) return;
-            const url = `${window.location.origin}${window.location.pathname}#${currentModalSlide.id}`;
-            navigator.clipboard.writeText(url).then(() => {
-                showToast("Slide presentation link copied to clipboard!");
-            });
-        }
-
         // Toast notification
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -820,18 +1174,220 @@
             }, 3000);
         }
 
-        // Listen for ESC key to close modal
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeSlideModal();
-                closeAddSlidesModal();
+        // ==========================================
+        // INTERACTIVE ACADEMIC TOOLKIT LOGIC
+        // ==========================================
+        function switchToolTab(tab) {
+            document.querySelectorAll('.tool-tab').forEach(b => {
+                b.classList.remove('active', 'bg-blue-600', 'text-white', 'dark:bg-teal-400', 'dark:text-slate-950');
+                b.classList.add('border', 'border-slate-200', 'bg-white', 'text-slate-600', 'dark:border-slate-700', 'dark:bg-slate-800', 'dark:text-slate-300');
+            });
+            const activeBtn = document.getElementById(`tool-tab-${tab}`);
+            activeBtn?.classList.add('active', 'bg-blue-600', 'text-white', 'dark:bg-teal-400', 'dark:text-slate-950');
+            activeBtn?.classList.remove('border', 'border-slate-200', 'bg-white', 'text-slate-600');
+
+            document.querySelectorAll('.tool-pane').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`tool-pane-${tab}`)?.classList.remove('hidden');
+        }
+
+        // Seminar Timer
+        let timerSeconds = 600;
+        let initialSeconds = 600;
+        let timerInterval = null;
+
+        function setTimerMinutes(mins) {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = null;
+            initialSeconds = mins * 60;
+            timerSeconds = initialSeconds;
+            updateTimerDisplay();
+            document.getElementById('timer-toggle-btn').textContent = "Start Rehearsal";
+            document.getElementById('timer-status').textContent = "Ready to Begin";
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timerSeconds / 60);
+            const s = timerSeconds % 60;
+            document.getElementById('timer-display').textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('timer-toggle-btn');
+            const status = document.getElementById('timer-status');
+
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                btn.textContent = "Resume";
+                status.textContent = "Paused";
+            } else {
+                btn.textContent = "Pause";
+                status.textContent = "Rehearsing Presentation...";
+                timerInterval = setInterval(() => {
+                    if (timerSeconds > 0) {
+                        timerSeconds--;
+                        updateTimerDisplay();
+                        if (timerSeconds === 120) {
+                            showToast("⚠️ 2 Minutes Remaining in Seminar!");
+                        }
+                    } else {
+                        clearInterval(timerInterval);
+                        timerInterval = null;
+                        btn.textContent = "Start";
+                        status.textContent = "Time Concluded! (Q&A Session)";
+                        showToast("🔔 Presentation time concluded!");
+                    }
+                }, 1000);
             }
-        });
+        }
+
+        function resetTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = null;
+            timerSeconds = initialSeconds;
+            updateTimerDisplay();
+            document.getElementById('timer-toggle-btn').textContent = "Start Rehearsal";
+            document.getElementById('timer-status').textContent = "Ready to Begin";
+        }
+
+        // Ohm's Law Solver
+        function calculateOhmsLaw() {
+            const vInput = document.getElementById('ohm-voltage');
+            const iInput = document.getElementById('ohm-current');
+            const rInput = document.getElementById('ohm-resistance');
+            const pInput = document.getElementById('ohm-power');
+            const msg = document.getElementById('ohm-msg');
+
+            let v = parseFloat(vInput.value);
+            let i = parseFloat(iInput.value);
+            let r = parseFloat(rInput.value);
+            let p = parseFloat(pInput.value);
+
+            let count = [v, i, r, p].filter(val => !isNaN(val) && val > 0).length;
+            if (count !== 2) {
+                msg.classList.remove('hidden');
+                return;
+            }
+            msg.classList.add('hidden');
+
+            // Solve based on the 2 knowns
+            if (!isNaN(v) && !isNaN(i)) {
+                r = v / i;
+                p = v * i;
+            } else if (!isNaN(v) && !isNaN(r)) {
+                i = v / r;
+                p = (v * v) / r;
+            } else if (!isNaN(v) && !isNaN(p)) {
+                i = p / v;
+                r = (v * v) / p;
+            } else if (!isNaN(i) && !isNaN(r)) {
+                v = i * r;
+                p = i * i * r;
+            } else if (!isNaN(i) && !isNaN(p)) {
+                v = p / i;
+                r = p / (i * i);
+            } else if (!isNaN(r) && !isNaN(p)) {
+                v = Math.sqrt(p * r);
+                i = Math.sqrt(p / r);
+            }
+
+            vInput.value = v.toFixed(3);
+            iInput.value = i.toFixed(4);
+            rInput.value = r.toFixed(2);
+            pInput.value = p.toFixed(3);
+            showToast("Solved Ohm's Law and Power equations!");
+        }
+
+        function clearOhmsInputs() {
+            document.getElementById('ohm-voltage').value = '';
+            document.getElementById('ohm-current').value = '';
+            document.getElementById('ohm-resistance').value = '';
+            document.getElementById('ohm-power').value = '';
+            document.getElementById('ohm-msg').classList.add('hidden');
+        }
+
+        // Speech Pacing Estimator
+        const speechInput = document.getElementById('speech-text-input');
+        speechInput?.addEventListener('input', calculateSpeechPacing);
+
+        function calculateSpeechPacing() {
+            const text = speechInput?.value.trim() || '';
+            const words = text ? text.split(/\s+/).length : 0;
+            document.getElementById('word-count-stat').textContent = words;
+
+            // 130 words per minute (Formal)
+            const formalTotalSeconds = Math.round((words / 130) * 60);
+            const formalM = Math.floor(formalTotalSeconds / 60);
+            const formalS = formalTotalSeconds % 60;
+            document.getElementById('formal-pace-stat').textContent = `${formalM}m ${String(formalS).padStart(2, '0')}s`;
+
+            // 160 words per minute (Brisk)
+            const briskTotalSeconds = Math.round((words / 160) * 60);
+            const briskM = Math.floor(briskTotalSeconds / 60);
+            const briskS = briskTotalSeconds % 60;
+            document.getElementById('conversational-pace-stat').textContent = `${briskM}m ${String(briskS).padStart(2, '0')}s`;
+        }
+
+        function loadSampleAssemblySpeech() {
+            if (!speechInput) return;
+            speechInput.value = `A wise man speaks because he has something to say; a fool speaks because he has to say something. I am Dhyan and I am Johan and we are your hosts for today's assembly. I now request Master Megharoopan to lead us in the Pledge to remind us of our dues toward our great nation.\n\nThank you Megharoopan. Now we can proceed to the speeches of class.\n\nThank you students for your outstanding speeches. Now I request Aswathy Ma'am for feedback. Students are requested to be silent and rise for the school anthem.`;
+            calculateSpeechPacing();
+            showToast("Loaded School Assembly Script!");
+        }
+
+        // Big-O Benchmarker
+        function updateBigOValues(n) {
+            document.getElementById('bigo-n-val').textContent = n;
+            const container = document.getElementById('bigo-cards');
+            if (!container) return;
+
+            const nNum = parseInt(n);
+            const o1 = 1;
+            const oLogN = Math.round(Math.log2(nNum));
+            const oN = nNum;
+            const oNLogN = Math.round(nNum * Math.log2(nNum));
+            const oNSquared = nNum * nNum;
+            const o2N = nNum <= 20 ? Math.pow(2, nNum).toLocaleString() : '> 1,000,000+ (Explosive)';
+
+            container.innerHTML = `
+                <div class="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3.5 dark:border-emerald-900/50 dark:bg-emerald-950/20 text-center">
+                    <span class="rounded bg-emerald-200 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300">O(1) Constant</span>
+                    <div class="mt-2 text-xl font-black text-emerald-700 dark:text-emerald-300">${o1} op</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Hash Map Lookup</div>
+                </div>
+                <div class="rounded-xl border border-teal-200 bg-teal-50/60 p-3.5 dark:border-teal-900/50 dark:bg-teal-950/20 text-center">
+                    <span class="rounded bg-teal-200 px-2 py-0.5 text-[10px] font-bold text-teal-800 dark:bg-teal-900 dark:text-teal-300">O(log N)</span>
+                    <div class="mt-2 text-xl font-black text-teal-700 dark:text-teal-300">${oLogN} ops</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Binary Search</div>
+                </div>
+                <div class="rounded-xl border border-blue-200 bg-blue-50/60 p-3.5 dark:border-blue-900/50 dark:bg-blue-950/20 text-center">
+                    <span class="rounded bg-blue-200 px-2 py-0.5 text-[10px] font-bold text-blue-800 dark:bg-blue-900 dark:text-blue-300">O(N) Linear</span>
+                    <div class="mt-2 text-xl font-black text-blue-700 dark:text-blue-300">${oN} ops</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Array Scan</div>
+                </div>
+                <div class="rounded-xl border border-indigo-200 bg-indigo-50/60 p-3.5 dark:border-indigo-900/50 dark:bg-indigo-950/20 text-center">
+                    <span class="rounded bg-indigo-200 px-2 py-0.5 text-[10px] font-bold text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300">O(N log N)</span>
+                    <div class="mt-2 text-xl font-black text-indigo-700 dark:text-indigo-300">${oNLogN} ops</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Merge / Quick Sort</div>
+                </div>
+                <div class="rounded-xl border border-amber-200 bg-amber-50/60 p-3.5 dark:border-amber-900/50 dark:bg-amber-950/20 text-center">
+                    <span class="rounded bg-amber-200 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:bg-amber-900 dark:text-amber-300">O(N²) Quadratic</span>
+                    <div class="mt-2 text-xl font-black text-amber-700 dark:text-amber-300">${oNSquared} ops</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Nested Loops</div>
+                </div>
+                <div class="rounded-xl border border-rose-200 bg-rose-50/60 p-3.5 dark:border-rose-900/50 dark:bg-rose-950/20 text-center">
+                    <span class="rounded bg-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-800 dark:bg-rose-900 dark:text-rose-300">O(2ᴺ) Exponential</span>
+                    <div class="mt-2 text-base font-black text-rose-700 dark:text-rose-300 truncate">${o2N}</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">Brute Force Subsets</div>
+                </div>
+            `;
+        }
 
         // Initialize on DOM load
         document.addEventListener('DOMContentLoaded', () => {
             renderSlides();
-            renderFormulas();
+            updateFavoritesBadge();
+            updateBigOValues(16);
 
             // Check if hash matches an ID
             const hash = window.location.hash.replace('#', '');
