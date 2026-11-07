@@ -1623,9 +1623,30 @@
                 console.error(e);
             }
 
-            // 2. Load from Cloudflare Edge API (/api/submissions)
+            // 2. Load from Cloudflare Edge API (/api/submissions) with GitHub API fallback
             try {
-                const res = await fetch(CLOUDFLARE_API_ENDPOINT);
+                let res = await fetch(CLOUDFLARE_API_ENDPOINT);
+                // Fallback directly to public GitHub Contents API if Worker endpoint is not available
+                if (!res.ok) {
+                    const ghRes = await fetch('https://api.github.com/repos/dhyankrishna24/esp32site/contents/submissions', {
+                        headers: { 'User-Agent': 'EduSphere-Web' }
+                    });
+                    if (ghRes.ok) {
+                        const files = await ghRes.json();
+                        if (Array.isArray(files)) {
+                            const items = await Promise.all(files.filter(f => f.name.endsWith('.json')).map(async f => {
+                                try {
+                                    const raw = await fetch(f.download_url);
+                                    if (raw.ok) return await raw.json();
+                                } catch(e){}
+                                return null;
+                            }));
+                            const valid = items.filter(Boolean);
+                            res = { ok: true, json: async () => valid };
+                        }
+                    }
+                }
+
                 if (res.ok) {
                     const data = await res.json();
                     if (data && Array.isArray(data) && data.length > 0) {

@@ -1,0 +1,39 @@
+{
+  "id": "quantum-computing-algorithms",
+  "title": "Introduction to Quantum Computing Algorithms & Qubit Mechanics",
+  "category": "Computer Science",
+  "type": "PPTX",
+  "slidesCount": "14 Slides",
+  "fileSize": "Cloud Shared",
+  "academicLevel": "Senior Secondary / Undergraduate",
+  "author": "Arjun Menon (Grade 12)",
+  "date": "2026",
+  "featured": true,
+  "isCommunity": true,
+  "summary": "A student-authored seminar deck introducing qubits, superposition, Bloch sphere states, Hadamard and CNOT quantum gates, and Shor's factoring polynomial speedup.",
+  "topicsCovered": [
+    "Qubits, Dirac ket notation, and Bloch Sphere coordinates",
+    "Quantum logic gates: Hadamard, Pauli-X, and CNOT entanglement",
+    "Shor's and Grover's algorithms: Complexity advantages vs classical computing"
+  ],
+  "fileUrl": "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/view?usp=sharing",
+  "embedUrl": "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/preview",
+  "tags": ["quantum", "algorithms", "qubits", "computer science", "physics", "StudentDeck"],
+  "citation": {
+    "apa": "Menon, A. (2026). Introduction to Quantum Computing Algorithms & Qubit Mechanics. EduSphere Academic Hub.",
+    "ieee": "A. Menon, \"Introduction to Quantum Computing Algorithms & Qubit Mechanics,\" EduSphere Academic Hub, 2026."
+  },
+  "slidesDeck": [
+    {
+      "slideNumber": 1,
+      "title": "Introduction to Quantum Computing",
+      "subtitle": "Presented by Arjun Menon (Grade 12)",
+      "bullets": [
+        "Classical bits exist strictly as 0 or 1, whereas quantum bits (qubits) exploit quantum superposition.",
+        "State space expands exponentially: N entangled qubits can simultaneously represent 2^N complex amplitudes.",
+        "Core objective: Harness constructive interference to amplify correct computational solutions."
+      ],
+      "takeaway": "Quantum computing is fundamentally probabilistic and non-deterministic prior to quantum measurement."
+    }
+  ]
+}
