@@ -38,12 +38,18 @@
 * **📄 Executive Study Cheatsheet**: Formats slide summaries, takeaways, and topics into an exportable study guide with print optimization (`@media print`) and Markdown copy.
 * **⏳ Talk Time Badges**: Dynamic speaking duration estimation (`⏳ ~Xm talk`) based on slide volume.
 
-### 4. 🚀 Student Contributor Studio
+### 4. 🛠️ Slides Data Studio (Visual GUI Editor)
+* **No Manual Code Editing**: Full graphical dashboard ([`studio.html`](studio.html)) to create, update, reorder, and delete presentation decks, slide breakdowns, and academic formulas.
+* **Direct-to-Disk Saving**: Uses the Web File System Access API to directly save updates back to [`slides-data.js`](slides-data.js) on your computer with a single click.
+* **Slide-by-Slide Visual Builder**: Add slides, adjust titles/subtitles, write bullet points, and set core takeaways visually.
+* **Live Portal Synchronization**: In-browser instant preview syncing via `localStorage` so edits reflect on [`index.html`](index.html) immediately.
+
+### 5. 🚀 Student Contributor Studio
 * **Peer Slide Sharing**: A submission studio for fellow students to add and showcase their school and college presentations.
 * **Multi-Format Support**: Supports `.pptx`, `.pdf`, interactive web apps, Canva links, and cloud storage shares (Google Drive, OneDrive).
 * **Open Source Contribution**: One-click code generation for [`slides-data.js`](slides-data.js) enabling easy GitHub Pull Requests.
 
-### 5. 🔌 ESP32 Microcontroller Hub
+### 6. 🔌 ESP32 Microcontroller Hub
 * **Hands-on IoT Subpage**: Preserved hardware engineering workspace located in [`esp32/`](esp32/).
 * **Telemetry Dashboards**: Environmental sensor readings, remote LED controller, radio stream hub, and embedded FreeRTOS experiments.
 
@@ -54,6 +60,7 @@
 ```
 esp32site/
 ├── index.html               # Main Academic Hub & Slides Portal
+├── studio.html              # Visual GUI Editor for slides-data.js
 ├── about.html               # Author biography & background
 ├── slides-data.js           # Comprehensive presentations database & formulas
 ├── wrangler.json            # Cloudflare Workers Static Assets configuration
