@@ -48,6 +48,43 @@
         ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.7); }
         .slide-glow { box-shadow: 0 0 50px -10px rgba(59, 130, 246, 0.15); }
+
+        /* 3D Flashcard flip */
+        .perspective-1000 { perspective: 1000px; }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            min-height: 220px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .flashcard-inner.flipped { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            top: 0;
+            left: 0;
+        }
+        .flashcard-back { transform: rotateY(180deg); }
+
+        /* Cheatsheet Print Layout */
+        @media print {
+            body > *:not(#cheatsheet-modal) { display: none !important; }
+            #cheatsheet-modal {
+                position: static !important;
+                display: block !important;
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            #cheatsheet-modal .no-print { display: none !important; }
+            #cheatsheet-content { color: black !important; }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-800 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 selection:bg-blue-500 selection:text-white">
@@ -341,6 +378,15 @@
                 <button onclick="switchToolTab('bigo')" id="tool-tab-bigo" class="tool-tab rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     📈 Big-O Complexity Benchmarker
                 </button>
+                <button onclick="switchToolTab('quiz')" id="tool-tab-quiz" class="tool-tab rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    🧠 Flashcards & Quiz
+                </button>
+                <button onclick="switchToolTab('formulas')" id="tool-tab-formulas" class="tool-tab rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    📐 Formula Directory
+                </button>
+                <button onclick="switchToolTab('focus')" id="tool-tab-focus" class="tool-tab rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    🎧 Focus Audio
+                </button>
             </div>
 
             <!-- Tool Container 1: Seminar Timer -->
@@ -469,6 +515,172 @@
                 </div>
             </div>
 
+            <!-- Tool Container 5: Flashcard & Seminar Quiz Trainer -->
+            <div id="tool-pane-quiz" class="tool-pane hidden mt-8 max-w-3xl mx-auto rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Flashcards & Seminar Quiz Trainer</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Test your recall of key definitions, medical mechanisms, and algorithms.</p>
+                    </div>
+
+                    <!-- Mode Toggle (Flashcards vs Quiz) -->
+                    <div class="flex items-center rounded-xl bg-slate-100 p-1 dark:bg-slate-800 text-xs font-semibold">
+                        <button onclick="setQuizSubMode('flashcard')" id="quiz-submode-flashcard" class="rounded-lg bg-white px-3 py-1.5 shadow-sm font-bold text-blue-600 dark:bg-slate-700 dark:text-teal-300">
+                            🗂️ Flashcards
+                        </button>
+                        <button onclick="setQuizSubMode('quiz')" id="quiz-submode-quiz" class="rounded-lg px-3 py-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                            📝 5-Question Quiz
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sub-pane 1: Flashcards -->
+                <div id="quiz-box-flashcard" class="space-y-4">
+                    <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                        <span id="flashcard-category" class="rounded-full bg-blue-100 px-2.5 py-0.5 font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">Computer Science</span>
+                        <span id="flashcard-counter" class="font-mono">Card 1 of 8</span>
+                    </div>
+
+                    <!-- 3D Flip Card Container -->
+                    <div class="perspective-1000 cursor-pointer" onclick="flipFlashcard()">
+                        <div id="flashcard-element" class="flashcard-inner rounded-3xl border border-blue-200/80 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-teal-500/5 p-8 text-center flex flex-col justify-center items-center shadow-md dark:border-slate-700 dark:bg-slate-800/80 min-h-[220px]">
+                            
+                            <!-- Front side -->
+                            <div class="flashcard-front flex flex-col justify-center items-center p-6">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-teal-400 mb-2">Question (Click to reveal answer)</span>
+                                <h4 id="flashcard-question" class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-relaxed">
+                                    Loading flashcard question...
+                                </h4>
+                                <span class="mt-4 text-[11px] text-slate-400 font-medium">🔄 Tap / Click to flip</span>
+                            </div>
+
+                            <!-- Back side -->
+                            <div class="flashcard-back flex flex-col justify-center items-center p-6">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-2">Answer & Technical Takeaway</span>
+                                <p id="flashcard-answer" class="text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-200 leading-relaxed">
+                                    Loading answer...
+                                </p>
+                                <div id="flashcard-tip" class="mt-3 text-[11px] text-slate-500 dark:text-slate-400 italic"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="flex items-center justify-between pt-2">
+                        <button onclick="prevFlashcard()" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                            &larr; Previous Card
+                        </button>
+                        <button onclick="flipFlashcard()" class="rounded-xl bg-slate-100 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200">
+                            Flip Card 🔄
+                        </button>
+                        <button onclick="nextFlashcard()" class="rounded-xl bg-blue-600 px-5 py-2 text-xs font-bold text-white shadow-md hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                            Next Card &rarr;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sub-pane 2: Interactive Quiz -->
+                <div id="quiz-box-quiz" class="hidden space-y-4">
+                    <div class="flex items-center justify-between pb-3">
+                        <span class="text-xs text-slate-500 dark:text-slate-400">Answer each question to check your technical understanding.</span>
+                        <span id="quiz-score-badge" class="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">Score: 0 / 5</span>
+                    </div>
+
+                    <div id="quiz-questions-container" class="space-y-4">
+                        <!-- Questions injected dynamically -->
+                    </div>
+
+                    <div class="text-center pt-4">
+                        <button onclick="renderSeminarQuiz()" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                            Restart Quiz
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tool Container 6: Scientific Formulas & Laws Directory -->
+            <div id="tool-pane-formulas" class="tool-pane hidden mt-8 max-w-4xl mx-auto rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">Scientific Formulas & Law Reference Directory</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Quick-reference equations across electronics, computing, mathematics, and biometrics.</p>
+                </div>
+
+                <!-- Search & Subject Filters -->
+                <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                    <div class="relative flex-1">
+                        <input id="formula-search-input" oninput="renderFormulasDirectory()" type="text" placeholder="Search formula name, theorem, or equation..." class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 pl-9 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                        <svg class="h-4 w-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1" id="formula-subject-pills">
+                        <button onclick="setFormulaSubject('All')" class="formula-subj-btn active rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-bold text-white dark:bg-teal-400 dark:text-slate-950">All</button>
+                        <button onclick="setFormulaSubject('Electronics')" class="formula-subj-btn rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">Electronics</button>
+                        <button onclick="setFormulaSubject('Computer')" class="formula-subj-btn rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">Computer Science</button>
+                        <button onclick="setFormulaSubject('Mathematics')" class="formula-subj-btn rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">Math</button>
+                        <button onclick="setFormulaSubject('Biology')" class="formula-subj-btn rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300">Biology</button>
+                    </div>
+                </div>
+
+                <!-- Formulas Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="formulas-grid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Tool Container 7: Ambient Study Focus Sound Generator -->
+            <div id="tool-pane-focus" class="tool-pane hidden mt-8 max-w-2xl mx-auto rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900 text-center">
+                <div class="inline-flex items-center gap-2 rounded-full bg-indigo-100 px-3 py-1 text-xs font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 mb-4">
+                    <span>Web Audio Synthesizer</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Ambient Study Focus Audio</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Natively synthesized white, brown, and binaural alpha noise to enhance cognitive focus during slide rehearsal.</p>
+
+                <!-- Sound Atmosphere Selector -->
+                <div class="my-6 grid grid-cols-3 gap-2 max-w-md mx-auto">
+                    <button onclick="setFocusSoundMode('brown')" id="focus-mode-brown" class="focus-mode-btn active rounded-2xl bg-blue-600 p-3 text-white dark:bg-teal-400 dark:text-slate-950 shadow-sm transition">
+                        <div class="text-lg">🌊</div>
+                        <div class="font-bold text-xs mt-1">Brown Noise</div>
+                        <div class="text-[10px] opacity-80">Deep Study</div>
+                    </button>
+                    <button onclick="setFocusSoundMode('alpha')" id="focus-mode-alpha" class="focus-mode-btn rounded-2xl border border-slate-200 bg-white p-3 text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 shadow-sm transition">
+                        <div class="text-lg">🧠</div>
+                        <div class="font-bold text-xs mt-1">432 Hz Alpha</div>
+                        <div class="text-[10px] opacity-80">Binaural Beat</div>
+                    </button>
+                    <button onclick="setFocusSoundMode('white')" id="focus-mode-white" class="focus-mode-btn rounded-2xl border border-slate-200 bg-white p-3 text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 shadow-sm transition">
+                        <div class="text-lg">💨</div>
+                        <div class="font-bold text-xs mt-1">White Noise</div>
+                        <div class="text-[10px] opacity-80">Mask Chatter</div>
+                    </button>
+                </div>
+
+                <!-- Animated Wave Indicator -->
+                <div class="my-4 flex items-center justify-center gap-1.5 h-8 opacity-30 transition-opacity" id="focus-wave-anim">
+                    <span class="w-1.5 h-4 rounded-full bg-blue-500 animate-pulse"></span>
+                    <span class="w-1.5 h-7 rounded-full bg-indigo-500 animate-pulse delay-75"></span>
+                    <span class="w-1.5 h-5 rounded-full bg-teal-500 animate-pulse delay-150"></span>
+                    <span class="w-1.5 h-8 rounded-full bg-sky-500 animate-pulse delay-100"></span>
+                    <span class="w-1.5 h-3 rounded-full bg-blue-500 animate-pulse delay-200"></span>
+                </div>
+
+                <!-- Status Text -->
+                <div id="focus-status-text" class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
+                    Audio Inactive
+                </div>
+
+                <!-- Master Controls -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-sm mx-auto">
+                    <button id="focus-toggle-btn" onclick="toggleFocusAudio()" class="w-full sm:w-auto rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/25 hover:bg-blue-700 active:scale-95 dark:bg-teal-400 dark:text-slate-950">
+                        Start Focus Audio
+                    </button>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <span class="text-xs text-slate-400">🔈</span>
+                        <input id="focus-volume-slider" type="range" min="0.01" max="0.5" step="0.01" value="0.2" oninput="updateFocusVolume(this.value)" class="w-28 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700">
+                        <span class="text-xs text-slate-400">🔊</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -485,6 +697,12 @@
                 </div>
 
                 <div class="flex items-center gap-2">
+                    <button onclick="toggleSpeakerNotes()" id="speaker-notes-toggle-btn" class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200" title="Toggle Presenter Speaker Notes">
+                        🎙️ Speaker Notes
+                    </button>
+                    <button onclick="toggleFullscreenStage()" id="fullscreen-stage-btn" class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200" title="Projector Fullscreen Mode (Press F)">
+                        🖥️ Fullscreen (F)
+                    </button>
                     <button onclick="toggleSlideCarouselMode()" id="carousel-mode-btn" class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200" title="Switch View">
                         Slide Deck View
                     </button>
@@ -522,6 +740,15 @@
                     <div id="slide-stage-takeaway-box" class="rounded-2xl border border-blue-200/80 bg-blue-50/60 p-4 dark:border-teal-900/40 dark:bg-teal-950/20">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-teal-400">Core Seminar Takeaway</span>
                         <p id="slide-stage-takeaway" class="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 mt-0.5">Takeaway text...</p>
+                    </div>
+
+                    <!-- Speaker Teleprompter / Talking Points -->
+                    <div id="speaker-notes-box" class="hidden mt-4 rounded-2xl border border-amber-200 bg-amber-50/80 p-4 dark:border-amber-900/50 dark:bg-amber-950/30">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">🎙️ Presenter Teleprompter & Talking Points</span>
+                            <span class="text-[10px] text-amber-600/80 dark:text-amber-400 font-mono">Visible to Speaker</span>
+                        </div>
+                        <p id="speaker-notes-text" class="text-xs sm:text-sm font-medium text-amber-950 dark:text-amber-200 leading-relaxed"></p>
                     </div>
 
                     <!-- Carousel Controls -->
@@ -569,6 +796,9 @@
                     </button>
                     <button onclick="openCitationModal()" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
                         <span>Cite Deck</span>
+                    </button>
+                    <button onclick="openCheatsheetModal()" class="inline-flex items-center gap-1.5 rounded-xl border border-indigo-300 bg-indigo-50/80 px-3.5 py-2 text-xs font-bold text-indigo-700 shadow-sm transition hover:bg-indigo-100 dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-300">
+                        <span>📄 Study Cheatsheet</span>
                     </button>
                 </div>
 
@@ -619,6 +849,41 @@
 
             <div class="mt-6 text-right">
                 <button onclick="closeCitationModal()" class="rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white dark:bg-teal-400 dark:text-slate-950">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Executive Study Cheatsheet Modal -->
+    <div id="cheatsheet-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/80 p-4 backdrop-blur-sm sm:p-6 md:p-10">
+        <div class="relative mx-auto w-full max-w-3xl rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
+            <div class="flex items-start justify-between pb-4 border-b border-slate-200 dark:border-slate-800 no-print">
+                <div>
+                    <span class="rounded bg-indigo-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">Instant Study Guide</span>
+                    <h3 class="mt-1 text-xl sm:text-2xl font-black text-slate-900 dark:text-white" id="cheatsheet-title">Deck Cheatsheet</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">High-yield revision notes synthesized from seminar slides.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.print()" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                        🖨️ Print
+                    </button>
+                    <button onclick="copyCheatsheetMarkdown()" id="cheatsheet-copy-btn" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                        📋 Copy MD
+                    </button>
+                    <button onclick="closeCheatsheetModal()" class="rounded-full p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Printable content area -->
+            <div id="cheatsheet-content" class="mt-6 space-y-6 text-slate-800 dark:text-slate-200">
+                <!-- Dynamically populated -->
+            </div>
+
+            <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-800 no-print">
+                <button onclick="closeCheatsheetModal()" class="rounded-xl px-5 py-2 text-xs font-bold bg-blue-600 text-white dark:bg-teal-400 dark:text-slate-950">
+                    Close Cheatsheet
+                </button>
             </div>
         </div>
     </div>
@@ -897,15 +1162,28 @@
             document.getElementById('slides-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Keyboard shortcut: Press / to search
+        // Keyboard shortcut: Press / to search, Arrow keys for slides, F for fullscreen, N for notes
         window.addEventListener('keydown', (e) => {
             if ((e.key === '/' || (e.ctrlKey && e.key === 'k')) && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
                 e.preventDefault();
                 focusSearch();
             }
+            if (e.key === 'Escape') {
+                closeCheatsheetModal();
+                closeCitationModal();
+                closeSlideModal();
+            }
             if (currentModalSlide) {
                 if (e.key === 'ArrowRight') nextSlide();
                 if (e.key === 'ArrowLeft') prevSlide();
+                if ((e.key === 'f' || e.key === 'F') && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    toggleFullscreenStage();
+                }
+                if ((e.key === 'n' || e.key === 'N') && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    toggleSpeakerNotes();
+                }
             }
         });
 
@@ -1141,6 +1419,8 @@
                                 <span class="font-medium text-slate-600 dark:text-slate-300">${item.author}</span>
                                 <span>•</span>
                                 <span>${item.slidesCount}</span>
+                                <span>•</span>
+                                <span class="font-semibold text-blue-600 dark:text-teal-400">⏳ ~${Math.max(5, Math.round((parseInt(item.slidesCount) || 8) * 1.5))}m talk</span>
                                 ${item.fileSize ? `<span>•</span><span>${item.fileSize}</span>` : ''}
                             </div>
 
@@ -1167,6 +1447,9 @@
                             <button onclick="openSlideModal('${item.id}')" class="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
                                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 <span>${isExternal ? 'View Presentation' : 'Slide Deck View'}</span>
+                            </button>
+                            <button onclick="openCheatsheetForCard('${item.id}', event)" class="inline-flex items-center justify-center rounded-xl border border-indigo-200 bg-indigo-50/70 p-2.5 text-indigo-700 transition hover:bg-indigo-100 active:scale-95 dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-300" title="Open Instant Study Cheatsheet">
+                                <span class="text-xs font-bold">📄</span>
                             </button>
                             
                             ${isExternal ? `
@@ -1271,6 +1554,12 @@
                 takeawayBox.classList.add('hidden');
             }
 
+            // Presenter Speaker Notes / Teleprompter
+            const speakerNotesEl = document.getElementById('speaker-notes-text');
+            if (speakerNotesEl) {
+                speakerNotesEl.textContent = getSlideSpeakerNotes(slide, currentDeckIndex, total);
+            }
+
             // Dots
             const dotsEl = document.getElementById('slide-dots-indicator');
             dotsEl.innerHTML = deck.map((_, i) => `
@@ -1322,6 +1611,167 @@
             } else if (!iframeContainer.classList.contains('hidden')) {
                 iframeContainer.classList.add('hidden');
             }
+        }
+
+        // Speaker Notes & Fullscreen Presentation Mode
+        let speakerNotesActive = false;
+        function toggleSpeakerNotes() {
+            speakerNotesActive = !speakerNotesActive;
+            const box = document.getElementById('speaker-notes-box');
+            const btn = document.getElementById('speaker-notes-toggle-btn');
+            if (box) box.classList.toggle('hidden', !speakerNotesActive);
+            if (btn) {
+                btn.classList.toggle('bg-amber-100', speakerNotesActive);
+                btn.classList.toggle('text-amber-800', speakerNotesActive);
+                btn.classList.toggle('dark:bg-amber-950', speakerNotesActive);
+                btn.classList.toggle('dark:text-amber-300', speakerNotesActive);
+            }
+        }
+
+        function getSlideSpeakerNotes(slide, index, total) {
+            if (!slide) return '';
+            if (slide.speakerNotes) return slide.speakerNotes;
+            const firstBullet = (slide.bullets && slide.bullets[0]) ? ` Focus prominently on: "${slide.bullets[0]}".` : '';
+            const takeawayStr = slide.takeaway ? ` Conclude this slide by emphasizing: "${slide.takeaway}"` : '';
+            if (index === 0) {
+                return `[Opening Remarks] Introduce "${slide.title}". State the motivation and target audience of the talk.${firstBullet}${takeawayStr}`;
+            } else if (index === total - 1) {
+                return `[Conclusion & Q&A] Summarize core takeaways.${firstBullet}${takeawayStr} Invite audience questions and open discussion.`;
+            } else {
+                return `[Slide ${index + 1} Talking Points] Guide the room through "${slide.title}".${firstBullet}${takeawayStr} Keep pacing at ~90-120 seconds.`;
+            }
+        }
+
+        function toggleFullscreenStage() {
+            const stage = document.getElementById('native-slide-stage');
+            if (!stage) return;
+            if (!document.fullscreenElement) {
+                if (stage.requestFullscreen) {
+                    stage.requestFullscreen();
+                } else if (stage.webkitRequestFullscreen) {
+                    stage.webkitRequestFullscreen();
+                } else if (stage.msRequestFullscreen) {
+                    stage.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // ==========================================
+        // EXECUTIVE STUDY CHEATSHEET GENERATOR
+        // ==========================================
+        function openCheatsheetModal() {
+            if (!currentModalSlide) return;
+            populateCheatsheetContent(currentModalSlide);
+            document.getElementById('cheatsheet-modal').classList.remove('hidden');
+        }
+
+        function openCheatsheetForCard(id, event) {
+            if (event) event.stopPropagation();
+            const allItems = getAllResources();
+            const item = allItems.find(r => r.id === id);
+            if (!item) return;
+            currentModalSlide = item;
+            populateCheatsheetContent(item);
+            document.getElementById('cheatsheet-modal').classList.remove('hidden');
+        }
+
+        function closeCheatsheetModal() {
+            document.getElementById('cheatsheet-modal').classList.add('hidden');
+        }
+
+        function populateCheatsheetContent(deck) {
+            const container = document.getElementById('cheatsheet-content');
+            const titleEl = document.getElementById('cheatsheet-title');
+            if (!container || !deck) return;
+
+            if (titleEl) {
+                titleEl.textContent = `${deck.title} • Study Cheatsheet`;
+            }
+
+            const slides = deck.slidesDeck || [];
+            const keyPointsHtml = slides.map(s => `
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-800/60">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-blue-600 dark:text-teal-400 uppercase tracking-wider">Slide ${s.slideNumber}: ${s.title}</span>
+                        ${s.subtitle ? `<span class="text-[11px] text-slate-400">${s.subtitle}</span>` : ''}
+                    </div>
+                    <ul class="space-y-1.5 list-disc list-inside text-xs text-slate-700 dark:text-slate-300">
+                        ${(s.bullets || []).map(b => `<li>${b}</li>`).join('')}
+                    </ul>
+                    ${s.takeaway ? `
+                        <div class="mt-3 rounded-xl bg-blue-100/60 p-2.5 text-[11px] font-semibold text-blue-800 dark:bg-teal-950/40 dark:text-teal-300">
+                            💡 Core Principle: ${s.takeaway}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <!-- Overview Banner -->
+                <div class="rounded-2xl border border-indigo-200 bg-indigo-50/70 p-5 dark:border-indigo-900/40 dark:bg-indigo-950/20">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="rounded-full bg-blue-600 px-2.5 py-0.5 text-[10px] font-bold text-white dark:bg-teal-400 dark:text-slate-950">${deck.category}</span>
+                        <span class="rounded-full bg-slate-200 px-2.5 py-0.5 text-[10px] font-mono font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">${deck.type}</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400">Author: <strong>${deck.author}</strong></span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400">• Total Slides: <strong>${deck.slidesCount}</strong></span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">${deck.summary}</p>
+                </div>
+
+                <!-- High-Yield Slide Summaries -->
+                <div>
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-3">High-Yield Slide-by-Slide Breakdown</h4>
+                    <div class="space-y-3">
+                        ${keyPointsHtml}
+                    </div>
+                </div>
+
+                <!-- Topics Covered List -->
+                ${(deck.topicsCovered && deck.topicsCovered.length > 0) ? `
+                    <div class="pt-2">
+                        <h4 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-2">Curriculum Topics Covered</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${deck.topicsCovered.map(t => `<span class="rounded-lg bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">✓ ${t}</span>`).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- Academic Citation Reference -->
+                <div class="pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 font-mono">
+                    <span class="font-bold text-slate-600 dark:text-slate-400">Citation:</span> ${deck.citation?.apa || `${deck.author} (2026). ${deck.title}.`}
+                </div>
+            `;
+        }
+
+        function copyCheatsheetMarkdown() {
+            if (!currentModalSlide) return;
+            const deck = currentModalSlide;
+            const slides = deck.slidesDeck || [];
+            let md = `# ${deck.title}\n`;
+            md += `*Discipline: ${deck.category} | Author: ${deck.author} | Format: ${deck.type}*\n\n`;
+            md += `## Executive Summary\n${deck.summary}\n\n`;
+            md += `## Slide-by-Slide Technical Takeaways\n`;
+            slides.forEach(s => {
+                md += `\n### Slide ${s.slideNumber}: ${s.title}\n`;
+                if (s.subtitle) md += `*${s.subtitle}*\n`;
+                (s.bullets || []).forEach(b => {
+                    md += `- ${b}\n`;
+                });
+                if (s.takeaway) md += `> **Key Takeaway:** ${s.takeaway}\n`;
+            });
+            if (deck.citation?.apa) {
+                md += `\n## Citation (APA)\n${deck.citation.apa}\n`;
+            }
+
+            navigator.clipboard.writeText(md).then(() => {
+                showToast("Copied Cheatsheet Markdown to clipboard!");
+            }).catch(() => {
+                showToast("Markdown copied!");
+            });
         }
 
         // ==========================================
@@ -1867,6 +2317,511 @@
             `;
         }
 
+        // ==========================================
+        // FLASHCARD & QUIZ TRAINER DATA & LOGIC
+        // ==========================================
+        const studyFlashcards = [
+            {
+                category: "Computer Science",
+                question: "What is the time complexity of searching in a Balanced Binary Search Tree (AVL / Red-Black)?",
+                answer: "O(log N). Because the tree maintains height balance (h ≤ c·log₂ N), every comparison halves the remaining search space.",
+                tip: "Contrast with an unbalanced BST which can degenerate into a linked list of O(N)."
+            },
+            {
+                category: "Electronics & IoT",
+                question: "How does ESP32 Deep Sleep mode achieve ultra-low power consumption (<10 µA)?",
+                answer: "The dual-core Xtensa CPU, high-speed RAM, and radio modules (Wi-Fi/BLE) are powered down. Only the Ultra Low Power (ULP) coprocessor, RTC timer, and RTC slow memory remain active.",
+                tip: "Wakeup triggers include RTC timer alarm, external GPIO interrupts, or touchpad touch."
+            },
+            {
+                category: "Biology & Health",
+                question: "Which antibody isotype mediates immediate Type I Hypersensitivity (Allergic Anaphylaxis)?",
+                answer: "Immunoglobulin E (IgE). IgE binds with high affinity to FcεRI receptors on tissue mast cells and basophils, causing cross-linking and rapid release of histamine, leukotrienes, and prostaglandins.",
+                tip: "Sensitization occurs on first allergen exposure; clinical degranulation occurs on subsequent re-exposure."
+            },
+            {
+                category: "Computer Science",
+                question: "Explain the difference between Symmetric and Asymmetric encryption.",
+                answer: "Symmetric encryption (e.g. AES-256, ChaCha20) uses a single shared secret key for both encryption and decryption (very fast). Asymmetric encryption (e.g. RSA, ECC, Ed25519) uses a public/private keypair (used for key exchange & digital signatures).",
+                tip: "Modern TLS 1.3 combines both: ECDHE for asymmetric key agreement, AES-GCM for payload encryption."
+            },
+            {
+                category: "Electronics & IoT",
+                question: "What is the Nyquist-Shannon Sampling Theorem requirement for signal reconstruction?",
+                answer: "The sampling frequency (f_s) must be strictly greater than twice the highest frequency component (f_max) of the analog signal: f_s > 2·f_max.",
+                tip: "Sampling below 2·f_max results in aliasing distortion. Hardware anti-aliasing low-pass filters are placed before the ADC."
+            },
+            {
+                category: "Economics & Social Studies",
+                question: "What constitutes the 'Impossible Trinity' (Mundell-Fleming Trilemma) in monetary policy?",
+                answer: "A central bank can simultaneously choose only two of the three: 1) Fixed exchange rate, 2) Free capital mobility, and 3) Independent monetary policy.",
+                tip: "For instance, the Eurozone chose (1) and (2), sacrificing independent member monetary policy."
+            },
+            {
+                category: "Mathematics & Science",
+                question: "What does Euler's Identity e^(iπ) + 1 = 0 signify in mathematical analysis?",
+                answer: "It establishes the profound connection between the five fundamental constants of mathematics: e (base of natural log), i (imaginary unit), π (ratio of circumference to diameter), 1 (multiplicative identity), and 0 (additive identity).",
+                tip: "Derived directly from Euler's Formula: e^(iθ) = cos(θ) + i·sin(θ) evaluated at θ = π."
+            },
+            {
+                category: "Electronics & IoT",
+                question: "Why are pull-up resistors mandatory on I2C bus SDA and SCL lines?",
+                answer: "I2C drivers use open-drain (or open-collector) transistors that can only pull the bus line LOW to Ground. External pull-up resistors (typically 2.2kΩ - 10kΩ) are required to pull the bus HIGH to VCC when all devices are idle.",
+                tip: "Open-drain allows multi-master arbitration and clock stretching without risk of short-circuits."
+            }
+        ];
+
+        let currentFlashcardIndex = 0;
+
+        function renderCurrentFlashcard() {
+            const card = studyFlashcards[currentFlashcardIndex];
+            if (!card) return;
+
+            const categoryEl = document.getElementById('flashcard-category');
+            const counterEl = document.getElementById('flashcard-counter');
+            const questionEl = document.getElementById('flashcard-question');
+            const answerEl = document.getElementById('flashcard-answer');
+            const tipEl = document.getElementById('flashcard-tip');
+            const cardEl = document.getElementById('flashcard-element');
+
+            if (categoryEl) categoryEl.textContent = card.category;
+            if (counterEl) counterEl.textContent = `Card ${currentFlashcardIndex + 1} of ${studyFlashcards.length}`;
+            if (questionEl) questionEl.textContent = card.question;
+            if (answerEl) answerEl.textContent = card.answer;
+            if (tipEl) tipEl.textContent = card.tip ? `💡 Pro Tip: ${card.tip}` : '';
+
+            // Reset flip state
+            if (cardEl) cardEl.classList.remove('flipped');
+        }
+
+        function flipFlashcard() {
+            const cardEl = document.getElementById('flashcard-element');
+            if (cardEl) cardEl.classList.toggle('flipped');
+        }
+
+        function nextFlashcard() {
+            currentFlashcardIndex = (currentFlashcardIndex + 1) % studyFlashcards.length;
+            renderCurrentFlashcard();
+        }
+
+        function prevFlashcard() {
+            currentFlashcardIndex = (currentFlashcardIndex - 1 + studyFlashcards.length) % studyFlashcards.length;
+            renderCurrentFlashcard();
+        }
+
+        function setQuizSubMode(mode) {
+            const flashBtn = document.getElementById('quiz-submode-flashcard');
+            const quizBtn = document.getElementById('quiz-submode-quiz');
+            const flashBox = document.getElementById('quiz-box-flashcard');
+            const quizBox = document.getElementById('quiz-box-quiz');
+
+            if (mode === 'flashcard') {
+                flashBtn?.classList.add('bg-white', 'shadow-sm', 'font-bold', 'text-blue-600', 'dark:bg-slate-700', 'dark:text-teal-300');
+                flashBtn?.classList.remove('text-slate-600', 'dark:text-slate-400');
+                quizBtn?.classList.remove('bg-white', 'shadow-sm', 'font-bold', 'text-blue-600', 'dark:bg-slate-700', 'dark:text-teal-300');
+                quizBtn?.classList.add('text-slate-600', 'dark:text-slate-400');
+                flashBox?.classList.remove('hidden');
+                quizBox?.classList.add('hidden');
+            } else {
+                quizBtn?.classList.add('bg-white', 'shadow-sm', 'font-bold', 'text-blue-600', 'dark:bg-slate-700', 'dark:text-teal-300');
+                quizBtn?.classList.remove('text-slate-600', 'dark:text-slate-400');
+                flashBtn?.classList.remove('bg-white', 'shadow-sm', 'font-bold', 'text-blue-600', 'dark:bg-slate-700', 'dark:text-teal-300');
+                flashBtn?.classList.add('text-slate-600', 'dark:text-slate-400');
+                quizBox?.classList.remove('hidden');
+                flashBox?.classList.add('hidden');
+            }
+        }
+
+        const seminarQuizzes = [
+            {
+                id: 1,
+                question: "Which microcontroller architecture features integrated dual-mode Bluetooth (Classic + BLE) alongside Wi-Fi?",
+                options: [
+                    "Arduino Uno (ATmega328P)",
+                    "ESP8266 (Tensilica L106)",
+                    "ESP32 (Tensilica Xtensa LX6 / S3)",
+                    "Raspberry Pi Pico (RP2040 Standard)"
+                ],
+                correct: 2,
+                explanation: "The ESP32 family integrates both 2.4 GHz Wi-Fi and Bluetooth (v4.2 BR/EDR and BLE), unlike the ESP8266 which only provides Wi-Fi."
+            },
+            {
+                id: 2,
+                question: "In computational complexity, what is the best known average-case time complexity of Merge Sort?",
+                options: [
+                    "O(N)",
+                    "O(N log N)",
+                    "O(N²)",
+                    "O(log N)"
+                ],
+                correct: 1,
+                explanation: "Merge Sort consistently divides the list in half (log N levels) and merges them in linear O(N) time at each level, guaranteeing O(N log N) in all cases."
+            },
+            {
+                id: 3,
+                question: "If a 12V DC power source is connected across a 4Ω resistor, what is the current and total dissipated power?",
+                options: [
+                    "3 Amps and 36 Watts",
+                    "0.33 Amps and 4 Watts",
+                    "48 Amps and 144 Watts",
+                    "3 Amps and 12 Watts"
+                ],
+                correct: 0,
+                explanation: "By Ohm's Law: I = V / R = 12 / 4 = 3A. Power: P = V · I = 12 · 3 = 36W (or P = I²R = 9 · 4 = 36W)."
+            },
+            {
+                id: 4,
+                question: "Which mediator released by activated mast cells is the primary driver of immediate vasodilation and bronchoconstriction during anaphylaxis?",
+                options: [
+                    "Immunoglobulin G (IgG)",
+                    "Histamine",
+                    "Insulin",
+                    "Thyroxine"
+                ],
+                correct: 1,
+                explanation: "Histamine binds to H1 receptors on vascular endothelial cells (causing vasodilation and increased permeability) and bronchial smooth muscle (causing constriction)."
+            },
+            {
+                id: 5,
+                question: "According to Shannon-Hartley theorem, channel capacity C can be increased without expanding bandwidth B by:",
+                options: [
+                    "Decreasing the Signal-to-Noise Ratio (SNR)",
+                    "Increasing the Signal-to-Noise Ratio (S/N)",
+                    "Adding white thermal noise to the medium",
+                    "Decreasing transmission power"
+                ],
+                correct: 1,
+                explanation: "C = B · log₂(1 + S/N). With bandwidth fixed, higher SNR directly increases channel capacity logarithmically."
+            }
+        ];
+
+        let quizUserSelections = {};
+
+        function renderSeminarQuiz() {
+            quizUserSelections = {};
+            const container = document.getElementById('quiz-questions-container');
+            const scoreBadge = document.getElementById('quiz-score-badge');
+            if (scoreBadge) scoreBadge.textContent = "Score: 0 / 5";
+            if (!container) return;
+
+            container.innerHTML = seminarQuizzes.map((q, qIdx) => `
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-800/40" id="quiz-card-${qIdx}">
+                    <div class="flex items-start gap-2 mb-3">
+                        <span class="rounded bg-blue-100 px-2 py-0.5 text-xs font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">Q${qIdx + 1}</span>
+                        <h4 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-snug">${q.question}</h4>
+                    </div>
+
+                    <div class="space-y-2" id="quiz-options-${qIdx}">
+                        ${q.options.map((opt, optIdx) => `
+                            <button onclick="selectQuizOption(${qIdx}, ${optIdx})" class="quiz-opt-btn w-full text-left rounded-xl border border-slate-200 bg-white p-3 text-xs font-medium text-slate-700 hover:border-blue-400 hover:bg-blue-50/50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-teal-500/50 transition">
+                                <span class="font-bold text-slate-400 mr-2">${String.fromCharCode(65 + optIdx)}.</span>
+                                <span>${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <div id="quiz-feedback-${qIdx}" class="hidden mt-3 rounded-xl p-3 text-xs"></div>
+                </div>
+            `).join('');
+        }
+
+        function selectQuizOption(qIdx, optIdx) {
+            if (quizUserSelections[qIdx] !== undefined) return;
+            quizUserSelections[qIdx] = optIdx;
+
+            const q = seminarQuizzes[qIdx];
+            const isCorrect = optIdx === q.correct;
+
+            // Update option styles
+            const optionsContainer = document.getElementById(`quiz-options-${qIdx}`);
+            const buttons = optionsContainer.querySelectorAll('.quiz-opt-btn');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.correct) {
+                    btn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900', 'dark:bg-emerald-950/60', 'dark:text-emerald-300', 'font-bold');
+                } else if (idx === optIdx && !isCorrect) {
+                    btn.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-900', 'dark:bg-rose-950/60', 'dark:text-rose-300');
+                }
+            });
+
+            // Feedback box
+            const feedbackBox = document.getElementById(`quiz-feedback-${qIdx}`);
+            if (feedbackBox) {
+                feedbackBox.classList.remove('hidden');
+                if (isCorrect) {
+                    feedbackBox.className = "mt-3 rounded-xl p-3 text-xs bg-emerald-100/70 text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800";
+                    feedbackBox.innerHTML = `<strong>✓ Correct!</strong> ${q.explanation}`;
+                } else {
+                    feedbackBox.className = "mt-3 rounded-xl p-3 text-xs bg-rose-100/70 text-rose-900 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-300 dark:border-rose-800";
+                    feedbackBox.innerHTML = `<strong>✗ Incorrect.</strong> The correct answer is <strong>(${String.fromCharCode(65 + q.correct)}) ${q.options[q.correct]}</strong>.<br><span class="mt-1 block opacity-90">${q.explanation}</span>`;
+                }
+            }
+
+            // Update score badge
+            const totalAnswered = Object.keys(quizUserSelections).length;
+            const correctCount = Object.entries(quizUserSelections).filter(([idx, sel]) => sel === seminarQuizzes[idx].correct).length;
+            const scoreBadge = document.getElementById('quiz-score-badge');
+            if (scoreBadge) {
+                scoreBadge.textContent = `Score: ${correctCount} / ${seminarQuizzes.length}`;
+                if (totalAnswered === seminarQuizzes.length) {
+                    showToast(`Quiz completed! Final Score: ${correctCount} / ${seminarQuizzes.length}`);
+                }
+            }
+        }
+
+        // ==========================================
+        // SCIENTIFIC FORMULA DIRECTORY LOGIC
+        // ==========================================
+        let currentFormulaSubject = 'All';
+
+        function setFormulaSubject(subj) {
+            currentFormulaSubject = subj;
+            const buttons = document.querySelectorAll('.formula-subj-btn');
+            buttons.forEach(b => {
+                const isActive = b.textContent.includes(subj) || (subj === 'All' && b.textContent === 'All');
+                if (isActive) {
+                    b.className = "formula-subj-btn active rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-bold text-white dark:bg-teal-400 dark:text-slate-950";
+                } else {
+                    b.className = "formula-subj-btn rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300";
+                }
+            });
+            renderFormulasDirectory();
+        }
+
+        function renderFormulasDirectory() {
+            const grid = document.getElementById('formulas-grid');
+            const searchInput = document.getElementById('formula-search-input');
+            const query = (searchInput?.value || '').toLowerCase().trim();
+            if (!grid) return;
+
+            const formulas = typeof academicFormulas !== 'undefined' ? academicFormulas : [];
+            const filtered = formulas.filter(f => {
+                const matchSubj = currentFormulaSubject === 'All' || f.subject.toLowerCase().includes(currentFormulaSubject.toLowerCase());
+                const matchQuery = !query ||
+                    f.title.toLowerCase().includes(query) ||
+                    f.formula.toLowerCase().includes(query) ||
+                    f.description.toLowerCase().includes(query) ||
+                    f.subject.toLowerCase().includes(query);
+                return matchSubj && matchQuery;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-8 text-center text-xs text-slate-400">
+                        No formulas match your search query. Try typing 'Ohm', 'Capacitor', or 'Shannon'.
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(f => `
+                <div class="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-800/40 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="rounded-full bg-blue-100 px-2.5 py-0.5 text-[10px] font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">${f.subject}</span>
+                            <button onclick="copyFormulaText('${f.formula.replace(/'/g, "\\'")}')" class="text-xs text-slate-400 hover:text-blue-600 dark:hover:text-teal-300 font-semibold inline-flex items-center gap-1" title="Copy Formula">
+                                📋 Copy
+                            </button>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white">${f.title}</h4>
+                        <div class="my-2.5 rounded-xl border border-blue-200 bg-white p-3 font-mono text-xs font-bold text-blue-700 dark:border-slate-700 dark:bg-slate-900 dark:text-teal-300 select-all overflow-x-auto">
+                            ${f.formula}
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">${f.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function copyFormulaText(formula) {
+            navigator.clipboard.writeText(formula).then(() => {
+                showToast("Formula copied to clipboard!");
+            });
+        }
+
+        // ==========================================
+        // AMBIENT STUDY FOCUS SOUND (WEB AUDIO API)
+        // ==========================================
+        let focusAudioCtx = null;
+        let focusSourceNode = null;
+        let focusGainNode = null;
+        let isFocusAudioPlaying = false;
+        let currentFocusMode = 'brown';
+        let focusVolume = 0.2;
+
+        function initFocusAudioContext() {
+            if (!focusAudioCtx) {
+                const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtxClass) {
+                    focusAudioCtx = new AudioCtxClass();
+                }
+            }
+        }
+
+        function setFocusSoundMode(mode) {
+            currentFocusMode = mode;
+            ['brown', 'alpha', 'white'].forEach(m => {
+                const btn = document.getElementById(`focus-mode-${m}`);
+                if (btn) {
+                    if (m === mode) {
+                        btn.className = "focus-mode-btn active rounded-2xl bg-blue-600 p-3 text-white dark:bg-teal-400 dark:text-slate-950 shadow-sm transition";
+                    } else {
+                        btn.className = "focus-mode-btn rounded-2xl border border-slate-200 bg-white p-3 text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 shadow-sm transition";
+                    }
+                }
+            });
+
+            if (isFocusAudioPlaying) {
+                stopFocusAudio();
+                playFocusAudio();
+            }
+        }
+
+        function updateFocusVolume(val) {
+            focusVolume = parseFloat(val);
+            if (focusGainNode && focusAudioCtx) {
+                focusGainNode.gain.setValueAtTime(focusVolume, focusAudioCtx.currentTime);
+            }
+        }
+
+        function toggleFocusAudio() {
+            if (isFocusAudioPlaying) {
+                stopFocusAudio();
+            } else {
+                playFocusAudio();
+            }
+        }
+
+        function playFocusAudio() {
+            try {
+                initFocusAudioContext();
+                if (!focusAudioCtx) {
+                    showToast("Web Audio API not supported on this browser.");
+                    return;
+                }
+
+                if (focusAudioCtx.state === 'suspended') {
+                    focusAudioCtx.resume();
+                }
+
+                focusGainNode = focusAudioCtx.createGain();
+                focusGainNode.gain.setValueAtTime(focusVolume, focusAudioCtx.currentTime);
+                focusGainNode.connect(focusAudioCtx.destination);
+
+                const sampleRate = focusAudioCtx.sampleRate;
+                const bufferDuration = 5;
+                const bufferSize = sampleRate * bufferDuration;
+
+                if (currentFocusMode === 'white') {
+                    const buffer = focusAudioCtx.createBuffer(1, bufferSize, sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        data[i] = Math.random() * 2 - 1;
+                    }
+                    const noise = focusAudioCtx.createBufferSource();
+                    noise.buffer = buffer;
+                    noise.loop = true;
+                    noise.connect(focusGainNode);
+                    noise.start();
+                    focusSourceNode = noise;
+                } else if (currentFocusMode === 'brown') {
+                    const buffer = focusAudioCtx.createBuffer(1, bufferSize, sampleRate);
+                    const data = buffer.getChannelData(0);
+                    let lastOut = 0.0;
+                    for (let i = 0; i < bufferSize; i++) {
+                        const white = Math.random() * 2 - 1;
+                        lastOut = (lastOut + (0.02 * white)) / 1.02;
+                        data[i] = lastOut * 3.5;
+                    }
+                    const noise = focusAudioCtx.createBufferSource();
+                    noise.buffer = buffer;
+                    noise.loop = true;
+                    noise.connect(focusGainNode);
+                    noise.start();
+                    focusSourceNode = noise;
+                } else if (currentFocusMode === 'alpha') {
+                    const osc1 = focusAudioCtx.createOscillator();
+                    const osc2 = focusAudioCtx.createOscillator();
+                    osc1.type = 'sine';
+                    osc1.frequency.setValueAtTime(432, focusAudioCtx.currentTime);
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(442, focusAudioCtx.currentTime);
+
+                    const filter = focusAudioCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(800, focusAudioCtx.currentTime);
+
+                    osc1.connect(filter);
+                    osc2.connect(filter);
+                    filter.connect(focusGainNode);
+
+                    osc1.start();
+                    osc2.start();
+                    focusSourceNode = {
+                        stop: () => {
+                            try { osc1.stop(); osc2.stop(); } catch(e){}
+                        }
+                    };
+                }
+
+                isFocusAudioPlaying = true;
+                const toggleBtn = document.getElementById('focus-toggle-btn');
+                const statusText = document.getElementById('focus-status-text');
+                const waveAnim = document.getElementById('focus-wave-anim');
+
+                if (toggleBtn) {
+                    toggleBtn.textContent = "Stop Focus Audio";
+                    toggleBtn.classList.replace('bg-blue-600', 'bg-rose-600');
+                    toggleBtn.classList.replace('dark:bg-teal-400', 'dark:bg-rose-500');
+                    toggleBtn.classList.replace('dark:text-slate-950', 'dark:text-white');
+                }
+                if (statusText) {
+                    statusText.textContent = `Active • Synthesizing ${currentFocusMode.toUpperCase()} soundscape`;
+                    statusText.className = "text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-4";
+                }
+                if (waveAnim) {
+                    waveAnim.classList.remove('opacity-30');
+                    waveAnim.classList.add('opacity-100');
+                }
+
+                showToast(`Started ${currentFocusMode.toUpperCase()} focus audio 🎧`);
+            } catch(e) {
+                console.error("Audio synth error:", e);
+                showToast("Could not start focus audio synthesizer.");
+            }
+        }
+
+        function stopFocusAudio() {
+            if (focusSourceNode) {
+                try { focusSourceNode.stop(); } catch(e){}
+                focusSourceNode = null;
+            }
+            if (focusGainNode) {
+                try { focusGainNode.disconnect(); } catch(e){}
+                focusGainNode = null;
+            }
+            isFocusAudioPlaying = false;
+
+            const toggleBtn = document.getElementById('focus-toggle-btn');
+            const statusText = document.getElementById('focus-status-text');
+            const waveAnim = document.getElementById('focus-wave-anim');
+
+            if (toggleBtn) {
+                toggleBtn.textContent = "Start Focus Audio";
+                toggleBtn.classList.replace('bg-rose-600', 'bg-blue-600');
+                toggleBtn.classList.replace('dark:bg-rose-500', 'dark:teal-400');
+                toggleBtn.classList.replace('dark:text-white', 'dark:text-slate-950');
+            }
+            if (statusText) {
+                statusText.textContent = "Audio Inactive";
+                statusText.className = "text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4";
+            }
+            if (waveAnim) {
+                waveAnim.classList.remove('opacity-100');
+                waveAnim.classList.add('opacity-30');
+            }
+        }
+
         // Initialize on DOM load
         document.addEventListener('DOMContentLoaded', () => {
             loadCommunitySubmissions();
@@ -1875,6 +2830,9 @@
             updateCommunityCountBadge();
             updateBigOValues(16);
             updateGithubSnippet();
+            renderCurrentFlashcard();
+            renderSeminarQuiz();
+            renderFormulasDirectory();
 
             // Auto-update GitHub snippet when user types in any form field
             document.getElementById('student-submission-form')?.addEventListener('input', updateGithubSnippet);

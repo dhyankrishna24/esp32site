@@ -24,17 +24,26 @@
   - ⚛️ **Quantum Computing**: *Qubits, Superposition & Shor's Algorithm*.
 
 ### 2. 🛠️ Interactive Student Toolkit
+* **🧠 Flashcards & Quiz Trainer**: 3D interactive flashcards with flip animations and a self-scoring 5-question technical quiz with instant explanations.
+* **📐 Formula Quick-Reference Directory**: Searchable directory covering Electronics, Computer Science, Mathematics, and Biology with one-click clipboard copying.
+* **🎧 Ambient Study Focus Audio**: Web Audio API synthesizer generating Brown noise, White noise, and 432 Hz Alpha binaural beats for rehearsal focus.
 * **⏱️ Seminar Rehearsal Timer**: Dedicated countdown timer with quick presets (5m, 10m, 15m) and automatic 2-minute concluding alerts.
 * **⚡ Ohm's Law & Power Solver**: 4-variable electrical calculation engine ($V, I, R, P$) with real-time derivations.
 * **🎙️ Speech Pacing Estimator**: Word count analyzer calculating speaking duration for formal (130 wpm) and conversational (160 wpm) speech rates.
 * **📊 Big-O Complexity Benchmarker**: Interactive slider illustrating algorithmic growth comparisons ($O(1)$, $O(\log N)$, $O(N)$, $O(N \log N)$, $O(N^2)$, $O(2^N)$).
 
-### 3. 🚀 Student Contributor Studio
+### 3. 🎯 Presenter & Study Modes
+* **🎙️ Presenter Speaker Notes**: Slide-by-slide teleprompter and talking points to guide live seminar delivery.
+* **🖥️ Fullscreen Projector Mode**: One-click and keyboard shortcut (`F` key) for distraction-free presentation display.
+* **📄 Executive Study Cheatsheet**: Formats slide summaries, takeaways, and topics into an exportable study guide with print optimization (`@media print`) and Markdown copy.
+* **⏳ Talk Time Badges**: Dynamic speaking duration estimation (`⏳ ~Xm talk`) based on slide volume.
+
+### 4. 🚀 Student Contributor Studio
 * **Peer Slide Sharing**: A submission studio for fellow students to add and showcase their school and college presentations.
 * **Multi-Format Support**: Supports `.pptx`, `.pdf`, interactive web apps, Canva links, and cloud storage shares (Google Drive, OneDrive).
 * **Open Source Contribution**: One-click code generation for [`slides-data.js`](slides-data.js) enabling easy GitHub Pull Requests.
 
-### 4. 🔌 ESP32 Microcontroller Hub
+### 5. 🔌 ESP32 Microcontroller Hub
 * **Hands-on IoT Subpage**: Preserved hardware engineering workspace located in [`esp32/`](esp32/).
 * **Telemetry Dashboards**: Environmental sensor readings, remote LED controller, radio stream hub, and embedded FreeRTOS experiments.
 
