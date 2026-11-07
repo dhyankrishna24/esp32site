@@ -221,8 +221,14 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Browse slide decks, inspect agendas, preview slide-by-slide in our built-in player, or download PPTX files.</p>
             </div>
             
-            <div id="results-count" class="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                Loading presentations...
+            <div class="flex flex-wrap items-center gap-3">
+                <button onclick="openAddSlidesModal()" class="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-md hover:bg-blue-700 active:scale-95 dark:bg-teal-400 dark:text-slate-950">
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>Submit Your Slides</span>
+                </button>
+                <div id="results-count" class="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                    Loading presentations...
+                </div>
             </div>
         </div>
 
@@ -233,6 +239,10 @@
             <div class="flex flex-wrap items-center gap-2" id="category-filters">
                 <button data-category="All" class="category-btn active rounded-xl bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm transition dark:bg-teal-400 dark:text-slate-950">
                     All Categories
+                </button>
+                <button data-category="Community" id="community-filter-btn" class="category-btn rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600 flex items-center gap-1.5">
+                    <span>🎓 Student Submissions</span>
+                    <span id="community-count-badge" class="rounded-full bg-blue-100 text-blue-700 px-1.5 text-[10px] font-bold dark:bg-blue-900/60 dark:text-blue-300">0</span>
                 </button>
                 <button data-category="Favorites" id="fav-filter-btn" class="category-btn rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600 flex items-center gap-1.5">
                     <span class="text-amber-500">★</span>
@@ -295,9 +305,15 @@
             <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             <h3 class="mt-4 text-base font-bold text-slate-900 dark:text-white">No matching presentations found</h3>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Try adjusting your search terms or category filters.</p>
-            <button onclick="resetFilters()" class="mt-4 inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
-                Clear Filters
-            </button>
+            <div class="mt-4 flex items-center justify-center gap-2">
+                <button onclick="resetFilters()" class="inline-flex items-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                    Clear Filters
+                </button>
+                <button onclick="openAddSlidesModal()" class="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <span>Submit Your Slides</span>
+                </button>
+            </div>
         </div>
 
     </main>
@@ -607,61 +623,176 @@
         </div>
     </div>
 
-    <!-- How to Add Slides Modal -->
-    <div id="add-slides-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6 md:p-10">
-        <div class="relative mx-auto w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
+    <!-- Student Contributor Studio & Slide Submission Modal -->
+    <div id="add-slides-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/85 p-3 backdrop-blur-md sm:p-6 md:p-8">
+        <div class="relative mx-auto w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xl dark:border-slate-700 dark:bg-slate-900 overflow-hidden">
+            
+            <!-- Modal Header -->
             <div class="flex items-start justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
                 <div>
-                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">How to Add Your PPTs & Seminar Slides</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Super simple 2-step setup to host and showcase your presentations.</p>
+                    <div class="flex items-center gap-2">
+                        <span class="rounded bg-blue-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:bg-teal-950 dark:text-teal-300">Open Contributor Studio</span>
+                    </div>
+                    <h3 class="mt-1 text-2xl font-black text-slate-900 dark:text-white">Submit Your Slide Deck</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Share your school, college, or seminar presentations with other students in real time.</p>
                 </div>
                 <button onclick="closeAddSlidesModal()" class="rounded-full p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
 
-            <div class="mt-6 space-y-6 text-sm">
-                <!-- Step 1 -->
-                <div class="flex items-start gap-4">
-                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 font-bold dark:bg-blue-900/50 dark:text-blue-300">1</div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 dark:text-white">Place your slide file in the folder</h4>
-                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                            Save your PowerPoint (<code class="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">.pptx</code>), HTML app, or PDF document into the <code class="rounded bg-slate-100 px-1 py-0.5 text-blue-600 dark:bg-slate-800 dark:text-blue-400">slides/</code> directory.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="flex items-start gap-4">
-                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-teal-100 text-teal-600 font-bold dark:bg-teal-900/50 dark:text-teal-300">2</div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 dark:text-white">Add the entry in <code>slides-data.js</code></h4>
-                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                            Open <code class="rounded bg-slate-100 px-1 py-0.5 text-blue-600 dark:bg-slate-800 dark:text-blue-400">slides-data.js</code> in your project folder and append this block:
-                        </p>
-                        <pre class="mt-3 overflow-x-auto rounded-xl bg-slate-900 p-3.5 text-[11px] font-mono text-slate-200"><code>{
-  id: "my-topic",
-  title: "My Presentation Title",
-  category: "Computer Science",
-  type: "PPTX",
-  slidesCount: "25 Slides",
-  academicLevel: "College Seminar",
-  author: "Dhyan Krishna M",
-  date: "2026",
-  summary: "Brief overview of what the presentation covers...",
-  topicsCovered: ["Point 1", "Point 2", "Point 3"],
-  fileUrl: "slides/my_presentation.pptx"
-}</code></pre>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800 text-right">
-                <button onclick="closeAddSlidesModal()" class="rounded-xl bg-blue-600 px-5 py-2 text-xs font-bold text-white shadow-md hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
-                    Got it!
+            <!-- Submission Tabs -->
+            <div class="mt-4 flex border-b border-slate-200 dark:border-slate-800 text-xs font-semibold">
+                <button onclick="switchSubmissionTab('web')" id="sub-tab-btn-web" class="sub-tab active px-4 py-2.5 border-b-2 border-blue-600 text-blue-600 dark:border-teal-400 dark:text-teal-300 font-bold">
+                    🚀 Fast Online Publish
+                </button>
+                <button onclick="switchSubmissionTab('github')" id="sub-tab-btn-github" class="sub-tab px-4 py-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white">
+                    💻 GitHub Open Source
+                </button>
+                <button onclick="switchSubmissionTab('email')" id="sub-tab-btn-email" class="sub-tab px-4 py-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white">
+                    ✉️ Direct Email File
                 </button>
             </div>
+
+            <!-- Tab 1: Fast Online Form -->
+            <div id="sub-pane-web" class="sub-pane mt-5 space-y-4">
+                <form id="student-submission-form" onsubmit="handleStudentSubmission(event)" class="space-y-4">
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Your Name / Group Name *</label>
+                            <input type="text" id="sub-author" required placeholder="e.g. Aarav Sharma or Group B" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Class / Roll No / College</label>
+                            <input type="text" id="sub-level" placeholder="e.g. Grade 11 • Roll 18 or B.Tech CS" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Presentation Title *</label>
+                        <input type="text" id="sub-title" required placeholder="e.g. Clean Solar Energy & Photovoltaic Cell Efficiency" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Discipline *</label>
+                            <select id="sub-category" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                                <option value="Computer Science">Computer Science & Cyber</option>
+                                <option value="Biology & Health">Biology & Health</option>
+                                <option value="Economics & Social Studies">Economics & Finance</option>
+                                <option value="Geography & Social Studies">Geography & Social Studies</option>
+                                <option value="Electronics & IoT">Electronics & IoT</option>
+                                <option value="Mathematics & Science">Mathematics & Science</option>
+                                <option value="Study Notes">Study Notes & Speeches</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Format *</label>
+                            <select id="sub-format" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                                <option value="PPTX">PowerPoint (PPTX)</option>
+                                <option value="PDF">PDF Document</option>
+                                <option value="Interactive HTML">Interactive Web / Canva</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Slide Count</label>
+                            <input type="text" id="sub-count" placeholder="e.g. 12 Slides" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">File Link (Google Drive / OneDrive / Canva / GitHub) *</label>
+                        <input type="url" id="sub-url" required placeholder="https://drive.google.com/file/d/.../view?usp=sharing" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <p class="text-[11px] text-slate-400 mt-1">Upload your slide file to Google Drive or OneDrive, set permission to <strong>"Anyone with link can view"</strong>, and paste the share link here.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Short Summary (1-2 sentences) *</label>
+                        <textarea id="sub-summary" rows="2" required placeholder="Briefly describe what this presentation teaches..." class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Key Slide Highlights (Up to 3 Points)</label>
+                        <div class="space-y-2">
+                            <input type="text" id="sub-b1" placeholder="Highlight 1 (e.g. Photovoltaic physics and solar cell doping)" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                            <input type="text" id="sub-b2" placeholder="Highlight 2 (e.g. Inverter topology and grid synchronization)" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                            <input type="text" id="sub-b3" placeholder="Highlight 3 (e.g. Case study on commercial rooftop arrays)" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                        <span class="text-[11px] text-slate-400 flex items-center gap-1">
+                            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                            Publishes live to EduSphere
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="closeAddSlidesModal()" class="rounded-xl px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+                                Cancel
+                            </button>
+                            <button type="submit" id="sub-submit-btn" class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-blue-700 active:scale-95 dark:bg-teal-400 dark:text-slate-950">
+                                <span>Publish Presentation</span>
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Tab 2: GitHub Open Source -->
+            <div id="sub-pane-github" class="sub-pane hidden mt-5 space-y-4 text-xs">
+                <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Permanent Open Source Contribution</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        If you want your slide file directly committed into the repository's <code class="rounded bg-slate-200 px-1 py-0.5 dark:bg-slate-700">slides/</code> directory, you can submit a quick Pull Request on GitHub.
+                    </p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Auto-Generated Code for <code>slides-data.js</code>:</label>
+                    <pre class="overflow-x-auto rounded-xl bg-slate-900 p-3.5 text-[11px] font-mono text-slate-200"><code id="github-snippet-code">// Fill out the form in the first tab to automatically generate your code snippet!</code></pre>
+                </div>
+
+                <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
+                    <button onclick="copyGithubSnippet()" class="rounded-xl border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                        Copy Code Snippet
+                    </button>
+                    <a href="https://github.com/dhyankrishna24/esp32site/edit/main/slides-data.js" target="_blank" rel="noopener noreferrer" class="rounded-xl bg-slate-900 px-5 py-2 font-bold text-white shadow-md hover:bg-slate-800 dark:bg-teal-400 dark:text-slate-950 inline-flex items-center gap-1.5">
+                        <span>Edit on GitHub & Create PR</span>
+                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tab 3: Email Direct Upload -->
+            <div id="sub-pane-email" class="sub-pane hidden mt-5 space-y-4 text-xs">
+                <div class="rounded-2xl bg-blue-50/70 p-4 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900">
+                    <h4 class="font-bold text-blue-900 dark:text-blue-300 text-sm mb-1">Send File Directly to Dhyan</h4>
+                    <p class="text-blue-800 dark:text-blue-200 leading-relaxed">
+                        If you have a <code class="font-mono">.pptx</code> or <code class="font-mono">.pdf</code> file on your computer and want it published, simply email it with your presentation title and topics.
+                    </p>
+                </div>
+
+                <div class="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-850 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-semibold text-slate-600 dark:text-slate-400">Recipient Email:</span>
+                        <span class="font-mono font-bold text-blue-600 dark:text-teal-400">anupuknambiar@gmail.com</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-semibold text-slate-600 dark:text-slate-400">Subject:</span>
+                        <span class="font-mono text-slate-700 dark:text-slate-300">[EduSphere Slide Submission] My Presentation Title</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-200 dark:border-slate-800 text-right">
+                    <a href="mailto:anupuknambiar@gmail.com?subject=EduSphere%20Slide%20Submission&body=Hi%20Dhyan%2C%0A%0AI%20would%20like%20to%20contribute%20my%20presentation%20slides%20to%20EduSphere.%0A%0ATitle%3A%20%0ASubject%3A%20%0ASlide%20Count%3A%20%0APresenter%20Name%20%26%20Class%3A%20%0A%0A(Attached%20is%20my%20PPTX%2FPDF%20file)%0A" class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 font-bold text-white shadow-md hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span>Compose Email with Attachment</span>
+                    </a>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -708,6 +839,12 @@
         let currentModalSlide = null;
         let currentDeckIndex = 0;
         let favorites = JSON.parse(localStorage.getItem('edu_favorites') || '[]');
+        let communitySubmissions = [];
+
+        function getAllResources() {
+            const core = typeof academicResources !== 'undefined' ? academicResources : [];
+            return [...communitySubmissions, ...core];
+        }
 
         // Theme Toggle Setup
         const themeButton = document.getElementById('theme-toggle');
@@ -854,28 +991,35 @@
 
             if (!grid) return;
 
-            if (statSlidesCount && typeof academicResources !== 'undefined') {
-                statSlidesCount.textContent = `${academicResources.length}+`;
+            const allItems = getAllResources();
+
+            if (statSlidesCount) {
+                statSlidesCount.textContent = `${allItems.length}+`;
             }
 
-            let filtered = (typeof academicResources !== 'undefined' ? academicResources : []).filter(item => {
-                // Favorites filter
-                if (selectedCategory === "Favorites") {
-                    return favorites.includes(item.id);
-                }
+            let filtered = allItems.filter(item => {
                 // Category match
-                const matchCategory = selectedCategory === "All" || item.category === selectedCategory;
+                if (selectedCategory === "Community") {
+                    if (!item.isCommunity) return false;
+                } else if (selectedCategory === "Favorites") {
+                    if (!favorites.includes(item.id)) return false;
+                } else if (selectedCategory !== "All") {
+                    if (item.category !== selectedCategory) return false;
+                }
+
                 // Format match
                 const matchFormat = selectedFormat === "All" || item.type.toUpperCase() === selectedFormat.toUpperCase();
+
                 // Search query match
                 const matchSearch = !searchQuery || 
                     item.title.toLowerCase().includes(searchQuery) ||
-                    item.summary.toLowerCase().includes(searchQuery) ||
-                    item.category.toLowerCase().includes(searchQuery) ||
-                    item.tags.some(t => t.toLowerCase().includes(searchQuery)) ||
-                    item.topicsCovered.some(tpc => tpc.toLowerCase().includes(searchQuery));
+                    (item.summary && item.summary.toLowerCase().includes(searchQuery)) ||
+                    (item.category && item.category.toLowerCase().includes(searchQuery)) ||
+                    (item.tags && item.tags.some(t => t.toLowerCase().includes(searchQuery))) ||
+                    (item.topicsCovered && item.topicsCovered.some(tpc => tpc.toLowerCase().includes(searchQuery))) ||
+                    (item.author && item.author.toLowerCase().includes(searchQuery));
 
-                return matchCategory && matchFormat && matchSearch;
+                return matchFormat && matchSearch;
             });
 
             // Sorting
@@ -888,58 +1032,94 @@
                     return countB - countA;
                 });
             } else {
-                // Featured first
-                filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+                // Featured and Community first
+                filtered.sort((a, b) => {
+                    if (a.isCommunity && !b.isCommunity) return -1;
+                    if (!a.isCommunity && b.isCommunity) return 1;
+                    return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+                });
             }
 
             // Update counter
             if (resultsCount) {
-                resultsCount.textContent = `Showing ${filtered.length} of ${academicResources.length} presentations`;
+                resultsCount.textContent = `Showing ${filtered.length} of ${allItems.length} presentations`;
             }
 
             if (filtered.length === 0) {
                 grid.innerHTML = '';
-                emptyState?.classList.remove('hidden');
+                if (emptyState) {
+                    emptyState.classList.remove('hidden');
+                    const emptyTitle = emptyState.querySelector('h3');
+                    const emptyP = emptyState.querySelector('p');
+                    if (selectedCategory === "Community") {
+                        if (emptyTitle) emptyTitle.textContent = "No student submissions yet";
+                        if (emptyP) emptyP.textContent = "Be the first student to publish your seminar presentation or project deck!";
+                    } else if (selectedCategory === "Favorites") {
+                        if (emptyTitle) emptyTitle.textContent = "No saved presentations";
+                        if (emptyP) emptyP.textContent = "Click the ★ star on any presentation to save it for quick reference.";
+                    } else {
+                        if (emptyTitle) emptyTitle.textContent = "No matching presentations found";
+                        if (emptyP) emptyP.textContent = "Try adjusting your search terms or category filters.";
+                    }
+                }
                 return;
             }
 
             emptyState?.classList.add('hidden');
 
+            const myIds = JSON.parse(localStorage.getItem('my_submission_ids') || '[]');
+
             grid.innerHTML = filtered.map(item => {
                 const isFav = favorites.includes(item.id);
-                const badgeColor = item.category.includes('Computer') ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300' :
+                const isMine = myIds.includes(item.id);
+                const isExternal = item.fileUrl && item.fileUrl.startsWith('http');
+
+                const badgeColor = item.isCommunity ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white dark:from-teal-400 dark:to-cyan-400 dark:text-slate-950 font-bold' :
+                                   item.category.includes('Computer') ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300' :
                                    item.category.includes('Biology') ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' :
                                    item.category.includes('Economics') ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300' :
                                    item.category.includes('Geography') ? 'bg-cyan-100 text-cyan-700 dark:bg-cyan-950/60 dark:text-cyan-300' :
                                    item.category.includes('Electronics') ? 'bg-teal-100 text-teal-700 dark:bg-teal-950/60 dark:text-teal-300' :
                                    'bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300';
 
-                const topicsHtml = item.topicsCovered.slice(0, 3).map(tpc => `
+                const topicsHtml = (item.topicsCovered || []).slice(0, 3).map(tpc => `
                     <li class="flex items-start gap-1.5 text-xs text-slate-600 dark:text-slate-400">
                         <svg class="h-3.5 w-3.5 shrink-0 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         <span class="line-clamp-1">${tpc}</span>
                     </li>
                 `).join('');
 
-                const tagsHtml = item.tags.slice(0, 3).map(t => `
+                const tagsHtml = (item.tags || []).slice(0, 3).map(t => `
                     <button onclick="quickFilterSearch('${t}')" class="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-600 dark:bg-slate-800 dark:text-slate-300">#${t}</button>
                 `).join(' ');
 
                 return `
-                    <div class="card group flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-400 dark:border-slate-800 dark:bg-slate-900/90 dark:hover:border-teal-400/50">
+                    <div class="card group flex flex-col justify-between rounded-3xl border ${item.isCommunity ? 'border-blue-300 shadow-md ring-1 ring-blue-500/20 dark:border-teal-500/40' : 'border-slate-200 shadow-sm'} bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-400 dark:border-slate-800 dark:bg-slate-900/90 dark:hover:border-teal-400/50">
                         
                         <div>
-                            <!-- Header Meta + Bookmark -->
+                            <!-- Header Meta + Bookmark + Delete -->
                             <div class="flex items-center justify-between gap-2 mb-3">
-                                <span class="rounded-full px-2.5 py-0.5 text-[11px] font-bold ${badgeColor}">
-                                    ${item.category}
-                                </span>
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="rounded-full px-2.5 py-0.5 text-[11px] font-bold ${badgeColor}">
+                                        ${item.isCommunity ? '🎓 Student Submission' : item.category}
+                                    </span>
+                                    ${item.isCommunity ? `
+                                        <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                            ${item.category}
+                                        </span>
+                                    ` : ''}
+                                </div>
 
-                                <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-1.5">
                                     <span class="rounded bg-slate-100 px-2 py-0.5 font-mono text-[10px] uppercase font-bold dark:bg-slate-800 dark:text-slate-300">${item.type}</span>
                                     <button onclick="toggleFavorite('${item.id}', event)" title="${isFav ? 'Remove from Saved' : 'Save Presentation'}" class="text-sm p-1 rounded-lg transition hover:scale-125 ${isFav ? 'text-amber-500' : 'text-slate-300 dark:text-slate-600 hover:text-amber-500'}">
                                         ★
                                     </button>
+                                    ${isMine ? `
+                                        <button onclick="deleteStudentSubmission('${item.id}', event)" title="Delete your submission" class="text-xs p-1 rounded-lg text-rose-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition">
+                                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    ` : ''}
                                 </div>
                             </div>
 
@@ -950,7 +1130,7 @@
 
                             <!-- Author & Details -->
                             <div class="mt-1 flex items-center gap-2 text-xs text-slate-400">
-                                <span>${item.author}</span>
+                                <span class="font-medium text-slate-600 dark:text-slate-300">${item.author}</span>
                                 <span>•</span>
                                 <span>${item.slidesCount}</span>
                                 ${item.fileSize ? `<span>•</span><span>${item.fileSize}</span>` : ''}
@@ -978,12 +1158,18 @@
                         <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center gap-2">
                             <button onclick="openSlideModal('${item.id}')" class="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-95 dark:bg-gradient-to-r dark:from-teal-300 dark:to-sky-400 dark:text-slate-950">
                                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                <span>Slide Deck View</span>
+                                <span>${isExternal ? 'View Presentation' : 'Slide Deck View'}</span>
                             </button>
                             
-                            <a href="${item.fileUrl}" download class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-blue-600 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700" title="Download Slide Deck">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            </a>
+                            ${isExternal ? `
+                                <a href="${item.fileUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-blue-600 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700" title="Open Presentation Source Link">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                </a>
+                            ` : `
+                                <a href="${item.fileUrl}" download class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-blue-600 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700" title="Download Slide Deck">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                </a>
+                            `}
                         </div>
 
                     </div>
@@ -995,7 +1181,8 @@
         // SLIDE MODAL & NATIVE CAROUSEL THEATER LOGIC
         // ==========================================
         function openSlideModal(id) {
-            const item = academicResources.find(r => r.id === id);
+            const allItems = getAllResources();
+            const item = allItems.find(r => r.id === id);
             if (!item) return;
 
             currentModalSlide = item;
@@ -1013,12 +1200,21 @@
             const downloadBtn = document.getElementById('modal-download-btn');
 
             downloadBtn.href = item.fileUrl;
-            downloadBtn.setAttribute('download', item.fileUrl.split('/').pop());
+            if (item.fileUrl && item.fileUrl.startsWith('http')) {
+                downloadBtn.target = "_blank";
+                downloadBtn.removeAttribute('download');
+                downloadBtn.querySelector('span').textContent = "Open Presentation";
+            } else {
+                downloadBtn.removeAttribute('target');
+                downloadBtn.setAttribute('download', (item.fileUrl || '').split('/').pop());
+                downloadBtn.querySelector('span').textContent = "Download Slide File";
+            }
 
-            // If it's an interactive HTML app, allow both native iframe and slide overview
-            if (item.type === 'Interactive HTML' || item.fileUrl.endsWith('.html')) {
+            // Embed / SmartBoard Viewer
+            const embedSrc = item.embedUrl || (item.fileUrl && item.fileUrl.endsWith('.html') ? item.fileUrl : '');
+            if (embedSrc) {
                 iframeContainer.classList.remove('hidden');
-                iframe.src = item.fileUrl;
+                iframe.src = embedSrc;
                 openTab.href = item.fileUrl;
             } else {
                 iframeContainer.classList.add('hidden');
@@ -1156,11 +1352,289 @@
         function openAddSlidesModal() {
             document.getElementById('add-slides-modal').classList.remove('hidden');
             document.body.classList.add('overflow-hidden');
+            updateGithubSnippet();
         }
 
         function closeAddSlidesModal() {
             document.getElementById('add-slides-modal').classList.add('hidden');
             document.body.classList.remove('overflow-hidden');
+        }
+
+        // ==========================================
+        // STUDENT CONTRIBUTOR STUDIO LOGIC
+        // ==========================================
+        function switchSubmissionTab(tab) {
+            document.querySelectorAll('.sub-tab').forEach(b => {
+                b.classList.remove('active', 'border-b-2', 'border-blue-600', 'text-blue-600', 'dark:border-teal-400', 'dark:text-teal-300', 'font-bold');
+                b.classList.add('text-slate-500', 'dark:text-slate-400');
+            });
+            const activeBtn = document.getElementById(`sub-tab-btn-${tab}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'border-b-2', 'border-blue-600', 'text-blue-600', 'dark:border-teal-400', 'dark:text-teal-300', 'font-bold');
+                activeBtn.classList.remove('text-slate-500', 'dark:text-slate-400');
+            }
+
+            document.querySelectorAll('.sub-pane').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`sub-pane-${tab}`)?.classList.remove('hidden');
+
+            if (tab === 'github') {
+                updateGithubSnippet();
+            }
+        }
+
+        function updateGithubSnippet() {
+            const author = document.getElementById('sub-author')?.value.trim() || 'Your Name';
+            const level = document.getElementById('sub-level')?.value.trim() || '';
+            const title = document.getElementById('sub-title')?.value.trim() || 'Your Presentation Title';
+            const category = document.getElementById('sub-category')?.value || 'Computer Science';
+            const format = document.getElementById('sub-format')?.value || 'PPTX';
+            const count = document.getElementById('sub-count')?.value.trim() || '12 Slides';
+            const url = document.getElementById('sub-url')?.value.trim() || 'slides/your_presentation.pptx';
+            const summary = document.getElementById('sub-summary')?.value.trim() || 'Comprehensive seminar deck exploring fundamental concepts and case studies.';
+            const b1 = document.getElementById('sub-b1')?.value.trim() || 'Key concept analysis and architecture';
+            const b2 = document.getElementById('sub-b2')?.value.trim() || 'Experimental methodology and findings';
+            const b3 = document.getElementById('sub-b3')?.value.trim() || 'Practical takeaways for students and researchers';
+
+            const cleanId = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').slice(0, 30) || 'student-seminar';
+            const authorStr = level ? `${author} (${level})` : author;
+
+            const snippet = `    {
+        id: "${cleanId}",
+        title: "${title.replace(/"/g, '\\"')}",
+        category: "${category}",
+        type: "${format}",
+        author: "${authorStr.replace(/"/g, '\\"')}",
+        slidesCount: "${count}",
+        fileSize: "Community Contribution",
+        fileUrl: "${url}",
+        summary: "${summary.replace(/"/g, '\\"')}",
+        topicsCovered: [
+            "${b1.replace(/"/g, '\\"')}",
+            "${b2.replace(/"/g, '\\"')}",
+            "${b3.replace(/"/g, '\\"')}"
+        ],
+        tags: ["${category.split(' ')[0]}", "${format}", "StudentContribution"],
+        slidesDeck: [
+            {
+                slideNumber: 1,
+                title: "${title.replace(/"/g, '\\"')}",
+                subtitle: "Presented by ${author.replace(/"/g, '\\"')}",
+                bullets: [
+                    "${b1.replace(/"/g, '\\"')}",
+                    "${b2.replace(/"/g, '\\"')}",
+                    "${b3.replace(/"/g, '\\"')}"
+                ],
+                takeaway: "Contributed by student researcher ${author.replace(/"/g, '\\"')} to EduSphere Academic Knowledge Hub."
+            }
+        ],
+        citation: {
+            apa: "${author.replace(/"/g, '\\"')}. (${new Date().getFullYear()}). ${title.replace(/"/g, '\\"')}. EduSphere Academic Hub.",
+            ieee: '${author.replace(/'/g, "\\'")}, "${title.replace(/"/g, '\\"')}," EduSphere Academic Hub, ${new Date().getFullYear()}.'
+        }
+    },`;
+
+            const codeEl = document.getElementById('github-snippet-code');
+            if (codeEl) codeEl.textContent = snippet;
+        }
+
+        function copyGithubSnippet() {
+            updateGithubSnippet();
+            const code = document.getElementById('github-snippet-code')?.textContent;
+            if (!code) return;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast("Copied GitHub slides-data.js code snippet!");
+            }).catch(() => {
+                showToast("Snippet copied!");
+            });
+        }
+
+        async function handleStudentSubmission(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('sub-submit-btn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-75');
+                const span = submitBtn.querySelector('span');
+                if (span) span.textContent = "Publishing...";
+            }
+
+            try {
+                const author = document.getElementById('sub-author').value.trim();
+                const level = document.getElementById('sub-level').value.trim();
+                const title = document.getElementById('sub-title').value.trim();
+                const category = document.getElementById('sub-category').value;
+                const format = document.getElementById('sub-format').value;
+                const count = document.getElementById('sub-count').value.trim() || '10+ Slides';
+                let url = document.getElementById('sub-url').value.trim();
+                const summary = document.getElementById('sub-summary').value.trim();
+                const b1 = document.getElementById('sub-b1').value.trim();
+                const b2 = document.getElementById('sub-b2').value.trim();
+                const b3 = document.getElementById('sub-b3').value.trim();
+
+                let embedUrl = '';
+                let fileUrl = url;
+                const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+                if (driveMatch && driveMatch[1]) {
+                    const driveId = driveMatch[1];
+                    embedUrl = `https://drive.google.com/file/d/${driveId}/preview`;
+                    fileUrl = `https://drive.google.com/file/d/${driveId}/view?usp=sharing`;
+                } else if (url.includes('onedrive.live.com') || url.includes('1drv.ms') || url.endsWith('.html') || url.includes('canva.com')) {
+                    embedUrl = url;
+                }
+
+                const authorDisplay = level ? `${author} (${level})` : author;
+                const bullets = [b1, b2, b3].filter(Boolean);
+                if (bullets.length === 0) bullets.push(summary);
+
+                const newId = `student-${Date.now()}`;
+                const newSubmission = {
+                    id: newId,
+                    title: title,
+                    category: category,
+                    type: format,
+                    author: authorDisplay,
+                    slidesCount: count,
+                    fileSize: 'Cloud Shared',
+                    fileUrl: fileUrl,
+                    embedUrl: embedUrl,
+                    summary: summary,
+                    topicsCovered: bullets,
+                    tags: [category.split(' ')[0], format, 'StudentDeck'],
+                    featured: true,
+                    isCommunity: true,
+                    submittedAt: new Date().toISOString(),
+                    slidesDeck: [
+                        {
+                            slideNumber: 1,
+                            title: title,
+                            subtitle: `Presented by ${authorDisplay}`,
+                            bullets: bullets,
+                            takeaway: `Contributed by student ${authorDisplay} to EduSphere Open Learning.`
+                        }
+                    ],
+                    citation: {
+                        apa: `${author}. (${new Date().getFullYear()}). ${title}. EduSphere Academic Hub. ${fileUrl}`,
+                        ieee: `${author}, "${title}," EduSphere Academic Hub, ${new Date().getFullYear()}. [Online]. Available: ${fileUrl}`
+                    }
+                };
+
+                // 1. Record ID in local my_submission_ids
+                let myIds = JSON.parse(localStorage.getItem('my_submission_ids') || '[]');
+                if (!myIds.includes(newId)) {
+                    myIds.unshift(newId);
+                    localStorage.setItem('my_submission_ids', JSON.stringify(myIds));
+                }
+
+                // 2. Prepend to local communitySubmissions
+                communitySubmissions = [newSubmission, ...communitySubmissions.filter(s => s.id !== newId)];
+                localStorage.setItem('edu_community_slides', JSON.stringify(communitySubmissions));
+
+                // 3. Sync to Firebase Realtime Database
+                try {
+                    await fetch(`https://dk-radio-e8950-default-rtdb.asia-southeast1.firebasedatabase.app/community_submissions/${newId}.json`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newSubmission)
+                    });
+                } catch(err) {
+                    console.warn("Firebase sync notice:", err);
+                }
+
+                // 4. Update UI
+                updateCommunityCountBadge();
+                
+                // Switch filter to Community button
+                const communityBtn = document.getElementById('community-filter-btn');
+                if (communityBtn) {
+                    categoryButtons.forEach(b => {
+                        b.classList.remove('active', 'bg-blue-600', 'text-white', 'dark:bg-teal-400', 'dark:text-slate-950');
+                        b.classList.add('border', 'border-slate-200', 'bg-white', 'text-slate-600', 'dark:border-slate-700', 'dark:bg-slate-800', 'dark:text-slate-300');
+                    });
+                    communityBtn.classList.add('active', 'bg-blue-600', 'text-white', 'dark:bg-teal-400', 'dark:text-slate-950');
+                    communityBtn.classList.remove('border', 'border-slate-200', 'bg-white', 'text-slate-600', 'dark:border-slate-700', 'dark:bg-slate-800', 'dark:text-slate-300');
+                    selectedCategory = "Community";
+                }
+
+                renderSlides();
+                closeAddSlidesModal();
+                document.getElementById('student-submission-form').reset();
+                showToast("🎉 Presentation published to EduSphere!");
+
+                document.getElementById('slides-section')?.scrollIntoView({ behavior: 'smooth' });
+
+            } catch(err) {
+                console.error("Submission failed:", err);
+                showToast("⚠️ Could not publish presentation. Please check inputs.");
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-75');
+                    const span = submitBtn.querySelector('span');
+                    if (span) span.textContent = "Publish Presentation";
+                }
+            }
+        }
+
+        async function deleteStudentSubmission(id, event) {
+            if (event) event.stopPropagation();
+            if (!confirm("Are you sure you want to remove your presentation?")) return;
+
+            communitySubmissions = communitySubmissions.filter(s => s.id !== id);
+            localStorage.setItem('edu_community_slides', JSON.stringify(communitySubmissions));
+
+            let myIds = JSON.parse(localStorage.getItem('my_submission_ids') || '[]');
+            myIds = myIds.filter(x => x !== id);
+            localStorage.setItem('my_submission_ids', JSON.stringify(myIds));
+
+            updateCommunityCountBadge();
+            renderSlides();
+            showToast("Presentation removed.");
+
+            try {
+                await fetch(`https://dk-radio-e8950-default-rtdb.asia-southeast1.firebasedatabase.app/community_submissions/${id}.json`, {
+                    method: 'DELETE'
+                });
+            } catch(err) {
+                console.warn("Firebase delete notice:", err);
+            }
+        }
+
+        async function loadCommunitySubmissions() {
+            // 1. Instant local load
+            try {
+                const local = localStorage.getItem('edu_community_slides');
+                if (local) {
+                    communitySubmissions = JSON.parse(local) || [];
+                    updateCommunityCountBadge();
+                    renderSlides();
+                }
+            } catch(e) {
+                console.error(e);
+            }
+
+            // 2. Network load from Firebase
+            try {
+                const res = await fetch('https://dk-radio-e8950-default-rtdb.asia-southeast1.firebasedatabase.app/community_submissions.json');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data) {
+                        const cloudList = Object.values(data).filter(item => item && item.id);
+                        const map = new Map();
+                        cloudList.forEach(item => map.set(item.id, item));
+                        communitySubmissions.forEach(item => {
+                            if (item && item.id && !map.has(item.id)) {
+                                map.set(item.id, item);
+                            }
+                        });
+                        communitySubmissions = Array.from(map.values()).sort((a, b) => new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0));
+                        localStorage.setItem('edu_community_slides', JSON.stringify(communitySubmissions));
+                        updateCommunityCountBadge();
+                        renderSlides();
+                    }
+                }
+            } catch(err) {
+                console.warn("Could not fetch cloud submissions:", err);
+            }
         }
 
         // Toast notification
@@ -1385,14 +1859,20 @@
 
         // Initialize on DOM load
         document.addEventListener('DOMContentLoaded', () => {
+            loadCommunitySubmissions();
             renderSlides();
             updateFavoritesBadge();
             updateBigOValues(16);
+            updateGithubSnippet();
+
+            // Auto-update GitHub snippet when user types in any form field
+            document.getElementById('student-submission-form')?.addEventListener('input', updateGithubSnippet);
 
             // Check if hash matches an ID
             const hash = window.location.hash.replace('#', '');
-            if (hash && typeof academicResources !== 'undefined') {
-                const match = academicResources.find(r => r.id === hash);
+            if (hash) {
+                const all = getAllResources();
+                const match = all.find(r => r.id === hash);
                 if (match) openSlideModal(match.id);
             }
         });
