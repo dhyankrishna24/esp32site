@@ -60,7 +60,9 @@
 ```
 esp32site/
 ├── index.html               # Main Academic Hub & Slides Portal
-├── studio.html              # Visual GUI Editor for slides-data.js
+├── studio.html              # Visual Web GUI Editor for slides-data.js
+├── slides_editor.py         # Python Desktop GUI Editor for slides-data.js
+├── editor.bat               # Windows 1-click launcher for Python desktop editor
 ├── about.html               # Author biography & background
 ├── slides-data.js           # Comprehensive presentations database & formulas
 ├── wrangler.json            # Cloudflare Workers Static Assets configuration
@@ -101,6 +103,21 @@ npx serve .
 python -m http.server 8080
 ```
 Open your browser and navigate to `http://localhost:8080`.
+
+### 🖥️ Python Desktop GUI Editor (Direct `slides-data.js` Editing)
+To edit presentations, slide theater agendas, and formulas without writing raw code:
+
+```bash
+# On Windows, simply double-click:
+editor.bat
+
+# OR run from terminal:
+python slides_editor.py
+
+# Optional: Run local web GUI with direct auto-save API:
+python slides_editor.py --web
+```
+This desktop app directly modifies and writes your changes back to [`slides-data.js`](slides-data.js) on your computer, automatically creating safety backups (`slides-data.js.bak`).
 
 ### Cloudflare Workers Deployment
 This project is deployed to Cloudflare's Edge using Wrangler with Static Assets:

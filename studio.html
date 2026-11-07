@@ -904,6 +904,27 @@
         }
 
         async function saveDirectToFile() {
+            // Check if local Python Studio backend is running
+            if (window.location.protocol.startsWith('http')) {
+                try {
+                    const res = await fetch('/api/save_slides_data', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            academicResources: studioResources,
+                            academicFormulas: studioFormulas
+                        })
+                    });
+                    if (res.ok) {
+                        persistStudioToLocalStorage();
+                        showToast("🎉 Saved directly to slides-data.js via Python!");
+                        return;
+                    }
+                } catch(e) {
+                    // Fallback to File System Access API
+                }
+            }
+
             const code = generateFullCode();
             try {
                 if ('showSaveFilePicker' in window) {
