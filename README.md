@@ -24,7 +24,7 @@
   - ⚛️ **Quantum Computing**: *Qubits, Superposition & Shor's Algorithm*.
 
 ### 2. 🛠️ Interactive Student Toolkit
-* **🧠 Flashcards & Quiz Trainer**: 3D interactive flashcards with flip animations and a self-scoring 5-question technical quiz with instant explanations.
+* **🧠 Flashcards & Quiz Trainer**: 3D interactive flashcards with flip animations, a self-scoring 5-question technical quiz, and an interactive **Flashcard Studio GUI** allowing students to author custom flashcards directly from slide presentations or academic topics.
 * **📐 Formula Quick-Reference Directory**: Searchable directory covering Electronics, Computer Science, Mathematics, and Biology with one-click clipboard copying.
 * **🎧 Ambient Study Focus Audio**: Web Audio API synthesizer generating Brown noise, White noise, and 432 Hz Alpha binaural beats for rehearsal focus.
 * **⏱️ Seminar Rehearsal Timer**: Dedicated countdown timer with quick presets (5m, 10m, 15m) and automatic 2-minute concluding alerts.

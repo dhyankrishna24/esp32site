@@ -536,9 +536,20 @@
 
                 <!-- Sub-pane 1: Flashcards -->
                 <div id="quiz-box-flashcard" class="space-y-4">
-                    <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span id="flashcard-category" class="rounded-full bg-blue-100 px-2.5 py-0.5 font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">Computer Science</span>
-                        <span id="flashcard-counter" class="font-mono">Card 1 of 8</span>
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
+                        <div class="flex items-center gap-2">
+                            <span id="flashcard-category" class="rounded-full bg-blue-100 px-2.5 py-0.5 font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">Computer Science</span>
+                            <span id="flashcard-custom-badge" class="hidden rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-950 dark:text-amber-300">🎓 Custom Card</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openAddFlashcardModal()" class="inline-flex items-center gap-1 rounded-xl bg-blue-600 px-3 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-blue-700 active:scale-95 dark:bg-teal-400 dark:text-slate-950">
+                                <span>➕ Add Flashcard</span>
+                            </button>
+                            <span id="flashcard-counter" class="font-mono text-xs">Card 1 of 8</span>
+                            <button id="flashcard-delete-btn" onclick="deleteCurrentFlashcard()" class="hidden rounded-lg p-1 text-rose-500 hover:bg-rose-50 hover:text-rose-700 dark:hover:bg-rose-950/40 transition" title="Delete this custom flashcard">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- 3D Flip Card Container -->
@@ -800,6 +811,9 @@
                     <button onclick="openCheatsheetModal()" class="inline-flex items-center gap-1.5 rounded-xl border border-indigo-300 bg-indigo-50/80 px-3.5 py-2 text-xs font-bold text-indigo-700 shadow-sm transition hover:bg-indigo-100 dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-300">
                         <span>📄 Study Cheatsheet</span>
                     </button>
+                    <button onclick="openAddFlashcardModalForCurrentSlide()" class="inline-flex items-center gap-1.5 rounded-xl border border-teal-300 bg-teal-50/80 px-3.5 py-2 text-xs font-bold text-teal-800 shadow-sm transition hover:bg-teal-100 dark:border-teal-800 dark:bg-teal-950/40 dark:text-teal-300" title="Create a flashcard directly from this slide">
+                        <span>🗂️ + Slide Flashcard</span>
+                    </button>
                 </div>
 
                 <div class="flex items-center gap-2">
@@ -885,6 +899,135 @@
                     Close Cheatsheet
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Add Slides Flashcard GUI Studio Modal -->
+    <div id="add-flashcard-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/85 p-3 backdrop-blur-md sm:p-6 md:p-8">
+        <div class="relative mx-auto w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xl dark:border-slate-700 dark:bg-slate-900 overflow-hidden">
+            
+            <!-- Modal Header -->
+            <div class="flex items-start justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="rounded bg-teal-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-teal-700 dark:bg-teal-950 dark:text-teal-300">Flashcard Studio</span>
+                        <span class="rounded bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">3D Interactive</span>
+                    </div>
+                    <h3 class="mt-1 text-2xl font-black text-slate-900 dark:text-white">Create Slide Flashcard</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Author custom revision flashcards from seminar slides or standalone academic topics.</p>
+                </div>
+                <button onclick="closeAddFlashcardModal()" class="rounded-full p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Form Body -->
+            <form id="add-flashcard-form" onsubmit="handleCreateFlashcard(event)" class="mt-5 space-y-4">
+                
+                <!-- Slide Association & Discipline -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Associate With Slide Deck</label>
+                        <select id="fc-deck-select" onchange="onFlashcardDeckSelectChange()" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">-- General Academic (No Deck) --</option>
+                            <!-- Injected dynamically from all resources -->
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">Discipline / Subject *</label>
+                        <select id="fc-category" required onchange="updateFlashcardPreview()" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="Computer Science">Computer Science & Cyber</option>
+                            <option value="Electronics & IoT">Electronics & IoT</option>
+                            <option value="Biology & Health">Biology & Health</option>
+                            <option value="Mathematics & Science">Mathematics & Science</option>
+                            <option value="Economics & Social Studies">Economics & Social Studies</option>
+                            <option value="Public Speaking & Notes">Public Speaking & Notes</option>
+                            <option value="Custom Topic">Custom Topic</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Quick Autofill Helper if slide deck is selected -->
+                <div id="fc-autofill-banner" class="hidden rounded-xl border border-blue-200 bg-blue-50/70 p-3 dark:border-teal-900/40 dark:bg-teal-950/20 text-xs">
+                    <div class="flex items-center justify-between">
+                        <span class="font-semibold text-blue-900 dark:text-teal-300">💡 Fast Autofill from Slide</span>
+                        <button type="button" onclick="autofillFlashcardFromSelectedSlide()" class="rounded-lg bg-blue-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-blue-700 dark:bg-teal-400 dark:text-slate-950">
+                            Auto-fill Current Slide Concept
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Front: Question / Problem Statement -->
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
+                        Front: Question / Slide Concept *
+                    </label>
+                    <textarea id="fc-question" required rows="2" placeholder="e.g. What is the fundamental difference between TCP and UDP in computer networks?" class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" oninput="updateFlashcardPreview()"></textarea>
+                </div>
+
+                <!-- Back: Answer / Takeaway -->
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
+                        Back: Answer & Technical Rationale *
+                    </label>
+                    <textarea id="fc-answer" required rows="3" placeholder="e.g. TCP provides connection-oriented, ordered byte streaming with error recovery and flow control. UDP provides connectionless, best-effort packet delivery with minimal latency." class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" oninput="updateFlashcardPreview()"></textarea>
+                </div>
+
+                <!-- Optional Pro Tip -->
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
+                        Study Tip / Exam Reminder (Optional)
+                    </label>
+                    <input type="text" id="fc-tip" placeholder="e.g. TCP has 20-byte min header overhead vs 8 bytes for UDP." class="w-full rounded-xl border border-slate-300 bg-slate-50 p-2.5 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" oninput="updateFlashcardPreview()">
+                </div>
+
+                <!-- Live Mini Card Preview -->
+                <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold uppercase text-slate-400">Card Preview (Interactive)</span>
+                        <span class="text-[10px] text-slate-400">Click preview to test flip</span>
+                    </div>
+
+                    <div class="perspective-1000 cursor-pointer" onclick="togglePreviewFlip()">
+                        <div id="fc-preview-inner" class="flashcard-inner rounded-2xl border border-blue-200 bg-slate-50 p-4 text-center flex flex-col justify-center items-center shadow-sm dark:border-slate-700 dark:bg-slate-800 min-h-[140px]">
+                            
+                            <!-- Front -->
+                            <div class="flashcard-front flex flex-col justify-center items-center p-3">
+                                <span id="fc-prev-cat" class="text-[9px] font-bold uppercase tracking-wider text-blue-600 dark:text-teal-400 mb-1">Computer Science</span>
+                                <p id="fc-prev-q" class="text-xs font-bold text-slate-800 dark:text-white line-clamp-3">Your question will appear here...</p>
+                                <span class="mt-2 text-[10px] text-slate-400 font-medium">🔄 Tap to flip</span>
+                            </div>
+
+                            <!-- Back -->
+                            <div class="flashcard-back flex flex-col justify-center items-center p-3">
+                                <span class="text-[9px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">Answer</span>
+                                <p id="fc-prev-a" class="text-xs font-medium text-slate-700 dark:text-slate-300 line-clamp-3">Your answer will appear here...</p>
+                                <span id="fc-prev-t" class="mt-1 text-[10px] text-slate-400 italic"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Action Buttons -->
+                <div class="mt-6 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
+                    <button type="button" onclick="copyFlashcardCodeSnippet()" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                        📋 Copy Code for PR
+                    </button>
+
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="closeAddFlashcardModal()" class="rounded-xl px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+                            Cancel
+                        </button>
+                        <button type="submit" id="save-fc-btn" class="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md hover:bg-blue-700 active:scale-95 dark:bg-teal-400 dark:text-slate-950">
+                            💾 Save to Flashcards
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
         </div>
     </div>
 
@@ -1169,6 +1312,7 @@
                 focusSearch();
             }
             if (e.key === 'Escape') {
+                closeAddFlashcardModal();
                 closeCheatsheetModal();
                 closeCitationModal();
                 closeSlideModal();
@@ -1450,6 +1594,9 @@
                             </button>
                             <button onclick="openCheatsheetForCard('${item.id}', event)" class="inline-flex items-center justify-center rounded-xl border border-indigo-200 bg-indigo-50/70 p-2.5 text-indigo-700 transition hover:bg-indigo-100 active:scale-95 dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-300" title="Open Instant Study Cheatsheet">
                                 <span class="text-xs font-bold">📄</span>
+                            </button>
+                            <button onclick="openAddFlashcardModalForCard('${item.id}', event)" class="inline-flex items-center justify-center rounded-xl border border-teal-200 bg-teal-50/70 p-2.5 text-teal-700 transition hover:bg-teal-100 active:scale-95 dark:border-teal-800 dark:bg-teal-950/40 dark:text-teal-300" title="Add Flashcard for this Presentation">
+                                <span class="text-xs font-bold">🗂️</span>
                             </button>
                             
                             ${isExternal ? `
@@ -2320,50 +2467,58 @@
         // ==========================================
         // FLASHCARD & QUIZ TRAINER DATA & LOGIC
         // ==========================================
-        const studyFlashcards = [
+        const defaultStudyFlashcards = [
             {
+                id: "core-cs-1",
                 category: "Computer Science",
                 question: "What is the time complexity of searching in a Balanced Binary Search Tree (AVL / Red-Black)?",
                 answer: "O(log N). Because the tree maintains height balance (h ≤ c·log₂ N), every comparison halves the remaining search space.",
                 tip: "Contrast with an unbalanced BST which can degenerate into a linked list of O(N)."
             },
             {
+                id: "core-iot-1",
                 category: "Electronics & IoT",
                 question: "How does ESP32 Deep Sleep mode achieve ultra-low power consumption (<10 µA)?",
                 answer: "The dual-core Xtensa CPU, high-speed RAM, and radio modules (Wi-Fi/BLE) are powered down. Only the Ultra Low Power (ULP) coprocessor, RTC timer, and RTC slow memory remain active.",
                 tip: "Wakeup triggers include RTC timer alarm, external GPIO interrupts, or touchpad touch."
             },
             {
+                id: "core-bio-1",
                 category: "Biology & Health",
                 question: "Which antibody isotype mediates immediate Type I Hypersensitivity (Allergic Anaphylaxis)?",
                 answer: "Immunoglobulin E (IgE). IgE binds with high affinity to FcεRI receptors on tissue mast cells and basophils, causing cross-linking and rapid release of histamine, leukotrienes, and prostaglandins.",
                 tip: "Sensitization occurs on first allergen exposure; clinical degranulation occurs on subsequent re-exposure."
             },
             {
+                id: "core-cs-2",
                 category: "Computer Science",
                 question: "Explain the difference between Symmetric and Asymmetric encryption.",
                 answer: "Symmetric encryption (e.g. AES-256, ChaCha20) uses a single shared secret key for both encryption and decryption (very fast). Asymmetric encryption (e.g. RSA, ECC, Ed25519) uses a public/private keypair (used for key exchange & digital signatures).",
                 tip: "Modern TLS 1.3 combines both: ECDHE for asymmetric key agreement, AES-GCM for payload encryption."
             },
             {
+                id: "core-iot-2",
                 category: "Electronics & IoT",
                 question: "What is the Nyquist-Shannon Sampling Theorem requirement for signal reconstruction?",
                 answer: "The sampling frequency (f_s) must be strictly greater than twice the highest frequency component (f_max) of the analog signal: f_s > 2·f_max.",
                 tip: "Sampling below 2·f_max results in aliasing distortion. Hardware anti-aliasing low-pass filters are placed before the ADC."
             },
             {
+                id: "core-econ-1",
                 category: "Economics & Social Studies",
                 question: "What constitutes the 'Impossible Trinity' (Mundell-Fleming Trilemma) in monetary policy?",
                 answer: "A central bank can simultaneously choose only two of the three: 1) Fixed exchange rate, 2) Free capital mobility, and 3) Independent monetary policy.",
                 tip: "For instance, the Eurozone chose (1) and (2), sacrificing independent member monetary policy."
             },
             {
+                id: "core-math-1",
                 category: "Mathematics & Science",
                 question: "What does Euler's Identity e^(iπ) + 1 = 0 signify in mathematical analysis?",
                 answer: "It establishes the profound connection between the five fundamental constants of mathematics: e (base of natural log), i (imaginary unit), π (ratio of circumference to diameter), 1 (multiplicative identity), and 0 (additive identity).",
                 tip: "Derived directly from Euler's Formula: e^(iθ) = cos(θ) + i·sin(θ) evaluated at θ = π."
             },
             {
+                id: "core-iot-3",
                 category: "Electronics & IoT",
                 question: "Why are pull-up resistors mandatory on I2C bus SDA and SCL lines?",
                 answer: "I2C drivers use open-drain (or open-collector) transistors that can only pull the bus line LOW to Ground. External pull-up resistors (typically 2.2kΩ - 10kΩ) are required to pull the bus HIGH to VCC when all devices are idle.",
@@ -2371,10 +2526,20 @@
             }
         ];
 
+        let userCustomFlashcards = JSON.parse(localStorage.getItem('edu_custom_flashcards') || '[]');
         let currentFlashcardIndex = 0;
 
+        function getAllFlashcards() {
+            return [...userCustomFlashcards, ...defaultStudyFlashcards];
+        }
+
         function renderCurrentFlashcard() {
-            const card = studyFlashcards[currentFlashcardIndex];
+            const allCards = getAllFlashcards();
+            if (allCards.length === 0) return;
+            if (currentFlashcardIndex >= allCards.length) currentFlashcardIndex = 0;
+            if (currentFlashcardIndex < 0) currentFlashcardIndex = allCards.length - 1;
+
+            const card = allCards[currentFlashcardIndex];
             if (!card) return;
 
             const categoryEl = document.getElementById('flashcard-category');
@@ -2383,12 +2548,22 @@
             const answerEl = document.getElementById('flashcard-answer');
             const tipEl = document.getElementById('flashcard-tip');
             const cardEl = document.getElementById('flashcard-element');
+            const customBadge = document.getElementById('flashcard-custom-badge');
+            const deleteBtn = document.getElementById('flashcard-delete-btn');
 
             if (categoryEl) categoryEl.textContent = card.category;
-            if (counterEl) counterEl.textContent = `Card ${currentFlashcardIndex + 1} of ${studyFlashcards.length}`;
+            if (counterEl) counterEl.textContent = `Card ${currentFlashcardIndex + 1} of ${allCards.length}`;
             if (questionEl) questionEl.textContent = card.question;
             if (answerEl) answerEl.textContent = card.answer;
             if (tipEl) tipEl.textContent = card.tip ? `💡 Pro Tip: ${card.tip}` : '';
+
+            if (card.isCustom) {
+                if (customBadge) customBadge.classList.remove('hidden');
+                if (deleteBtn) deleteBtn.classList.remove('hidden');
+            } else {
+                if (customBadge) customBadge.classList.add('hidden');
+                if (deleteBtn) deleteBtn.classList.add('hidden');
+            }
 
             // Reset flip state
             if (cardEl) cardEl.classList.remove('flipped');
@@ -2400,13 +2575,270 @@
         }
 
         function nextFlashcard() {
-            currentFlashcardIndex = (currentFlashcardIndex + 1) % studyFlashcards.length;
+            const total = getAllFlashcards().length;
+            if (total === 0) return;
+            currentFlashcardIndex = (currentFlashcardIndex + 1) % total;
             renderCurrentFlashcard();
         }
 
         function prevFlashcard() {
-            currentFlashcardIndex = (currentFlashcardIndex - 1 + studyFlashcards.length) % studyFlashcards.length;
+            const total = getAllFlashcards().length;
+            if (total === 0) return;
+            currentFlashcardIndex = (currentFlashcardIndex - 1 + total) % total;
             renderCurrentFlashcard();
+        }
+
+        function deleteCurrentFlashcard() {
+            const allCards = getAllFlashcards();
+            const card = allCards[currentFlashcardIndex];
+            if (!card || !card.isCustom) return;
+
+            if (!confirm(`Delete custom flashcard: "${card.question.slice(0, 45)}..."?`)) return;
+
+            userCustomFlashcards = userCustomFlashcards.filter(c => c.id !== card.id);
+            localStorage.setItem('edu_custom_flashcards', JSON.stringify(userCustomFlashcards));
+
+            if (currentFlashcardIndex >= getAllFlashcards().length) {
+                currentFlashcardIndex = Math.max(0, getAllFlashcards().length - 1);
+            }
+            renderCurrentFlashcard();
+            showToast("Flashcard removed.");
+        }
+
+        // ==========================================
+        // GUI FLASHCARD STUDIO MODAL CONTROLLER
+        // ==========================================
+        function populateFlashcardDecksDropdown() {
+            const select = document.getElementById('fc-deck-select');
+            if (!select) return;
+
+            const currentVal = select.value;
+            select.innerHTML = '<option value="">-- General Academic (No Deck) --</option>';
+
+            const allDecks = getAllResources();
+            allDecks.forEach(deck => {
+                const opt = document.createElement('option');
+                opt.value = deck.id;
+                opt.textContent = `${deck.category}: ${deck.title} (${deck.slidesCount})`;
+                select.appendChild(opt);
+            });
+
+            if (currentVal) select.value = currentVal;
+        }
+
+        function openAddFlashcardModal() {
+            populateFlashcardDecksDropdown();
+            updateFlashcardPreview();
+            document.getElementById('add-flashcard-modal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function openAddFlashcardModalForCurrentSlide() {
+            if (!currentModalSlide) return;
+            openAddFlashcardModal();
+
+            const select = document.getElementById('fc-deck-select');
+            if (select) select.value = currentModalSlide.id;
+
+            const categoryEl = document.getElementById('fc-category');
+            if (categoryEl) {
+                // Find matching option or default to first
+                for (let i = 0; i < categoryEl.options.length; i++) {
+                    if (categoryEl.options[i].value === currentModalSlide.category) {
+                        categoryEl.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            const slide = currentModalSlide.slidesDeck ? currentModalSlide.slidesDeck[currentDeckIndex] : null;
+            const qEl = document.getElementById('fc-question');
+            const aEl = document.getElementById('fc-answer');
+            const tEl = document.getElementById('fc-tip');
+
+            if (slide) {
+                qEl.value = `What is the core takeaway of "${slide.title}" in ${currentModalSlide.title}?`;
+                aEl.value = slide.takeaway || (slide.bullets || []).join('; ');
+                tEl.value = `Slide ${currentDeckIndex + 1} presented by ${currentModalSlide.author}.`;
+            } else {
+                qEl.value = `What is the primary topic addressed in "${currentModalSlide.title}"?`;
+                aEl.value = currentModalSlide.summary;
+                tEl.value = `From ${currentModalSlide.author}'s seminar presentation.`;
+            }
+
+            const banner = document.getElementById('fc-autofill-banner');
+            if (banner) banner.classList.remove('hidden');
+
+            updateFlashcardPreview();
+        }
+
+        function openAddFlashcardModalForCard(id, event) {
+            if (event) event.stopPropagation();
+            const deck = getAllResources().find(d => d.id === id);
+            if (!deck) return;
+            openAddFlashcardModal();
+
+            const select = document.getElementById('fc-deck-select');
+            if (select) select.value = deck.id;
+
+            const categoryEl = document.getElementById('fc-category');
+            if (categoryEl) {
+                for (let i = 0; i < categoryEl.options.length; i++) {
+                    if (categoryEl.options[i].value === deck.category) {
+                        categoryEl.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            const slide = (deck.slidesDeck && deck.slidesDeck[0]) ? deck.slidesDeck[0] : null;
+            const qEl = document.getElementById('fc-question');
+            const aEl = document.getElementById('fc-answer');
+            const tEl = document.getElementById('fc-tip');
+
+            if (slide) {
+                qEl.value = `What is the core takeaway of "${slide.title}" in ${deck.title}?`;
+                aEl.value = slide.takeaway || (slide.bullets || []).join('; ');
+                tEl.value = `Presented by ${deck.author}.`;
+            } else {
+                qEl.value = `What is the primary topic addressed in "${deck.title}"?`;
+                aEl.value = deck.summary;
+                tEl.value = `From ${deck.author}'s seminar presentation.`;
+            }
+
+            const banner = document.getElementById('fc-autofill-banner');
+            if (banner) banner.classList.remove('hidden');
+
+            updateFlashcardPreview();
+        }
+
+        function closeAddFlashcardModal() {
+            document.getElementById('add-flashcard-modal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+            const previewInner = document.getElementById('fc-preview-inner');
+            if (previewInner) previewInner.classList.remove('flipped');
+        }
+
+        function onFlashcardDeckSelectChange() {
+            const select = document.getElementById('fc-deck-select');
+            const banner = document.getElementById('fc-autofill-banner');
+            const catSelect = document.getElementById('fc-category');
+            const deckId = select ? select.value : '';
+
+            if (deckId) {
+                if (banner) banner.classList.remove('hidden');
+                const deck = getAllResources().find(d => d.id === deckId);
+                if (deck && catSelect) {
+                    for (let i = 0; i < catSelect.options.length; i++) {
+                        if (catSelect.options[i].value === deck.category) {
+                            catSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                if (banner) banner.classList.add('hidden');
+            }
+            updateFlashcardPreview();
+        }
+
+        function autofillFlashcardFromSelectedSlide() {
+            const deckId = document.getElementById('fc-deck-select')?.value;
+            if (!deckId) return;
+
+            const deck = getAllResources().find(d => d.id === deckId);
+            if (!deck || !deck.slidesDeck || deck.slidesDeck.length === 0) return;
+
+            // Pick a slide (first or random)
+            const slide = deck.slidesDeck[0];
+            document.getElementById('fc-question').value = `What is the core concept of "${slide.title}" in ${deck.title}?`;
+            document.getElementById('fc-answer').value = slide.takeaway || (slide.bullets || []).join('; ');
+            document.getElementById('fc-tip').value = `Key seminar point by ${deck.author}.`;
+            updateFlashcardPreview();
+            showToast("Autofilled slide data into flashcard!");
+        }
+
+        function updateFlashcardPreview() {
+            const cat = document.getElementById('fc-category')?.value || 'Computer Science';
+            const q = document.getElementById('fc-question')?.value.trim() || 'Your question will appear here...';
+            const a = document.getElementById('fc-answer')?.value.trim() || 'Your answer will appear here...';
+            const tip = document.getElementById('fc-tip')?.value.trim() || '';
+
+            const prevCat = document.getElementById('fc-prev-cat');
+            const prevQ = document.getElementById('fc-prev-q');
+            const prevA = document.getElementById('fc-prev-a');
+            const prevT = document.getElementById('fc-prev-t');
+
+            if (prevCat) prevCat.textContent = cat;
+            if (prevQ) prevQ.textContent = q;
+            if (prevA) prevA.textContent = a;
+            if (prevT) prevT.textContent = tip ? `💡 Tip: ${tip}` : '';
+        }
+
+        function togglePreviewFlip() {
+            const inner = document.getElementById('fc-preview-inner');
+            if (inner) inner.classList.toggle('flipped');
+        }
+
+        function handleCreateFlashcard(event) {
+            event.preventDefault();
+
+            const deckId = document.getElementById('fc-deck-select')?.value || '';
+            const category = document.getElementById('fc-category')?.value || 'General Academic';
+            const question = document.getElementById('fc-question')?.value.trim();
+            const answer = document.getElementById('fc-answer')?.value.trim();
+            const tip = document.getElementById('fc-tip')?.value.trim() || '';
+
+            if (!question || !answer) {
+                showToast("Please enter both a question and answer.");
+                return;
+            }
+
+            const newCard = {
+                id: `user-fc-${Date.now()}`,
+                category: category,
+                question: question,
+                answer: answer,
+                tip: tip,
+                deckId: deckId,
+                isCustom: true,
+                createdAt: new Date().toISOString()
+            };
+
+            userCustomFlashcards.unshift(newCard);
+            localStorage.setItem('edu_custom_flashcards', JSON.stringify(userCustomFlashcards));
+
+            currentFlashcardIndex = 0;
+            renderCurrentFlashcard();
+            closeAddFlashcardModal();
+            document.getElementById('add-flashcard-form')?.reset();
+
+            showToast("🎉 Flashcard added to your deck!");
+
+            // Switch to flashcard tool tab and scroll to view
+            switchToolTab('quiz');
+            setQuizSubMode('flashcard');
+            document.getElementById('tool-pane-quiz')?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyFlashcardCodeSnippet() {
+            const category = document.getElementById('fc-category')?.value || 'Computer Science';
+            const question = document.getElementById('fc-question')?.value.trim() || 'Question text';
+            const answer = document.getElementById('fc-answer')?.value.trim() || 'Answer text';
+            const tip = document.getElementById('fc-tip')?.value.trim() || '';
+
+            const snippet = `    {
+        category: "${category}",
+        question: "${question.replace(/"/g, '\\"')}",
+        answer: "${answer.replace(/"/g, '\\"')}",
+        tip: "${tip.replace(/"/g, '\\"')}"
+    },`;
+
+            navigator.clipboard.writeText(snippet).then(() => {
+                showToast("Copied flashcard code snippet for GitHub PR!");
+            }).catch(() => {
+                showToast("Code copied!");
+            });
         }
 
         function setQuizSubMode(mode) {
