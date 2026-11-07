@@ -194,7 +194,7 @@
                         Connect Theory to Practice: <span class="text-blue-600 dark:text-teal-300">ESP32 IoT Hub</span>
                     </h2>
                     <p class="max-w-2xl text-sm sm:text-base text-slate-600 dark:text-slate-300">
-                        Explore our live microcontroller subpage featuring real-time Firebase telemetry, DHT/BME sensor dashboards, remote LED controllers, and embedded FreeRTOS experiments.
+                        Explore our live microcontroller subpage featuring real-time telemetry, DHT/BME sensor dashboards, remote LED controllers, and embedded FreeRTOS experiments.
                     </p>
                 </div>
                 <div class="flex flex-wrap items-center justify-center gap-3">
@@ -929,6 +929,14 @@
             if (badge) badge.textContent = favorites.length;
         }
 
+        function updateCommunityCountBadge() {
+            const badge = document.getElementById('community-count-badge');
+            if (badge) {
+                const totalCommunity = getAllResources().filter(r => r.isCommunity).length;
+                badge.textContent = totalCommunity;
+            }
+        }
+
         // Category filter buttons
         const categoryButtons = document.querySelectorAll('.category-btn');
         categoryButtons.forEach(btn => {
@@ -1363,6 +1371,8 @@
         // ==========================================
         // STUDENT CONTRIBUTOR STUDIO LOGIC
         // ==========================================
+        // Cloudflare Pages Function (/api/submissions) or custom Cloudflare Worker endpoint
+        const CLOUDFLARE_API_ENDPOINT = window.CLOUDFLARE_API_ENDPOINT || '/api/submissions';
         function switchSubmissionTab(tab) {
             document.querySelectorAll('.sub-tab').forEach(b => {
                 b.classList.remove('active', 'border-b-2', 'border-blue-600', 'text-blue-600', 'dark:border-teal-400', 'dark:text-teal-300', 'font-bold');
@@ -1529,15 +1539,15 @@
                 communitySubmissions = [newSubmission, ...communitySubmissions.filter(s => s.id !== newId)];
                 localStorage.setItem('edu_community_slides', JSON.stringify(communitySubmissions));
 
-                // 3. Sync to Firebase Realtime Database
+                // 3. Sync to Cloudflare Edge API (Pages Functions / Worker)
                 try {
-                    await fetch(`https://dk-radio-e8950-default-rtdb.asia-southeast1.firebasedatabase.app/community_submissions/${newId}.json`, {
-                        method: 'PUT',
+                    await fetch(CLOUDFLARE_API_ENDPOINT, {
+                        method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(newSubmission)
                     });
                 } catch(err) {
-                    console.warn("Firebase sync notice:", err);
+                    console.log("Cloudflare edge notice:", err);
                 }
 
                 // 4. Update UI
@@ -1590,17 +1600,18 @@
             renderSlides();
             showToast("Presentation removed.");
 
+            // Remove from Cloudflare Edge API
             try {
-                await fetch(`https://dk-radio-e8950-default-rtdb.asia-southeast1.firebasedatabase.app/community_submissions/${id}.json`, {
+                await fetch(`${CLOUDFLARE_API_ENDPOINT}?id=${encodeURIComponent(id)}`, {
                     method: 'DELETE'
                 });
             } catch(err) {
-                console.warn("Firebase delete notice:", err);
+                console.log("Cloudflare edge notice:", err);
             }
         }
 
         async function loadCommunitySubmissions() {
-            // 1. Instant local load
+            // 1. Instant local load from browser cache
             try {
                 const local = localStorage.getItem('edu_community_slides');
                 if (local) {
@@ -1612,15 +1623,14 @@
                 console.error(e);
             }
 
-            // 2. Network load from Firebase
+            // 2. Load from Cloudflare Edge API (/api/submissions)
             try {
-                const res = await fetch('https://dk-radio-e8950-default-rtdb.asia-southeast1.firebasedatabase.app/community_submissions.json');
+                const res = await fetch(CLOUDFLARE_API_ENDPOINT);
                 if (res.ok) {
                     const data = await res.json();
-                    if (data) {
-                        const cloudList = Object.values(data).filter(item => item && item.id);
+                    if (data && Array.isArray(data) && data.length > 0) {
                         const map = new Map();
-                        cloudList.forEach(item => map.set(item.id, item));
+                        data.forEach(item => { if (item && item.id) map.set(item.id, item); });
                         communitySubmissions.forEach(item => {
                             if (item && item.id && !map.has(item.id)) {
                                 map.set(item.id, item);
@@ -1633,7 +1643,7 @@
                     }
                 }
             } catch(err) {
-                console.warn("Could not fetch cloud submissions:", err);
+                // Graceful fallback to local cache
             }
         }
 
@@ -1862,6 +1872,7 @@
             loadCommunitySubmissions();
             renderSlides();
             updateFavoritesBadge();
+            updateCommunityCountBadge();
             updateBigOValues(16);
             updateGithubSnippet();
 

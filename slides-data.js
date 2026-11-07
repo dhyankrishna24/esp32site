@@ -736,6 +736,78 @@ const academicResources = [
         takeaway: "Your voice delivers the story; your slides provide the evidence."
       }
     ]
+  },
+  {
+    id: "quantum-computing-algorithms",
+    title: "Introduction to Quantum Computing Algorithms & Qubit Mechanics",
+    category: "Computer Science",
+    type: "PPTX",
+    slidesCount: "14 Slides",
+    fileSize: "Cloud Shared",
+    academicLevel: "Senior Secondary / Undergraduate",
+    author: "Arjun Menon (Grade 12)",
+    date: "2026",
+    featured: true,
+    isCommunity: true,
+    summary: "A student-authored seminar deck introducing qubits, superposition, Bloch sphere states, Hadamard and CNOT quantum gates, and Shor's factoring polynomial speedup.",
+    topicsCovered: [
+      "Qubits, Dirac ket notation, and Bloch Sphere coordinates",
+      "Quantum logic gates: Hadamard, Pauli-X, and CNOT entanglement",
+      "Shor's and Grover's algorithms: Complexity advantages vs classical computing"
+    ],
+    fileUrl: "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/view?usp=sharing",
+    embedUrl: "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/preview",
+    tags: ["quantum", "algorithms", "qubits", "computer science", "physics", "StudentDeck"],
+    citation: {
+      apa: "Menon, A. (2026). Introduction to Quantum Computing Algorithms & Qubit Mechanics. EduSphere Academic Hub.",
+      ieee: "A. Menon, 'Introduction to Quantum Computing Algorithms & Qubit Mechanics,' EduSphere Academic Hub, 2026."
+    },
+    slidesDeck: [
+      {
+        slideNumber: 1,
+        title: "Introduction to Quantum Computing",
+        subtitle: "Presented by Arjun Menon (Grade 12)",
+        bullets: [
+          "Classical bits exist strictly as 0 or 1, whereas quantum bits (qubits) exploit quantum superposition.",
+          "State space expands exponentially: N entangled qubits can simultaneously represent 2^N complex amplitudes.",
+          "Core objective: Harness constructive interference to amplify correct computational solutions."
+        ],
+        takeaway: "Quantum computing is fundamentally probabilistic and non-deterministic prior to quantum measurement."
+      },
+      {
+        slideNumber: 2,
+        title: "The Qubit & Bloch Sphere",
+        subtitle: "Mathematical Representation of State Vectors",
+        bullets: [
+          "State vector |ψ⟩ = α|0⟩ + β|1⟩ where |α|² + |β|² = 1.",
+          "Bloch sphere maps complex probability amplitudes onto a 3D unit sphere surface.",
+          "Reversible transformations correspond to unitary rotations around axes on the sphere."
+        ],
+        takeaway: "Measurement irreversibly collapses the superposition state vector into an orthonormal eigenstate."
+      },
+      {
+        slideNumber: 3,
+        title: "Quantum Gates & Circuits",
+        subtitle: "Unitary Matrix Operations",
+        bullets: [
+          "Single-qubit gates: Hadamard (H) creates balanced superposition from pure basis states.",
+          "Two-qubit gates: Controlled-NOT (CNOT) enables quantum entanglement between pairs of qubits.",
+          "Universal quantum circuit sets can simulate any quantum mechanical physical system."
+        ],
+        takeaway: "Entangled qubit states cannot be factored into tensor products of individual subsystem states."
+      },
+      {
+        slideNumber: 4,
+        title: "Shor's Algorithm & Cryptography Impact",
+        subtitle: "Polynomial Time Prime Factorization",
+        bullets: [
+          "Classical RSA relies on the computational hardness of factoring large composite semi-primes.",
+          "Shor's algorithm transforms factoring into a period-finding problem via the Quantum Fourier Transform (QFT).",
+          "Executes in O((log N)³) polynomial time compared to classical sub-exponential general number field sieve."
+        ],
+        takeaway: "Accelerates modern research into NIST post-quantum cryptographic primitives (lattices, isogenies)."
+      }
+    ]
   }
 ];
 
