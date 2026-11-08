@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduSphere — Academic Presentations & Seminar Slides</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0071e3">
     <meta name="description" content="Open academic repository and presentation viewer for university students, educators, and researchers. Preview seminar slides, download lecture materials, test scientific formulas, and rehearse speeches.">
     <meta name="author" content="Dhyan Krishna M">
 
@@ -441,6 +443,9 @@
                 <button onclick="switchToolTab('focus')" id="tool-tab-focus" class="tool-tab rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Focus Audio
                 </button>
+                <button onclick="switchToolTab('circuit')" id="tool-tab-circuit" class="tool-tab rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                    Circuit Assistant
+                </button>
             </div>
 
             <!-- Tool Container 1: Seminar Timer -->
@@ -470,6 +475,41 @@
                     <button onclick="resetTimer()" class="rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-transparent hover:bg-black/[0.04] dark:hover:bg-white/[0.06] px-4 py-2 text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
                         Reset
                     </button>
+                </div>
+            
+                <!-- Audio Rehearsal Recorder & Slide Pacing -->
+                <div class="mt-6 pt-6 border-t border-black/[0.06] dark:border-white/[0.06]">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <div class="text-left">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Audio Voice Recorder & Slide Pacing</span>
+                                <span id="rehearsal-rec-badge" class="hidden rounded font-mono px-1.5 py-0.5 text-[10px] font-medium bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300 animate-pulse">● Recording</span>
+                            </div>
+                            <p class="text-[11px] text-[#6e6e73] dark:text-[#86868b]">Record your rehearsal speech and track seconds spent per slide automatically.</p>
+                        </div>
+                        <button id="rehearsal-record-btn" onclick="toggleRehearsalRecording()" class="inline-flex items-center gap-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors">
+                            <span id="rehearsal-record-icon" class="h-2 w-2 rounded-full bg-red-500"></span>
+                            <span id="rehearsal-record-text">Record Speech</span>
+                        </button>
+                    </div>
+
+                    <!-- Post-rehearsal Audio Scrubber & Slide Timeline -->
+                    <div id="rehearsal-results-box" class="hidden mt-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-4 text-left">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                            <span class="text-xs font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Rehearsal Pacing Audit</span>
+                            <div class="flex items-center gap-2">
+                                <span id="rehearsal-total-duration" class="font-mono text-xs text-[#6e6e73] dark:text-[#86868b]">0m 00s</span>
+                                <button onclick="downloadRehearsalAudio()" id="rehearsal-download-btn" class="rounded px-2 py-0.5 text-[11px] font-medium bg-[#0071e3] text-white hover:bg-[#0077ed] transition-colors">
+                                    Download Audio
+                                </button>
+                            </div>
+                        </div>
+
+                        <audio id="rehearsal-audio-player" controls class="w-full h-8 mb-3"></audio>
+
+                        <div class="text-[11px] text-[#86868b] mb-1.5 font-medium">Slide Delivery Timeline:</div>
+                        <div id="rehearsal-pacing-timeline" class="space-y-1.5 max-h-40 overflow-y-auto"></div>
+                    </div>
                 </div>
             </div>
 
@@ -633,7 +673,44 @@
                         <button onclick="nextFlashcard()" class="rounded-lg bg-[#0071e3] hover:bg-[#0077ed] px-4 py-1.5 text-xs font-medium text-white transition-colors">
                             Next →
                         </button>
+                    
+                    <!-- Spaced Repetition Rating Bar -->
+                    <div id="srs-rating-bar" class="rounded-xl border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.03] p-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-semibold text-[#6e6e73] dark:text-[#86868b]">Spaced Repetition Rating:</span>
+                            <div class="text-[11px] text-[#86868b] font-mono">
+                                Due Today: <span id="srs-due-count" class="font-bold text-[#0071e3] dark:text-[#2997ff]">0</span> · Learning: <span id="srs-learn-count" class="font-bold text-amber-500">0</span> · Mastered: <span id="srs-master-count" class="font-bold text-emerald-500">0</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button onclick="rateFlashcard('again')" class="rounded-lg border border-red-200 dark:border-red-900/40 bg-red-50/70 dark:bg-red-950/20 py-1.5 text-xs font-medium text-red-700 dark:text-red-300 hover:bg-red-100 transition-colors">
+                                Again <span class="block text-[10px] opacity-70">1 min</span>
+                            </button>
+                            <button onclick="rateFlashcard('hard')" class="rounded-lg border border-amber-200 dark:border-amber-900/40 bg-amber-50/70 dark:bg-amber-950/20 py-1.5 text-xs font-medium text-amber-700 dark:text-amber-300 hover:bg-amber-100 transition-colors">
+                                Hard <span class="block text-[10px] opacity-70">1 day</span>
+                            </button>
+                            <button onclick="rateFlashcard('good')" class="rounded-lg border border-blue-200 dark:border-blue-900/40 bg-blue-50/70 dark:bg-blue-950/20 py-1.5 text-xs font-medium text-[#0071e3] dark:text-[#2997ff] hover:bg-blue-100 transition-colors">
+                                Good <span class="block text-[10px] opacity-70">3 days</span>
+                            </button>
+                            <button onclick="rateFlashcard('easy')" class="rounded-lg border border-emerald-200 dark:border-emerald-900/40 bg-emerald-50/70 dark:bg-emerald-950/20 py-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 transition-colors">
+                                Easy <span class="block text-[10px] opacity-70">7 days</span>
+                            </button>
+                        </div>
                     </div>
+
+                    <!-- Anki & CSV Export / Import Toolbar -->
+                    <div class="flex items-center justify-between pt-1 text-xs">
+                        <div class="flex items-center gap-2">
+                            <button onclick="exportFlashcardsToAnki()" class="rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-1 font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors" title="Export cards for Anki (.txt TSV)">
+                                Export to Anki (.txt)
+                            </button>
+                            <button onclick="document.getElementById('flashcard-import-input').click()" class="rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-1 font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors" title="Import cards from JSON or CSV">
+                                Import Cards
+                            </button>
+                            <input type="file" id="flashcard-import-input" accept=".json,.csv,.txt" class="hidden" onchange="handleFlashcardFileImport(event)">
+                        </div>
+                    </div>
+                </div>
                 </div>
 
                 <!-- Sub-pane: Quiz -->
@@ -718,7 +795,75 @@
                         <input id="focus-volume-slider" type="range" min="0.01" max="0.5" step="0.01" value="0.2" oninput="updateFocusVolume(this.value)" class="w-24 h-1.5 bg-black/[0.1] dark:bg-white/[0.1] rounded-lg appearance-none cursor-pointer">
                     </div>
                 </div>
-            </div>
+            
+            <!-- Tool Container 8: ESP32 Circuit Wiring Assistant -->
+            <div id="tool-pane-circuit" class="tool-pane hidden mt-8 max-w-3xl mx-auto rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8">
+                <div class="text-center mb-6">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-[#0071e3] dark:text-[#2997ff]">Hardware Engineering</span>
+                    <h3 class="text-lg font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] mt-0.5">ESP32 Pinout & Circuit Wiring Assistant</h3>
+                    <p class="text-xs text-[#6e6e73] dark:text-[#86868b] mt-1">Select any sensor or module to generate verified wiring connections, color-coded pinouts, and ready-to-run driver code.</p>
+                </div>
+
+                <!-- Module Selection Pills -->
+                <div class="flex flex-wrap items-center justify-center gap-1.5 mb-6" id="circuit-module-pills">
+                    <button onclick="selectCircuitModule('dht11')" data-module="dht11" class="circuit-mod-btn active rounded-lg bg-[#0071e3] px-3 py-1.5 text-xs font-medium text-white transition-colors">DHT11 / DHT22 (Temp & Hum)</button>
+                    <button onclick="selectCircuitModule('bme280')" data-module="bme280" class="circuit-mod-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">BME280 (I2C Barometer)</button>
+                    <button onclick="selectCircuitModule('oled')" data-module="oled" class="circuit-mod-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">SSD1306 OLED (0.96" I2C)</button>
+                    <button onclick="selectCircuitModule('servo')" data-module="servo" class="circuit-mod-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">SG90 Servo (PWM)</button>
+                    <button onclick="selectCircuitModule('relay')" data-module="relay" class="circuit-mod-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">5V Relay Module (GPIO)</button>
+                    <button onclick="selectCircuitModule('neopixel')" data-module="neopixel" class="circuit-mod-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">WS2812B NeoPixel Strip</button>
+                </div>
+
+                <!-- Module Overview & Details -->
+                <div class="rounded-xl border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.03] p-4 mb-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <h4 id="circuit-mod-name" class="font-semibold text-sm text-[#1d1d1f] dark:text-[#f5f5f7]">DHT11 Temperature & Humidity Sensor</h4>
+                            <p id="circuit-mod-desc" class="text-xs text-[#6e6e73] dark:text-[#86868b] mt-0.5">Single-bus digital temperature and humidity sensor with calibrated digital signal output.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="circuit-mod-voltage" class="rounded font-mono px-2 py-0.5 text-[11px] font-medium bg-blue-50 text-[#0071e3] dark:bg-blue-950/40 dark:text-[#2997ff]">3.3V Logic</span>
+                            <span id="circuit-mod-protocol" class="rounded font-mono px-2 py-0.5 text-[11px] font-medium bg-black/[0.04] dark:bg-white/[0.06] text-[#6e6e73] dark:text-[#86868b]">Single Wire GPIO</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Color-Coded Wiring Table -->
+                <div class="mb-6">
+                    <h5 class="text-xs font-semibold uppercase tracking-wider text-[#6e6e73] dark:text-[#86868b] mb-2">Wiring Pin Connection Guide</h5>
+                    <div class="overflow-x-auto rounded-xl border border-black/[0.08] dark:border-white/[0.08]">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-black/[0.02] dark:bg-white/[0.04] border-b border-black/[0.06] dark:border-white/[0.06] text-[#6e6e73] dark:text-[#86868b] font-medium uppercase tracking-wider text-[10px]">
+                                <tr>
+                                    <th class="py-2.5 px-3">Wire Color</th>
+                                    <th class="py-2.5 px-3">Module Pin</th>
+                                    <th class="py-2.5 px-3">ESP32 Pin</th>
+                                    <th class="py-2.5 px-3">Electrical Function</th>
+                                </tr>
+                            </thead>
+                            <tbody id="circuit-wiring-tbody" class="divide-y divide-black/[0.06] dark:divide-white/[0.06] font-mono">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Driver Code Snippets -->
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-1.5 text-xs">
+                            <span class="font-medium text-[#6e6e73] dark:text-[#86868b]">Driver Code:</span>
+                            <button onclick="setCircuitCodeLang('arduino')" id="circuit-lang-arduino" class="circuit-lang-btn rounded font-medium px-2 py-0.5 bg-[#0071e3] text-white transition-colors">Arduino C++</button>
+                            <button onclick="setCircuitCodeLang('python')" id="circuit-lang-python" class="circuit-lang-btn rounded font-medium px-2 py-0.5 bg-black/[0.04] dark:bg-white/[0.06] text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">MicroPython</button>
+                        </div>
+                        <button onclick="copyCircuitCode()" id="copy-circuit-code-btn" class="inline-flex items-center gap-1 text-xs text-[#0071e3] dark:text-[#2997ff] hover:underline font-medium">
+                            Copy Code
+                        </button>
+                    </div>
+
+                    <pre class="overflow-x-auto rounded-xl bg-black/[0.04] dark:bg-white/[0.04] p-4 text-[11px] font-mono text-[#1d1d1f] dark:text-[#f5f5f7] leading-relaxed max-h-60 overflow-y-auto"><code id="circuit-code-block">// Loading circuit driver code...</code></pre>
+                </div>
+            </div></div>
 
         </div>
     </section>
@@ -765,7 +910,16 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <button onclick="toggleSpeakerNotes()" id="speaker-notes-toggle-btn" class="rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-1 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors" title="Toggle Presenter Speaker Notes">
+                                        <button onclick="toggleSlidePen()" id="pen-toggle-btn" class="rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-1 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors" title="Slide Drawing Pen (Press P)">
+                        Pen (P)
+                    </button>
+                    <button onclick="toggleLaserPointer()" id="laser-toggle-btn" class="rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-1 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors" title="Laser Pointer (Press L)">
+                        Laser (L)
+                    </button>
+                    <button onclick="toggleFilmstripTray()" id="filmstrip-toggle-btn" class="rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-1 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors" title="Slide Filmstrip Drawer (Press T)">
+                        Filmstrip (T)
+                    </button>
+<button onclick="toggleSpeakerNotes()" id="speaker-notes-toggle-btn" class="rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-1 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors" title="Toggle Presenter Speaker Notes">
                         Speaker Notes
                     </button>
                     <button onclick="toggleFullscreenStage()" id="fullscreen-stage-btn" class="rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-1 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors" title="Projector Fullscreen Mode (Press F)">
@@ -788,8 +942,19 @@
                     <p id="modal-summary" class="mt-1 text-xs sm:text-sm text-[#6e6e73] dark:text-[#86868b] leading-relaxed">Summary description goes here.</p>
                 </div>
 
+                
                 <!-- SLIDE THEATER STAGE -->
-                <div id="native-slide-stage" class="rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.01] dark:bg-white/[0.02] p-6 sm:p-8">
+                <div id="native-slide-stage" class="relative rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.01] dark:bg-white/[0.02] p-6 sm:p-8 overflow-hidden">
+                    <canvas id="slide-pen-canvas" class="pointer-events-none absolute inset-0 z-20 w-full h-full"></canvas>
+                    
+                    <!-- Pen Controls Palette -->
+                    <div id="slide-pen-toolbar" class="hidden absolute top-4 right-4 z-30 flex items-center gap-1.5 rounded-lg border border-black/[0.1] dark:border-white/[0.1] bg-white/95 dark:bg-[#1c1c1e]/95 p-1 shadow-sm backdrop-blur">
+                        <button onclick="setPenColor('#ef4444')" class="w-3.5 h-3.5 rounded-full bg-red-500 hover:scale-110 active:scale-95" title="Red Pen"></button>
+                        <button onclick="setPenColor('#0071e3')" class="w-3.5 h-3.5 rounded-full bg-blue-500 hover:scale-110 active:scale-95" title="Blue Pen"></button>
+                        <button onclick="setPenColor('#eab308')" class="w-3.5 h-3.5 rounded-full bg-yellow-400 hover:scale-110 active:scale-95" title="Yellow Highlighter"></button>
+                        <div class="h-3 w-px bg-black/[0.1] dark:bg-white/[0.1] mx-0.5"></div>
+                        <button onclick="clearSlidePenCanvas()" class="px-1.5 py-0.5 text-[10px] text-[#6e6e73] hover:text-[#1d1d1f] dark:text-[#86868b] dark:hover:text-[#f5f5f7]">Clear (C)</button>
+                    </div>
                     <div class="flex items-center justify-between mb-4 pb-2 border-b border-black/[0.06] dark:border-white/[0.06]">
                         <div class="text-xs font-semibold uppercase tracking-wider text-[#0071e3] dark:text-[#2997ff]" id="slide-stage-number">Slide 1</div>
                         <div class="text-[11px] text-[#86868b] font-mono">Navigate with ← / → keys</div>
@@ -828,6 +993,16 @@
                             Next →
                         </button>
                     </div>
+                </div>
+
+                
+                <!-- Slide Filmstrip Drawer -->
+                <div id="slide-filmstrip-drawer" class="hidden rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Slide Filmstrip</span>
+                        <span class="text-[11px] text-[#86868b]">Click any thumbnail to jump</span>
+                    </div>
+                    <div id="slide-filmstrip-tray" class="flex items-center gap-2.5 overflow-x-auto pb-2"></div>
                 </div>
 
                 <!-- EMBED / SMARTBOARD SIMULATOR IFRAME CONTAINER -->
@@ -3487,6 +3662,771 @@
             initHeroSlideStage();
         }
     
+    
+        // ==========================================
+        // FEATURE 1: PRESENTER AUDIO REHEARSAL & SLIDE PACING
+        // ==========================================
+        let isRehearsalRecording = false;
+        let rehearsalMediaRecorder = null;
+        let rehearsalAudioChunks = [];
+        let rehearsalStartTime = 0;
+        let rehearsalSlideLog = [];
+        let lastSlideTransitionTime = 0;
+        let rehearsalAudioBlob = null;
+
+        async function toggleRehearsalRecording() {
+            if (isRehearsalRecording) {
+                stopRehearsalRecording();
+            } else {
+                await startRehearsalRecording();
+            }
+        }
+
+        async function startRehearsalRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                rehearsalAudioChunks = [];
+                rehearsalMediaRecorder = new MediaRecorder(stream);
+                
+                rehearsalMediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) rehearsalAudioChunks.push(e.data);
+                };
+
+                rehearsalMediaRecorder.onstop = () => {
+                    stream.getTracks().forEach(t => t.stop());
+                    rehearsalAudioBlob = new Blob(rehearsalAudioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(rehearsalAudioBlob);
+                    const player = document.getElementById('rehearsal-audio-player');
+                    if (player) player.src = audioUrl;
+
+                    const finalDuration = Math.round((Date.now() - lastSlideTransitionTime) / 1000);
+                    if (rehearsalSlideLog.length > 0) {
+                        rehearsalSlideLog[rehearsalSlideLog.length - 1].duration = Math.max(1, finalDuration);
+                    }
+
+                    renderRehearsalPacingTimeline();
+                };
+
+                rehearsalMediaRecorder.start(500);
+                isRehearsalRecording = true;
+                rehearsalStartTime = Date.now();
+                lastSlideTransitionTime = rehearsalStartTime;
+                rehearsalSlideLog = [];
+
+                const initialTitle = currentModalSlide ? (currentModalSlide.slides[currentDeckIndex]?.title || `Slide ${currentDeckIndex + 1}`) : 'Slide 1 (Timer Rehearsal)';
+                rehearsalSlideLog.push({
+                    slideIndex: currentDeckIndex,
+                    title: initialTitle,
+                    startTime: 0,
+                    duration: 0
+                });
+
+                const recBtn = document.getElementById('rehearsal-record-btn');
+                const recBadge = document.getElementById('rehearsal-rec-badge');
+                const recText = document.getElementById('rehearsal-record-text');
+                const recIcon = document.getElementById('rehearsal-record-icon');
+                if (recBtn) recBtn.classList.add('border-red-500', 'bg-red-50/50', 'dark:bg-red-950/20');
+                if (recBadge) recBadge.classList.remove('hidden');
+                if (recText) recText.textContent = 'Stop Recording';
+                if (recIcon) recIcon.classList.add('animate-ping');
+
+                showToast('Rehearsal recording started. Advance slides to track pacing.');
+            } catch (err) {
+                console.error('Audio recording failed:', err);
+                showToast('Microphone access denied or unavailable.');
+            }
+        }
+
+        function stopRehearsalRecording() {
+            if (!isRehearsalRecording || !rehearsalMediaRecorder) return;
+            rehearsalMediaRecorder.stop();
+            isRehearsalRecording = false;
+
+            const recBtn = document.getElementById('rehearsal-record-btn');
+            const recBadge = document.getElementById('rehearsal-rec-badge');
+            const recText = document.getElementById('rehearsal-record-text');
+            const recIcon = document.getElementById('rehearsal-record-icon');
+            if (recBtn) recBtn.classList.remove('border-red-500', 'bg-red-50/50', 'dark:bg-red-950/20');
+            if (recBadge) recBadge.classList.add('hidden');
+            if (recText) recText.textContent = 'Record Speech';
+            if (recIcon) recIcon.classList.remove('animate-ping');
+
+            document.getElementById('rehearsal-results-box')?.classList.remove('hidden');
+            showToast('Rehearsal recorded. Pacing timeline generated below.');
+        }
+
+        function logSlideTransition(newIdx, newTitle) {
+            if (!isRehearsalRecording) return;
+            const now = Date.now();
+            const duration = Math.round((now - lastSlideTransitionTime) / 1000);
+            if (rehearsalSlideLog.length > 0) {
+                rehearsalSlideLog[rehearsalSlideLog.length - 1].duration = Math.max(1, duration);
+            }
+            lastSlideTransitionTime = now;
+            rehearsalSlideLog.push({
+                slideIndex: newIdx,
+                title: newTitle || `Slide ${newIdx + 1}`,
+                startTime: Math.round((now - rehearsalStartTime) / 1000),
+                duration: 0
+            });
+        }
+
+        function renderRehearsalPacingTimeline() {
+            const container = document.getElementById('rehearsal-pacing-timeline');
+            const totalDurEl = document.getElementById('rehearsal-total-duration');
+            if (!container) return;
+
+            const totalSec = rehearsalSlideLog.reduce((acc, cur) => acc + (cur.duration || 0), 0);
+            const totalMin = Math.floor(totalSec / 60);
+            const remSec = totalSec % 60;
+            if (totalDurEl) totalDurEl.textContent = `${totalMin}m ${remSec < 10 ? '0' : ''}${remSec}s Total`;
+
+            if (rehearsalSlideLog.length === 0) {
+                container.innerHTML = '<div class="text-xs text-[#86868b]">No slide transitions logged.</div>';
+                return;
+            }
+
+            container.innerHTML = rehearsalSlideLog.map((s) => {
+                const isOver = s.duration > 120;
+                const barWidth = Math.min(100, Math.max(10, Math.round((s.duration / Math.max(1, totalSec)) * 100)));
+                return `
+                    <div class="rounded-lg border border-black/[0.06] dark:border-white/[0.06] bg-white dark:bg-[#1c1c1e] p-2 text-xs">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-medium text-[#1d1d1f] dark:text-[#f5f5f7] truncate max-w-[200px]">Slide ${s.slideIndex + 1}: ${s.title}</span>
+                            <span class="font-mono text-[11px] ${isOver ? 'text-amber-500 font-bold' : 'text-[#6e6e73] dark:text-[#86868b]'}">${s.duration}s ${isOver ? '(Slow)' : ''}</span>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-black/[0.06] dark:bg-white/[0.06] overflow-hidden">
+                            <div class="h-full rounded-full ${isOver ? 'bg-amber-500' : 'bg-[#0071e3] dark:bg-[#2997ff]'}" style="width: ${barWidth}%;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function downloadRehearsalAudio() {
+            if (!rehearsalAudioBlob) {
+                showToast('No recorded rehearsal audio available.');
+                return;
+            }
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(rehearsalAudioBlob);
+            a.download = `edusphere_rehearsal_${new Date().toISOString().slice(0, 10)}.webm`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast('Rehearsal audio downloaded.');
+        }
+
+        // ==========================================
+        // FEATURE 2: PROJECTOR LASER, PEN & FILMSTRIP
+        // ==========================================
+        let isLaserPointerActive = false;
+        let isSlidePenActive = false;
+        let penColor = '#ef4444';
+        let isDrawing = false;
+        let penCanvas = null;
+        let penCtx = null;
+        let isFilmstripOpen = false;
+
+        function toggleLaserPointer() {
+            isLaserPointerActive = !isLaserPointerActive;
+            const laser = document.getElementById('slide-laser-pointer');
+            const btn = document.getElementById('laser-toggle-btn');
+            if (btn) btn.classList.toggle('bg-[#0071e3]', isLaserPointerActive);
+            if (btn) btn.classList.toggle('text-white', isLaserPointerActive);
+
+            if (isLaserPointerActive) {
+                laser?.classList.remove('hidden');
+                document.addEventListener('mousemove', onLaserMouseMove);
+                showToast('Laser Pointer active (Press L to toggle)');
+            } else {
+                laser?.classList.add('hidden');
+                document.removeEventListener('mousemove', onLaserMouseMove);
+            }
+        }
+
+        function onLaserMouseMove(e) {
+            const laser = document.getElementById('slide-laser-pointer');
+            if (laser && isLaserPointerActive) {
+                laser.style.left = `${e.clientX}px`;
+                laser.style.top = `${e.clientY}px`;
+            }
+        }
+
+        function toggleSlidePen() {
+            isSlidePenActive = !isSlidePenActive;
+            const btn = document.getElementById('pen-toggle-btn');
+            const toolbar = document.getElementById('slide-pen-toolbar');
+            const canvas = document.getElementById('slide-pen-canvas');
+
+            if (btn) btn.classList.toggle('bg-[#0071e3]', isSlidePenActive);
+            if (btn) btn.classList.toggle('text-white', isSlidePenActive);
+            if (toolbar) toolbar.classList.toggle('hidden', !isSlidePenActive);
+
+            if (canvas) {
+                canvas.style.pointerEvents = isSlidePenActive ? 'auto' : 'none';
+                if (isSlidePenActive) {
+                    initSlidePenCanvas();
+                    showToast('Slide Pen active (Press P to toggle, C to clear)');
+                }
+            }
+        }
+
+        function initSlidePenCanvas() {
+            penCanvas = document.getElementById('slide-pen-canvas');
+            if (!penCanvas) return;
+            const rect = penCanvas.getBoundingClientRect();
+            penCanvas.width = rect.width;
+            penCanvas.height = rect.height;
+            penCtx = penCanvas.getContext('2d');
+
+            penCanvas.onmousedown = (e) => {
+                isDrawing = true;
+                const r = penCanvas.getBoundingClientRect();
+                penCtx.beginPath();
+                penCtx.moveTo(e.clientX - r.left, e.clientY - r.top);
+            };
+
+            penCanvas.onmousemove = (e) => {
+                if (!isDrawing) return;
+                const r = penCanvas.getBoundingClientRect();
+                penCtx.lineTo(e.clientX - r.left, e.clientY - r.top);
+                penCtx.strokeStyle = penColor;
+                penCtx.lineWidth = penColor === '#eab308' ? 12 : 3;
+                penCtx.lineCap = 'round';
+                penCtx.lineJoin = 'round';
+                penCtx.globalAlpha = penColor === '#eab308' ? 0.35 : 0.9;
+                penCtx.stroke();
+            };
+
+            window.onmouseup = () => { isDrawing = false; };
+        }
+
+        function setPenColor(color) {
+            penColor = color;
+            showToast('Pen color changed');
+        }
+
+        function clearSlidePenCanvas() {
+            if (penCanvas && penCtx) {
+                penCtx.clearRect(0, 0, penCanvas.width, penCanvas.height);
+                showToast('Slide drawings cleared.');
+            }
+        }
+
+        function toggleFilmstripTray() {
+            isFilmstripOpen = !isFilmstripOpen;
+            const drawer = document.getElementById('slide-filmstrip-drawer');
+            const btn = document.getElementById('filmstrip-toggle-btn');
+            if (drawer) drawer.classList.toggle('hidden', !isFilmstripOpen);
+            if (btn) btn.classList.toggle('bg-[#0071e3]', isFilmstripOpen);
+            if (btn) btn.classList.toggle('text-white', isFilmstripOpen);
+            if (isFilmstripOpen) renderFilmstripTray();
+        }
+
+        function renderFilmstripTray() {
+            const tray = document.getElementById('slide-filmstrip-tray');
+            if (!tray || !currentModalSlide || !currentModalSlide.slides) return;
+            tray.innerHTML = currentModalSlide.slides.map((s, idx) => `
+                <button onclick="jumpToSlide(${idx})" class="shrink-0 w-32 p-2.5 rounded-lg border text-left transition-colors ${idx === currentDeckIndex ? 'border-[#0071e3] bg-blue-50/50 dark:bg-blue-950/30' : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] hover:border-black/[0.15]'}">
+                    <div class="text-[10px] font-mono font-medium text-[#86868b] uppercase">Slide ${idx + 1}</div>
+                    <div class="text-[11px] font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] line-clamp-2 mt-0.5">${s.title}</div>
+                </button>
+            `).join('');
+        }
+
+        // ==========================================
+        // FEATURE 3: SPACED REPETITION & ANKI EXPORT
+        // ==========================================
+        let srsData = JSON.parse(localStorage.getItem('edu_srs_data') || '{}');
+
+        function updateSRSCounts() {
+            const cards = getAllFlashcards();
+            const now = Date.now();
+            let due = 0;
+            let learning = 0;
+            let mastered = 0;
+
+            cards.forEach(c => {
+                const s = srsData[c.id];
+                if (!s) {
+                    due++;
+                } else if (s.state === 'mastered') {
+                    mastered++;
+                    if (s.nextDue && s.nextDue <= now) due++;
+                } else {
+                    learning++;
+                    if (!s.nextDue || s.nextDue <= now) due++;
+                }
+            });
+
+            const dueEl = document.getElementById('srs-due-count');
+            const learnEl = document.getElementById('srs-learn-count');
+            const mastEl = document.getElementById('srs-master-count');
+            if (dueEl) dueEl.textContent = due;
+            if (learnEl) learnEl.textContent = learning;
+            if (mastEl) mastEl.textContent = mastered;
+        }
+
+        function rateFlashcard(rating) {
+            const cards = getAllFlashcards();
+            if (cards.length === 0) return;
+            const currentCard = cards[currentFlashcardIndex];
+            if (!currentCard) return;
+
+            const now = Date.now();
+            const record = srsData[currentCard.id] || { interval: 1, ease: 2.5, reviews: 0 };
+            record.reviews = (record.reviews || 0) + 1;
+
+            if (rating === 'again') {
+                record.interval = 1;
+                record.nextDue = now + 60 * 1000;
+                record.state = 'learning';
+            } else if (rating === 'hard') {
+                record.interval = 1;
+                record.nextDue = now + 24 * 60 * 60 * 1000;
+                record.state = 'learning';
+            } else if (rating === 'good') {
+                record.interval = Math.round(record.interval * 2.5);
+                record.nextDue = now + record.interval * 24 * 60 * 60 * 1000;
+                record.state = record.reviews >= 3 ? 'mastered' : 'learning';
+            } else if (rating === 'easy') {
+                record.interval = Math.round(record.interval * 4.0);
+                record.nextDue = now + record.interval * 24 * 60 * 60 * 1000;
+                record.state = 'mastered';
+            }
+
+            srsData[currentCard.id] = record;
+            localStorage.setItem('edu_srs_data', JSON.stringify(srsData));
+            updateSRSCounts();
+            showToast(`Rated ${rating.toUpperCase()}. Advancing card...`);
+
+            const el = document.getElementById('flashcard-element');
+            if (el && isFlashcardFlipped) {
+                el.classList.remove('flipped');
+                isFlashcardFlipped = false;
+            }
+            setTimeout(() => nextFlashcard(), 250);
+        }
+
+        function exportFlashcardsToAnki() {
+            const cards = getAllFlashcards();
+            if (cards.length === 0) {
+                showToast('No flashcards to export.');
+                return;
+            }
+            const tsvContent = cards.map(c => {
+                const q = (c.question || '').replace(/\t/g, ' ').replace(/\n/g, '<br>');
+                const a = (c.answer || '').replace(/\t/g, ' ').replace(/\n/g, '<br>') + (c.tip ? `<br><i>Tip: ${c.tip}</i>` : '');
+                const tag = (c.category || 'EduSphere').replace(/\s+/g, '_');
+                return `${q}\t${a}\t${tag}`;
+            }).join('\n');
+
+            const blob = new Blob([tsvContent], { type: 'text/tab-separated-values;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `edusphere_anki_cards_${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast('Flashcards exported for Anki (.txt).');
+        }
+
+        function handleFlashcardFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const text = e.target.result;
+                    let imported = [];
+                    if (file.name.endsWith('.json')) {
+                        imported = JSON.parse(text);
+                    } else {
+                        const lines = text.split('\n');
+                        lines.forEach((l, idx) => {
+                            const parts = l.split('\t');
+                            if (parts.length >= 2) {
+                                imported.push({
+                                    id: `imported-${Date.now()}-${idx}`,
+                                    category: parts[2] || 'Imported',
+                                    question: parts[0].replace(/<br>/g, '\n').trim(),
+                                    answer: parts[1].replace(/<br>/g, '\n').trim(),
+                                    isCustom: true
+                                });
+                            }
+                        });
+                    }
+
+                    if (Array.isArray(imported) && imported.length > 0) {
+                        const existingCustom = JSON.parse(localStorage.getItem('edu_custom_flashcards') || '[]');
+                        localStorage.setItem('edu_custom_flashcards', JSON.stringify([...imported, ...existingCustom]));
+                        updateSRSCounts();
+                        renderCurrentFlashcard();
+                        showToast(`Successfully imported ${imported.length} cards!`);
+                    } else {
+                        showToast('Invalid format. File contained no valid cards.');
+                    }
+                } catch (err) {
+                    console.error('Import failed:', err);
+                    showToast('Failed to parse card file.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ==========================================
+        // FEATURE 4: INTERACTIVE ESP32 CIRCUIT ASSISTANT
+        // ==========================================
+        const circuitModulesData = {
+            dht11: {
+                name: 'DHT11 / DHT22 Temperature & Humidity Sensor',
+                desc: 'Digital environmental sensor featuring single-bus protocol with calibrated digital signal output.',
+                voltage: '3.3V Logic',
+                protocol: 'Single Wire GPIO',
+                connections: [
+                    { wire: 'Red', pin: 'VCC (+)', esp: '3V3', func: '3.3V Power Supply' },
+                    { wire: 'Black', pin: 'GND (-)', esp: 'GND', func: 'System Ground' },
+                    { wire: 'Yellow', pin: 'DATA (Out)', esp: 'GPIO 4', func: 'Bidirectional Data Signal' }
+                ],
+                arduino: `#include <DHT.h>
+#define DHTPIN 4
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  Serial.println("DHT11 Sensor Online");
+}
+
+void loop() {
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+  if (isnan(temp) || isnan(hum)) {
+    Serial.println("Failed to read from DHT sensor!");
+  } else {
+    Serial.printf("Temp: %.1f C | Humidity: %.1f %%\\n", temp, hum);
+  }
+  delay(2000);
+}`,
+                python: `import dht
+from machine import Pin
+import time
+
+sensor = dht.DHT11(Pin(4))
+
+while True:
+    try:
+        sensor.measure()
+        print("Temp: {} C, Humidity: {}%".format(sensor.temperature(), sensor.humidity()))
+    except OSError as e:
+        print("Failed to read sensor")
+    time.sleep(2)
+`
+            },
+            bme280: {
+                name: 'BME280 Barometric Pressure & Humidity Sensor',
+                desc: 'High-precision environmental sensor operating over standard I2C bus.',
+                voltage: '3.3V Logic',
+                protocol: 'I2C Bus (0x76 / 0x77)',
+                connections: [
+                    { wire: 'Red', pin: 'VIN', esp: '3V3', func: '3.3V Power' },
+                    { wire: 'Black', pin: 'GND', esp: 'GND', func: 'Ground' },
+                    { wire: 'Blue', pin: 'SCL', esp: 'GPIO 22', func: 'I2C Clock' },
+                    { wire: 'Yellow', pin: 'SDA', esp: 'GPIO 21', func: 'I2C Data' }
+                ],
+                arduino: `#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
+
+Adafruit_BME280 bme;
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+  if (!bme.begin(0x76)) {
+    Serial.println("Could not find a valid BME280 sensor, check wiring!");
+    while (1);
+  }
+  Serial.println("BME280 Telemetry Active");
+}
+
+void loop() {
+  Serial.printf("Temp: %.2f C | Press: %.1f hPa | Hum: %.1f %%\\n",
+    bme.readTemperature(), bme.readPressure() / 100.0F, bme.readHumidity());
+  delay(1500);
+}`,
+                python: `from machine import Pin, I2C
+import bme280
+import time
+
+i2c = I2C(0, scl=Pin(22), sda=Pin(21))
+bme = bme280.BME280(i2c=i2c)
+
+while True:
+    print("Readings:", bme.values)
+    time.sleep(1.5)
+`
+            },
+            oled: {
+                name: 'SSD1306 0.96" OLED Display (128x64)',
+                desc: 'Monochrome graphic OLED display driven over standard I2C interface.',
+                voltage: '3.3V Logic',
+                protocol: 'I2C Bus (0x3C)',
+                connections: [
+                    { wire: 'Red', pin: 'VCC', esp: '3V3', func: '3.3V Power' },
+                    { wire: 'Black', pin: 'GND', esp: 'GND', func: 'Ground' },
+                    { wire: 'Blue', pin: 'SCL', esp: 'GPIO 22', func: 'I2C Clock' },
+                    { wire: 'Yellow', pin: 'SDA', esp: 'GPIO 21', func: 'I2C Data' }
+                ],
+                arduino: `#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
+void setup() {
+  Wire.begin(21, 22);
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 10);
+  display.println("EduSphere IoT Hub");
+  display.println("Status: Telemetry OK");
+  display.display();
+}
+
+void loop() {}`,
+                python: `from machine import Pin, I2C
+import ssd1306
+
+i2c = I2C(0, scl=Pin(22), sda=Pin(21))
+oled = ssd1306.SSD1306_I2C(128, 64, i2c)
+oled.fill(0)
+oled.text("EduSphere IoT", 0, 10)
+oled.text("Status: Active", 0, 24)
+oled.show()
+`
+            },
+            servo: {
+                name: 'SG90 Micro Servo Motor (50 Hz PWM)',
+                desc: 'Position-controlled actuator requiring 50Hz PWM signal on a dedicated GPIO pin.',
+                voltage: '5V Power / 3.3V PWM',
+                protocol: 'PWM (50 Hz)',
+                connections: [
+                    { wire: 'Red', pin: 'VCC (Center)', esp: 'VIN (5V)', func: '5V Motor Supply' },
+                    { wire: 'Brown', pin: 'GND', esp: 'GND', func: 'Ground' },
+                    { wire: 'Orange', pin: 'PWM Signal', esp: 'GPIO 13', func: 'PWM Pulse Control' }
+                ],
+                arduino: `#include <ESP32Servo.h>
+
+Servo myServo;
+int servoPin = 13;
+
+void setup() {
+  myServo.setPeriodHertz(50);
+  myServo.attach(servoPin, 500, 2400);
+}
+
+void loop() {
+  myServo.write(0);
+  delay(1000);
+  myServo.write(90);
+  delay(1000);
+  myServo.write(180);
+  delay(1000);
+}`,
+                python: `from machine import Pin, PWM
+import time
+
+servo = PWM(Pin(13), freq=50)
+
+def set_angle(angle):
+    duty = int(40 + (angle / 180) * 75)
+    servo.duty(duty)
+
+while True:
+    set_angle(0)
+    time.sleep(1)
+    set_angle(90)
+    time.sleep(1)
+`
+            },
+            relay: {
+                name: '5V Optocoupler Relay Module',
+                desc: 'Electromechanical switch for high-current load actuation with optical isolation.',
+                voltage: '5V Coil / 3.3V Control',
+                protocol: 'Active LOW Digital GPIO',
+                connections: [
+                    { wire: 'Red', pin: 'VCC', esp: 'VIN (5V)', func: '5V Coil Power' },
+                    { wire: 'Black', pin: 'GND', esp: 'GND', func: 'Ground' },
+                    { wire: 'Green', pin: 'IN (Trigger)', esp: 'GPIO 26', func: 'Active LOW Logic' }
+                ],
+                arduino: `#define RELAY_PIN 26
+
+void setup() {
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, HIGH);
+}
+
+void loop() {
+  digitalWrite(RELAY_PIN, LOW);
+  delay(3000);
+  digitalWrite(RELAY_PIN, HIGH);
+  delay(3000);
+}`,
+                python: `from machine import Pin
+import time
+
+relay = Pin(26, Pin.OUT)
+relay.value(1)
+
+while True:
+    relay.value(0)
+    time.sleep(3)
+    relay.value(1)
+    time.sleep(3)
+`
+            },
+            neopixel: {
+                name: 'WS2812B Addressable RGB NeoPixel Strip',
+                desc: 'Individually addressable RGB LEDs driven by a single high-speed 800kHz pulse stream.',
+                voltage: '5V Power / 3.3V Data',
+                protocol: 'High-speed NRZ 800kHz',
+                connections: [
+                    { wire: 'Red', pin: '+5V (VCC)', esp: 'VIN (5V)', func: '5V LED Power' },
+                    { wire: 'Black', pin: 'GND', esp: 'GND', func: 'Ground' },
+                    { wire: 'White', pin: 'DIN (Data)', esp: 'GPIO 18', func: '800kHz Data Line' }
+                ],
+                arduino: `#include <Adafruit_NeoPixel.h>
+#define PIN 18
+#define NUMPIXELS 8
+
+Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+  pixels.begin();
+  pixels.clear();
+}
+
+void loop() {
+  for (int i=0; i<NUMPIXELS; i++) {
+    pixels.setPixelColor(i, pixels.Color(0, 113, 227));
+    pixels.show();
+    delay(100);
+  }
+}`,
+                python: `from machine import Pin
+import neopixel, time
+
+np = neopixel.NeoPixel(Pin(18), 8)
+while True:
+    for i in range(8):
+        np[i] = (0, 113, 227)
+        np.write()
+        time.sleep(0.1)
+`
+            }
+        };
+
+        let selectedCircuitModule = 'dht11';
+        let selectedCircuitLang = 'arduino';
+
+        function selectCircuitModule(moduleId) {
+            selectedCircuitModule = moduleId;
+            document.querySelectorAll('.circuit-mod-btn').forEach(b => {
+                const isActive = b.getAttribute('data-module') === moduleId;
+                b.classList.toggle('active', isActive);
+                b.classList.toggle('bg-[#0071e3]', isActive);
+                b.classList.toggle('text-white', isActive);
+            });
+            renderCircuitAssistant();
+        }
+
+        function setCircuitCodeLang(lang) {
+            selectedCircuitLang = lang;
+            const ardBtn = document.getElementById('circuit-lang-arduino');
+            const pyBtn = document.getElementById('circuit-lang-python');
+            if (ardBtn) {
+                ardBtn.classList.toggle('bg-[#0071e3]', lang === 'arduino');
+                ardBtn.classList.toggle('text-white', lang === 'arduino');
+            }
+            if (pyBtn) {
+                pyBtn.classList.toggle('bg-[#0071e3]', lang === 'python');
+                pyBtn.classList.toggle('text-white', lang === 'python');
+            }
+            renderCircuitAssistant();
+        }
+
+        function renderCircuitAssistant() {
+            const data = circuitModulesData[selectedCircuitModule];
+            if (!data) return;
+
+            const nameEl = document.getElementById('circuit-mod-name');
+            const descEl = document.getElementById('circuit-mod-desc');
+            const voltEl = document.getElementById('circuit-mod-voltage');
+            const protoEl = document.getElementById('circuit-mod-protocol');
+            const tbody = document.getElementById('circuit-wiring-tbody');
+            const codeEl = document.getElementById('circuit-code-block');
+
+            if (nameEl) nameEl.textContent = data.name;
+            if (descEl) descEl.textContent = data.desc;
+            if (voltEl) voltEl.textContent = data.voltage;
+            if (protoEl) protoEl.textContent = data.protocol;
+
+            if (tbody) {
+                tbody.innerHTML = data.connections.map(c => `
+                    <tr class="hover:bg-black/[0.02] dark:hover:bg-white/[0.02]">
+                        <td class="py-2.5 px-3 flex items-center gap-1.5 font-medium">
+                            <span class="w-2.5 h-2.5 rounded-full inline-block" style="background-color: ${c.wire === 'Red' ? '#ef4444' : c.wire === 'Black' ? '#1d1d1f' : c.wire === 'Blue' ? '#0071e3' : c.wire === 'Yellow' ? '#eab308' : c.wire === 'Green' ? '#10b981' : c.wire === 'Orange' ? '#f97316' : '#86868b'};"></span>
+                            <span>${c.wire}</span>
+                        </td>
+                        <td class="py-2.5 px-3 font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">${c.pin}</td>
+                        <td class="py-2.5 px-3 text-[#0071e3] dark:text-[#2997ff] font-bold">${c.esp}</td>
+                        <td class="py-2.5 px-3 text-[#6e6e73] dark:text-[#86868b]">${c.func}</td>
+                    </tr>
+                `).join('');
+            }
+
+            if (codeEl) {
+                codeEl.textContent = selectedCircuitLang === 'arduino' ? data.arduino : data.python;
+            }
+        }
+
+        function copyCircuitCode() {
+            const codeEl = document.getElementById('circuit-code-block');
+            if (codeEl) {
+                navigator.clipboard.writeText(codeEl.textContent).then(() => {
+                    showToast('Circuit driver code copied to clipboard!');
+                });
+            }
+        }
+
+        // Initialize features on load
+        if (typeof updateSRSCounts === 'function') {
+            setTimeout(updateSRSCounts, 200);
+        }
+        if (typeof renderCircuitAssistant === 'function') {
+            setTimeout(renderCircuitAssistant, 200);
+        }
+
+
+        // Progressive Web App: Service Worker registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+        
     </script>
+
+    <!-- Virtual Laser Pointer Element -->
+    <div id="slide-laser-pointer" class="hidden pointer-events-none fixed z-[999] w-3 h-3 rounded-full bg-red-500 shadow-[0_0_12px_4px_rgba(239,68,68,0.9)] -translate-x-1/2 -translate-y-1/2"></div>
 </body>
 </html>
