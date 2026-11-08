@@ -851,6 +851,66 @@ const academicFormulas = [
   }
 ];
 
+// Curated academic & seminar flashcards
+const academicFlashcards = [
+  {
+    id: "fc-cs-bst",
+    category: "Computer Science",
+    question: "What is the time complexity of searching in a Balanced Binary Search Tree (AVL / Red-Black)?",
+    answer: "O(log N). Because the tree maintains height balance (h ≤ c·log₂ N), every comparison halves the remaining search space.",
+    tip: "Contrast with an unbalanced BST which can degenerate into a linked list of O(N)."
+  },
+  {
+    id: "fc-iot-sleep",
+    category: "Electronics & IoT",
+    question: "How does ESP32 Deep Sleep mode achieve ultra-low power consumption (<10 µA)?",
+    answer: "The dual-core Xtensa CPU, high-speed RAM, and radio modules (Wi-Fi/BLE) are powered down. Only the Ultra Low Power (ULP) coprocessor, RTC timer, and RTC slow memory remain active.",
+    tip: "Wakeup triggers include RTC timer alarm, external GPIO interrupts, or touchpad touch."
+  },
+  {
+    id: "fc-bio-ige",
+    category: "Biology & Health",
+    question: "Which antibody isotype mediates immediate Type I Hypersensitivity (Allergic Anaphylaxis)?",
+    answer: "Immunoglobulin E (IgE). IgE binds with high affinity to FcεRI receptors on tissue mast cells and basophils, causing cross-linking and rapid release of histamine, leukotrienes, and prostaglandins.",
+    tip: "Sensitization occurs on first allergen exposure; clinical degranulation occurs on subsequent re-exposure."
+  },
+  {
+    id: "fc-cs-crypto",
+    category: "Computer Science",
+    question: "Explain the difference between Symmetric and Asymmetric encryption.",
+    answer: "Symmetric encryption (e.g. AES-256, ChaCha20) uses a single shared secret key for both encryption and decryption (very fast). Asymmetric encryption (e.g. RSA, ECC, Ed25519) uses a public/private keypair (used for key exchange & digital signatures).",
+    tip: "Modern TLS 1.3 combines both: ECDHE for asymmetric key agreement, AES-GCM for payload encryption."
+  },
+  {
+    id: "fc-iot-nyquist",
+    category: "Electronics & IoT",
+    question: "What is the Nyquist-Shannon Sampling Theorem requirement for signal reconstruction?",
+    answer: "The sampling frequency (f_s) must be strictly greater than twice the highest frequency component (f_max) of the analog signal: f_s > 2·f_max.",
+    tip: "Sampling below 2·f_max results in aliasing distortion. Hardware anti-aliasing low-pass filters are placed before the ADC."
+  },
+  {
+    id: "fc-econ-trilemma",
+    category: "Economics & Social Studies",
+    question: "What constitutes the 'Impossible Trinity' (Mundell-Fleming Trilemma) in monetary policy?",
+    answer: "A central bank can simultaneously choose only two of the three: 1) Fixed exchange rate, 2) Free capital mobility, and 3) Independent monetary policy.",
+    tip: "For instance, the Eurozone chose (1) and (2), sacrificing independent member monetary policy."
+  },
+  {
+    id: "fc-math-euler",
+    category: "Mathematics & Science",
+    question: "What does Euler's Identity e^(iπ) + 1 = 0 signify in mathematical analysis?",
+    answer: "It establishes the profound connection between the five fundamental constants of mathematics: e (base of natural log), i (imaginary unit), π (ratio of circumference to diameter), 1 (multiplicative identity), and 0 (additive identity).",
+    tip: "Derived directly from Euler's Formula: e^(iθ) = cos(θ) + i·sin(θ) evaluated at θ = π."
+  },
+  {
+    id: "fc-iot-i2c",
+    category: "Electronics & IoT",
+    question: "Why are pull-up resistors mandatory on I2C bus SDA and SCL lines?",
+    answer: "I2C drivers use open-drain (or open-collector) transistors that can only pull the bus line LOW to Ground. External pull-up resistors (typically 2.2kΩ - 10kΩ) are required to pull the bus HIGH to VCC when all devices are idle.",
+    tip: "Open-drain allows multi-master arbitration and clock stretching without risk of short-circuits."
+  }
+];
+
 if (typeof module !== 'undefined') {
-  module.exports = { academicResources, academicFormulas };
+  module.exports = { academicResources, academicFormulas, academicFlashcards };
 }

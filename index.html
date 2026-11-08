@@ -2560,7 +2560,17 @@
         let currentFlashcardIndex = 0;
 
         function getAllFlashcards() {
-            return [...userCustomFlashcards, ...defaultStudyFlashcards];
+            let core = typeof academicFlashcards !== 'undefined' ? academicFlashcards : defaultStudyFlashcards;
+            const studioOverride = localStorage.getItem('edu_studio_academic_flashcards');
+            if (studioOverride) {
+                try {
+                    const parsed = JSON.parse(studioOverride);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        core = parsed;
+                    }
+                } catch(e) {}
+            }
+            return [...userCustomFlashcards, ...core];
         }
 
         function renderCurrentFlashcard() {
