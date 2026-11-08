@@ -68,7 +68,7 @@
     </script>
     <style>
         :root {
-            --bg-page: #fbfbfd;
+            --bg-page: #f5f5f7;
             --bg-surface: #ffffff;
             --bg-subtle: #f5f5f7;
             --text-primary: #1d1d1f;
@@ -81,8 +81,8 @@
         }
 
         .dark {
-            --bg-page: #121214;
-            --bg-surface: #1c1c1e;
+            --bg-page: #000000;
+            --bg-surface: #161617;
             --bg-subtle: #252528;
             --text-primary: #f5f5f7;
             --text-secondary: #a1a1a6;
@@ -162,45 +162,46 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-[#fbfbfd] text-[#1d1d1f] dark:bg-[#121214] dark:text-[#f5f5f7] transition-colors duration-200">
+<body class="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] dark:bg-[#000000] dark:text-[#f5f5f7] transition-colors duration-200">
 
-    <!-- Header Navigation -->
-    <header class="sticky top-0 z-40 border-b border-black/[0.08] dark:border-white/[0.08] bg-[#fbfbfd]/80 dark:bg-[#121214]/80 backdrop-blur-md">
-        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 h-14">
+    <!-- Apple-Grade Global Navigation (44px) -->
+    <header class="sticky top-0 z-50 h-[44px] border-b border-black/[0.08] dark:border-white/[0.08] bg-[#f5f5f7]/80 dark:bg-[#161617]/80 backdrop-blur-xl transition-colors">
+        <div class="mx-auto flex max-w-5xl h-full items-center justify-between px-4 sm:px-6 text-[12px] font-normal tracking-[-0.01em]">
             
-            <!-- Logo & Brand -->
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="flex items-center gap-2 group">
-                    <span class="text-base font-semibold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">EduSphere</span>
-                    <span class="rounded border border-black/[0.08] dark:border-white/[0.1] px-1.5 py-0.5 font-mono text-[10px] text-[#6e6e73] dark:text-[#86868b]">2.5</span>
-                </a>
-            </div>
+            <!-- Brand Mark -->
+            <a href="index.html" class="flex items-center gap-2 text-[#1d1d1f] dark:text-[#f5f5f7] hover:opacity-70 transition-opacity">
+                <svg class="w-4 h-4 text-[#0071e3] dark:text-[#2997ff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <span class="font-semibold tracking-tight text-[13px]">EduSphere</span>
+            </a>
 
-            <!-- Desktop Links -->
-            <nav class="hidden md:flex items-center gap-6 text-xs font-medium text-[#6e6e73] dark:text-[#86868b]">
+            <!-- Centered Editorial Navigation Links -->
+            <nav class="hidden md:flex items-center gap-7 text-[#6e6e73] dark:text-[#a1a1a6]">
                 <a href="#slides-section" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Presentations</a>
-                <a href="#toolkit-section" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Academic Toolkit</a>
-                <a href="#iot-lab-section" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">ESP32 Lab</a>
+                <a href="#toolkit-section" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Rehearsal Stage</a>
+                <a href="#iot-lab-section" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Hardware Lab</a>
                 <a href="studio.html" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Slide Studio</a>
                 <a href="about.html" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">About</a>
             </nav>
 
-            <!-- Actions -->
+            <!-- Actions & Utility -->
             <div class="flex items-center gap-2">
-                <!-- Quick Search Trigger -->
-                <button onclick="focusSearch()" title="Press / or Ctrl+K to search" class="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] px-2.5 py-1 text-xs text-[#6e6e73] dark:text-[#86868b] hover:border-black/[0.15] dark:hover:border-white/[0.2] transition-colors">
+                <!-- Search Trigger -->
+                <button onclick="focusSearch()" title="Press / or Ctrl+K to search" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     <span>Search</span>
-                    <kbd class="rounded px-1 text-[10px] font-mono text-[#86868b] bg-black/[0.05] dark:bg-white/[0.08]">/</kbd>
                 </button>
 
-                <!-- Submit Button -->
-                <button onclick="openAddSlidesModal()" class="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-transparent hover:bg-black/[0.04] dark:hover:bg-white/[0.06] px-2.5 py-1 text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
-                    <span>+ Submit</span>
+                <!-- Submit Deck -->
+                <button onclick="openAddSlidesModal()" class="px-2.5 py-1 text-[11px] text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                    Submit
                 </button>
 
                 <!-- Theme Toggle -->
-                <button id="theme-toggle" aria-label="Toggle Theme" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-transparent text-[#1d1d1f] dark:text-[#f5f5f7] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors">
+                <button id="theme-toggle" aria-label="Toggle Theme" class="inline-flex h-7 w-7 items-center justify-center rounded-full text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     <svg id="sun-icon" class="hidden h-3.5 w-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
                     <svg id="moon-icon" class="hidden h-3.5 w-3.5 text-[#1d1d1f] dark:text-[#f5f5f7]" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                 </button>
@@ -208,98 +209,122 @@
         </div>
     </header>
 
-    <!-- Hero Section: Product-as-Hero -->
-    <section class="py-12 sm:py-16 border-b border-black/[0.06] dark:border-white/[0.06]">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6">
-            
-            <div class="max-w-3xl">
-                <p class="text-xs font-semibold tracking-wide uppercase text-[#0071e3] dark:text-[#2997ff]">
-                    Academic Presentation Library · <span id="stat-slides-count">11 Decks</span>
-                </p>
-                <h1 class="mt-2 text-3xl sm:text-5xl font-semibold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7] leading-tight">
-                    Academic presentations and seminar slides, built for the browser.
-                </h1>
-                <p class="mt-4 text-base sm:text-lg text-[#6e6e73] dark:text-[#86868b] leading-relaxed">
-                    Preview complete seminar slide decks slide by slide, download presentation files, inspect scientific formulas, and rehearse speeches with integrated pacing and timing tools.
-                </p>
-
-                <!-- Hero Action Buttons -->
-                <div class="mt-6 flex flex-wrap items-center gap-3">
-                    <button onclick="document.getElementById('slides-section').scrollIntoView({behavior: 'smooth'})" class="inline-flex items-center justify-center rounded-lg bg-[#0071e3] hover:bg-[#0077ed] px-4 py-2 text-xs font-medium text-white transition-colors">
-                        Browse Presentations
-                    </button>
-                    <a href="esp32/index.html" class="inline-flex items-center justify-center rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-transparent hover:bg-black/[0.04] dark:hover:bg-white/[0.06] px-4 py-2 text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
-                        ESP32 Hardware Lab →
-                    </a>
-                    <a href="studio.html" class="inline-flex items-center justify-center rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-transparent hover:bg-black/[0.04] dark:hover:bg-white/[0.06] px-4 py-2 text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
-                        Slide Studio
-                    </a>
-                </div>
+    <!-- Apple Product Local Subnav Ribbon (Sticky) -->
+    <div class="sticky top-[44px] z-40 border-b border-black/[0.08] dark:border-white/[0.08] bg-white/80 dark:bg-[#161617]/80 backdrop-blur-md">
+        <div class="mx-auto flex max-w-5xl h-12 items-center justify-between px-4 sm:px-6">
+            <div class="flex items-center gap-2">
+                <span class="text-sm font-semibold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">EduSphere</span>
+                <span class="text-[11px] font-mono text-[#86868b]">2.5</span>
             </div>
 
-            <!-- Integrated Search Bar & Topics -->
-            <div class="mt-8 max-w-2xl">
+            <div class="flex items-center gap-4 text-xs font-normal">
+                <a href="#slides-section" class="text-[#6e6e73] dark:text-[#a1a1a6] hover:text-[#0071e3] transition-colors hidden sm:inline">Decks</a>
+                <a href="#toolkit-section" class="text-[#6e6e73] dark:text-[#a1a1a6] hover:text-[#0071e3] transition-colors hidden sm:inline">Tools</a>
+                <button onclick="openHeroDeckInTheater()" class="rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white px-3.5 py-1 text-xs font-medium transition-all duration-200">
+                    Open Theater
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section: Apple Keynote Style -->
+    <section class="pt-16 pb-20 sm:pt-24 sm:pb-28 border-b border-black/[0.06] dark:border-white/[0.06] bg-gradient-to-b from-[#fbfbfd] to-[#f5f5f7] dark:from-[#121214] dark:to-[#161617]">
+        <div class="mx-auto max-w-5xl px-4 sm:px-6 text-center">
+            
+            <!-- Apple Keynote Eyebrow -->
+            <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[#0071e3] dark:text-[#2997ff] mb-3">
+                Academic Presentations · <span id="stat-slides-count">11 Decks</span>
+            </p>
+
+            <!-- Grand Apple Headline -->
+            <h1 class="text-5xl sm:text-7xl md:text-8xl font-semibold tracking-[-0.035em] text-[#1d1d1f] dark:text-[#f5f5f7] leading-[1.05] max-w-4xl mx-auto">
+                Academic rigor.<br>Podium ready.
+            </h1>
+
+            <!-- Subheadline -->
+            <p class="mt-5 text-lg sm:text-xl font-normal text-[#6e6e73] dark:text-[#86868b] max-w-2xl mx-auto leading-relaxed">
+                Present peer-reviewed seminar decks slide by slide. Rehearse with speech cadence telemetry. Build verified embedded circuits.
+            </p>
+
+            <!-- Apple Pill CTA Buttons -->
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-3.5">
+                <button onclick="document.getElementById('slides-section').scrollIntoView({behavior: 'smooth'})" class="rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white px-6 py-2.5 text-xs sm:text-sm font-medium transition-all duration-200 shadow-[0_2px_12px_rgba(0,113,227,0.3)]">
+                    Browse Presentations
+                </button>
+                <a href="studio.html" class="rounded-full bg-black/[0.05] dark:bg-white/[0.08] hover:bg-black/[0.08] dark:hover:bg-white/[0.12] text-[#1d1d1f] dark:text-[#f5f5f7] px-6 py-2.5 text-xs sm:text-sm font-medium transition-colors">
+                    Slide Studio
+                </a>
+                <a href="esp32/index.html" class="inline-flex items-center gap-1 text-xs sm:text-sm font-medium text-[#0071e3] dark:text-[#2997ff] hover:underline px-2 py-1">
+                    <span>ESP32 Hardware Lab</span>
+                    <span class="text-xs">&gt;</span>
+                </a>
+            </div>
+
+            <!-- Spotlight Search Pill -->
+            <div class="mt-10 max-w-xl mx-auto">
                 <div class="relative flex items-center">
-                    <input id="hero-search-input" type="text" placeholder="Search presentations by title, topic, or discipline..." class="w-full rounded-xl border border-black/[0.12] dark:border-white/[0.12] bg-white dark:bg-[#1c1c1e] py-3 pl-10 pr-24 text-xs text-[#1d1d1f] dark:text-[#f5f5f7] focus:outline-none focus:border-[#0071e3] dark:focus:border-[#2997ff]">
-                    <div class="pointer-events-none absolute left-3.5 text-[#86868b]">
+                    <input id="hero-search-input" type="text" placeholder="Search presentations by title, topic, or discipline..." class="w-full rounded-full border border-black/[0.1] dark:border-white/[0.12] bg-white/90 dark:bg-[#1c1c1e]/90 backdrop-blur-md py-3 pl-11 pr-24 text-xs text-[#1d1d1f] dark:text-[#f5f5f7] shadow-sm focus:outline-none focus:border-[#0071e3] dark:focus:border-[#2997ff] transition-all">
+                    <div class="pointer-events-none absolute left-4 text-[#86868b]">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
-                    <button onclick="document.getElementById('slides-section').scrollIntoView({behavior: 'smooth'})" class="absolute right-1.5 rounded-lg bg-[#0071e3] hover:bg-[#0077ed] px-3 py-1.5 text-[11px] font-medium text-white transition-colors">
+                    <button onclick="document.getElementById('slides-section').scrollIntoView({behavior: 'smooth'})" class="absolute right-1.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] px-3.5 py-1.5 text-[11px] font-medium text-white transition-colors">
                         Search
                     </button>
                 </div>
 
-                <div class="mt-3 flex flex-wrap items-center gap-1.5 text-xs">
-                    <span class="text-[11px] text-[#86868b]">Topics:</span>
-                    <button onclick="quickFilterSearch('viruses')" class="rounded px-2 py-0.5 text-[11px] font-medium text-[#6e6e73] dark:text-[#86868b] bg-black/[0.04] dark:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Computer Viruses</button>
-                    <button onclick="quickFilterSearch('allergies')" class="rounded px-2 py-0.5 text-[11px] font-medium text-[#6e6e73] dark:text-[#86868b] bg-black/[0.04] dark:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Allergies</button>
-                    <button onclick="quickFilterSearch('budgeting')" class="rounded px-2 py-0.5 text-[11px] font-medium text-[#6e6e73] dark:text-[#86868b] bg-black/[0.04] dark:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Budgeting</button>
-                    <button onclick="quickFilterSearch('rivers')" class="rounded px-2 py-0.5 text-[11px] font-medium text-[#6e6e73] dark:text-[#86868b] bg-black/[0.04] dark:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">World Rivers</button>
-                    <button onclick="quickFilterSearch('speech')" class="rounded px-2 py-0.5 text-[11px] font-medium text-[#6e6e73] dark:text-[#86868b] bg-black/[0.04] dark:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Assembly Speech</button>
+                <div class="mt-3 flex flex-wrap items-center justify-center gap-1.5 text-xs">
+                    <span class="text-[11px] text-[#86868b]">Trending:</span>
+                    <button onclick="quickFilterSearch('viruses')" class="rounded-full px-2.5 py-0.5 text-[11px] font-medium text-[#6e6e73] dark:text-[#86868b] bg-black/[0.04] dark:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Computer Viruses</button>
+                    <button onclick="quickFilterSearch('allergies')" class="rounded-full px-2.5 py-0.5 text-[11px] font-medium text-[#6e6e73] dark:text-[#86868b] bg-black/[0.04] dark:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Allergies</button>
+                    <button onclick="quickFilterSearch('budgeting')" class="rounded-full px-2.5 py-0.5 text-[11px] font-medium text-[#6e6e73] dark:text-[#86868b] bg-black/[0.04] dark:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Budgeting</button>
+                    <button onclick="quickFilterSearch('rivers')" class="rounded-full px-2.5 py-0.5 text-[11px] font-medium text-[#6e6e73] dark:text-[#86868b] bg-black/[0.04] dark:bg-white/[0.06] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">World Rivers</button>
                 </div>
             </div>
 
-            <!-- PRODUCT AS HERO: Working Interactive Presentation Stage -->
-            <div class="mt-10 rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8">
+            <!-- PRODUCT AS HERO: Apple Studio Hardware Stage -->
+            <div class="mt-14 rounded-[28px] sm:rounded-[36px] bg-[#1d1d1f] border border-white/[0.12] shadow-[0_30px_100px_rgba(0,0,0,0.25)] dark:shadow-[0_40px_120px_rgba(0,0,0,0.7)] p-4 sm:p-7 text-left text-white overflow-hidden">
                 
-                <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-black/[0.06] dark:border-white/[0.06]">
+                <!-- Display Bezel Header -->
+                <div class="flex items-center justify-between pb-3 mb-4 border-b border-white/10">
                     <div class="flex items-center gap-2">
-                        <span class="text-xs font-semibold uppercase tracking-wider text-[#0071e3] dark:text-[#2997ff]">Featured Presentation</span>
-                        <span class="rounded border border-black/[0.08] dark:border-white/[0.1] px-1.5 py-0.5 font-mono text-[10px] text-[#6e6e73] dark:text-[#86868b]">PPTX</span>
-                        <span id="hero-stage-counter" class="text-xs text-[#86868b]">Slide 1 of 8</span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f57]"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#febc2e]"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#28c840]"></span>
+                        <span class="ml-2 text-xs font-mono text-white/50">Studio Display Stage</span>
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <button onclick="openHeroDeckInTheater()" class="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-2.5 py-1 text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors">
-                            <span>Open in Full Theater Mode ↗</span>
+                        <span id="hero-stage-counter" class="text-xs font-mono text-white/60">Slide 1 of 8</span>
+                        <button onclick="openHeroDeckInTheater()" class="rounded-full border border-white/20 bg-white/10 hover:bg-white/20 px-3 py-1 text-xs font-medium text-white transition-colors">
+                            Full Theater ↗
                         </button>
                     </div>
                 </div>
 
                 <!-- Widescreen 16:9 Presentation Stage -->
-                <div class="py-6 min-h-[280px]">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div class="py-4 min-h-[300px]">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                         
                         <!-- Left Presentation Content (7 cols) -->
                         <div class="lg:col-span-7 space-y-4">
                             <div>
-                                <span class="rounded font-mono px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-black/[0.05] dark:bg-white/[0.1] text-[#0071e3] dark:text-[#2997ff]">
+                                <span class="rounded font-mono px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-white/10 text-[#2997ff]">
                                     Slide Presentation Theater
                                 </span>
-                                <h2 id="hero-stage-title" class="text-xl sm:text-2xl font-semibold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7] mt-1.5 leading-snug">
+                                <h2 id="hero-stage-title" class="text-xl sm:text-2xl font-semibold tracking-tight text-white mt-2 leading-snug">
                                     The Architecture of Computer Viruses: Vectors, Payloads & System Containment
                                 </h2>
-                                <p id="hero-stage-sub" class="text-xs sm:text-sm font-medium text-[#6e6e73] dark:text-[#86868b] mt-0.5">
+                                <p id="hero-stage-sub" class="text-xs sm:text-sm font-medium text-white/60 mt-0.5">
                                     A Technical Investigation into Malicious Executable Propagation
                                 </p>
                             </div>
 
-                            <ul id="hero-stage-bullets" class="space-y-2"></ul>
+                            <ul id="hero-stage-bullets" class="space-y-2.5 text-white/80"></ul>
 
                             <!-- Core Takeaway Box -->
-                            <div class="rounded-xl border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.03] p-3.5">
-                                <span class="text-[10px] font-semibold uppercase tracking-wider text-[#6e6e73] dark:text-[#86868b]">Core Technical Takeaway</span>
-                                <p id="hero-stage-takeaway" class="mt-0.5 text-xs text-[#1d1d1f] dark:text-[#f5f5f7] leading-relaxed">
+                            <div class="rounded-xl border border-white/10 bg-white/5 p-3.5">
+                                <span class="text-[10px] font-semibold uppercase tracking-wider text-white/50">Core Technical Takeaway</span>
+                                <p id="hero-stage-takeaway" class="mt-0.5 text-xs text-white/90 leading-relaxed">
                                     Loading takeaway...
                                 </p>
                             </div>
@@ -307,10 +332,10 @@
 
                         <!-- Right Column: Interactive Slide Architectural Diagram (5 cols) -->
                         <div class="lg:col-span-5 flex flex-col justify-center h-full">
-                            <div class="rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-4">
-                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-black/[0.06] dark:border-white/[0.06]">
-                                    <span class="text-[11px] font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Concept Schematic</span>
-                                    <span class="text-[10px] font-mono text-[#86868b]">Interactive Diagram</span>
+                            <div class="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
+                                    <span class="text-[11px] font-semibold text-white/90">Concept Schematic</span>
+                                    <span class="text-[10px] font-mono text-white/50">Interactive Diagram</span>
                                 </div>
                                 <div id="hero-stage-diagram-container">
                                     <!-- Populated dynamically by getHeroSlideVisualDiagram -->
@@ -321,9 +346,9 @@
                     </div>
                 </div>
 
-                <!-- Stage Footer Controls -->
-                <div class="flex items-center justify-between pt-4 border-t border-black/[0.06] dark:border-white/[0.06]">
-                    <button id="hero-stage-prev" onclick="prevHeroSlide()" class="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] px-3 py-1.5 text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] disabled:opacity-40 transition-colors">
+                <!-- Floating Apple Playback Control Bar -->
+                <div class="flex items-center justify-between pt-4 border-t border-white/10 mt-2">
+                    <button id="hero-stage-prev" onclick="prevHeroSlide()" class="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium text-white hover:bg-white/10 disabled:opacity-30 transition-colors">
                         ← Previous
                     </button>
 
@@ -331,7 +356,7 @@
                         <!-- Dots populated by JavaScript -->
                     </div>
 
-                    <button id="hero-stage-next" onclick="nextHeroSlide()" class="inline-flex items-center gap-1 rounded-lg bg-[#0071e3] hover:bg-[#0077ed] px-3 py-1.5 text-xs font-medium text-white disabled:opacity-40 transition-colors">
+                    <button id="hero-stage-next" onclick="nextHeroSlide()" class="inline-flex items-center gap-1 rounded-full bg-[#0071e3] hover:bg-[#0077ed] px-4 py-1.5 text-xs font-medium text-white disabled:opacity-30 transition-colors">
                         Next →
                     </button>
                 </div>
@@ -344,19 +369,19 @@
     <!-- Main Presentations / Slides Section -->
     <main id="slides-section" class="mx-auto max-w-7xl px-4 sm:px-6 py-12">
         
-        <!-- Section Header -->
+        <!-- Apple Editorial Section Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-black/[0.06] dark:border-white/[0.06]">
             <div>
-                <span class="text-xs font-semibold uppercase tracking-wider text-[#0071e3] dark:text-[#2997ff]">Presentation Library</span>
-                <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7] mt-0.5">Seminar Slides & Academic Decks</h2>
-                <p class="text-xs sm:text-sm text-[#6e6e73] dark:text-[#86868b] mt-1">Browse slide decks across computer science, biology, economics, and electronics.</p>
+                <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[#0071e3] dark:text-[#2997ff]">ACADEMIC ARCHIVE</span>
+                <h2 class="text-3xl sm:text-4xl font-semibold tracking-[-0.025em] text-[#1d1d1f] dark:text-[#f5f5f7] mt-1">Curated for scholarship.</h2>
+                <p class="text-xs sm:text-sm text-[#6e6e73] dark:text-[#86868b] mt-1.5 max-w-xl">Inspect complete seminar decks slide by slide with academic citations, topic outlines, and estimated presentation delivery times.</p>
             </div>
             
             <div class="flex flex-wrap items-center gap-3">
-                <button onclick="openAddSlidesModal()" class="inline-flex items-center gap-1.5 rounded-lg bg-[#0071e3] hover:bg-[#0077ed] px-3 py-1.5 text-xs font-medium text-white transition-colors">
-                    <span>+ Submit Slides</span>
+                <button onclick="openAddSlidesModal()" class="rounded-full bg-[#0071e3] hover:bg-[#0077ed] px-4 py-1.5 text-xs font-medium text-white transition-colors">
+                    + Submit Slides
                 </button>
-                <div id="results-count" class="text-xs text-[#86868b]">
+                <div id="results-count" class="text-xs font-mono text-[#86868b]">
                     Loading presentations...
                 </div>
             </div>
@@ -367,33 +392,33 @@
             
             <!-- Category Filter Pills -->
             <div class="flex flex-wrap items-center gap-1.5" id="category-filters">
-                <button data-category="All" class="category-btn active rounded-lg bg-[#0071e3] px-3 py-1.5 text-xs font-medium text-white transition-colors">
+                <button data-category="All" class="category-btn active rounded-full bg-[#0071e3] px-3 py-1.5 text-xs font-medium text-white transition-colors">
                     All Categories
                 </button>
-                <button data-category="Community" id="community-filter-btn" class="category-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors flex items-center gap-1">
+                <button data-category="Community" id="community-filter-btn" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors flex items-center gap-1">
                     <span>Student Submissions</span>
                     <span id="community-count-badge" class="rounded-full bg-black/[0.05] dark:bg-white/[0.1] text-[#1d1d1f] dark:text-[#f5f5f7] px-1.5 text-[10px] font-mono">0</span>
                 </button>
-                <button data-category="Favorites" id="fav-filter-btn" class="category-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors flex items-center gap-1">
+                <button data-category="Favorites" id="fav-filter-btn" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors flex items-center gap-1">
                     <span>★ Saved</span>
                     <span id="fav-count-badge" class="rounded-full bg-black/[0.05] dark:bg-white/[0.1] text-[#1d1d1f] dark:text-[#f5f5f7] px-1.5 text-[10px] font-mono">0</span>
                 </button>
-                <button data-category="Computer Science" class="category-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button data-category="Computer Science" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Computer Science
                 </button>
-                <button data-category="Biology & Health" class="category-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button data-category="Biology & Health" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Biology & Health
                 </button>
-                <button data-category="Economics & Social Studies" class="category-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button data-category="Economics & Social Studies" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Economics & Finance
                 </button>
-                <button data-category="Geography & Social Studies" class="category-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button data-category="Geography & Social Studies" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Geography & Rivers
                 </button>
-                <button data-category="Electronics & IoT" class="category-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button data-category="Electronics & IoT" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Electronics & IoT
                 </button>
-                <button data-category="Study Notes" class="category-btn rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button data-category="Study Notes" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Study Notes
                 </button>
             </div>
@@ -449,35 +474,35 @@
     <section id="toolkit-section" class="border-t border-black/[0.06] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.02] py-14">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="text-center max-w-2xl mx-auto">
-                <span class="text-xs font-semibold uppercase tracking-wider text-[#0071e3] dark:text-[#2997ff]">Interactive Suite</span>
-                <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7] mt-0.5">Academic Toolkit & Rehearsal Utilities</h2>
-                <p class="text-xs sm:text-sm text-[#6e6e73] dark:text-[#86868b] mt-1">Practice technical speeches with pacing and timers, calculate electrical formulas, evaluate algorithmic growth, and test knowledge with flashcards.</p>
+                <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[#0071e3] dark:text-[#2997ff]">STAGE & REHEARSAL TOOLS</span>
+                <h2 class="text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-[#1d1d1f] dark:text-[#f5f5f7] mt-1">Every tool you need.<br>Zero friction.</h2>
+                <p class="text-xs sm:text-sm text-[#6e6e73] dark:text-[#86868b] mt-2">Speech pacing analysis, real-time waveform audio recording, verified ESP32 breadboard schematics, and spaced repetition.</p>
             </div>
 
             <!-- Segmented Tabs -->
             <div class="mt-8 flex flex-wrap items-center justify-center gap-1.5" id="toolkit-tabs">
-                <button onclick="switchToolTab('timer')" id="tool-tab-timer" class="tool-tab active rounded-lg bg-[#0071e3] px-3.5 py-1.5 text-xs font-medium text-white transition-colors">
+                <button onclick="switchToolTab('timer')" id="tool-tab-timer" class="tool-tab active rounded-full bg-[#0071e3] px-3.5 py-1.5 text-xs font-medium text-white transition-colors">
                     Rehearsal Timer
                 </button>
-                <button onclick="switchToolTab('ohms')" id="tool-tab-ohms" class="tool-tab rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button onclick="switchToolTab('ohms')" id="tool-tab-ohms" class="tool-tab rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Ohm's Law Solver
                 </button>
-                <button onclick="switchToolTab('speech')" id="tool-tab-speech" class="tool-tab rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button onclick="switchToolTab('speech')" id="tool-tab-speech" class="tool-tab rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Speech Pacing
                 </button>
-                <button onclick="switchToolTab('bigo')" id="tool-tab-bigo" class="tool-tab rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button onclick="switchToolTab('bigo')" id="tool-tab-bigo" class="tool-tab rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Big-O Growth
                 </button>
-                <button onclick="switchToolTab('quiz')" id="tool-tab-quiz" class="tool-tab rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button onclick="switchToolTab('quiz')" id="tool-tab-quiz" class="tool-tab rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Flashcards & Quiz
                 </button>
-                <button onclick="switchToolTab('formulas')" id="tool-tab-formulas" class="tool-tab rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button onclick="switchToolTab('formulas')" id="tool-tab-formulas" class="tool-tab rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Formula Directory
                 </button>
-                <button onclick="switchToolTab('focus')" id="tool-tab-focus" class="tool-tab rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button onclick="switchToolTab('focus')" id="tool-tab-focus" class="tool-tab rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Focus Audio
                 </button>
-                <button onclick="switchToolTab('circuit')" id="tool-tab-circuit" class="tool-tab rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <button onclick="switchToolTab('circuit')" id="tool-tab-circuit" class="tool-tab rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3.5 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Circuit Assistant
                 </button>
             </div>
@@ -913,29 +938,28 @@
         </div>
     </section>
 
-    <!-- Practical IoT & ESP32 Lab Spotlight Banner -->
-    <section id="iot-lab-section" class="mx-auto max-w-7xl px-4 sm:px-6 py-12">
-        <div class="rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8">
-            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                <div class="space-y-1.5">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-[#0071e3] dark:text-[#2997ff]">Embedded Engineering</span>
-                    <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">
-                        Connect theory to physical hardware: ESP32 IoT Hub
+    <!-- Apple Hardware Chapter: ESP32 Lab Spotlight Banner -->
+    <section id="iot-lab-section" class="mx-auto max-w-7xl px-4 sm:px-6 py-16">
+        <div class="rounded-[28px] sm:rounded-[36px] border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#161617] p-8 sm:p-12 shadow-sm">
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+                <div class="space-y-2 max-w-2xl">
+                    <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[#0071e3] dark:text-[#2997ff]">PHYSICAL COMPUTING</span>
+                    <h2 class="text-3xl sm:text-4xl font-semibold tracking-[-0.025em] text-[#1d1d1f] dark:text-[#f5f5f7]">
+                        From theory to silicon.
                     </h2>
-                    <p class="max-w-2xl text-xs sm:text-sm text-[#6e6e73] dark:text-[#86868b] leading-relaxed">
-                        Explore our live microcontroller subpage featuring real-time telemetry, DHT and BME environmental sensors, remote GPIO relays, and FreeRTOS experiments.
+                    <p class="text-sm sm:text-base text-[#6e6e73] dark:text-[#86868b] leading-relaxed">
+                        Connect theoretical research to physical microcontroller hardware with verified ESP32 pinouts, live environmental telemetry, and production C++ firmware.
                     </p>
                 </div>
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <a href="esp32/index.html" class="inline-flex items-center gap-1.5 rounded-lg bg-[#0071e3] hover:bg-[#0077ed] px-4 py-2 text-xs font-medium text-white transition-colors">
-                        <span>Launch Hardware Hub</span>
-                        <span>→</span>
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="esp32/index.html" class="rounded-full bg-[#0071e3] hover:bg-[#0077ed] px-6 py-2.5 text-xs sm:text-sm font-medium text-white transition-all shadow-[0_2px_10px_rgba(0,113,227,0.3)]">
+                        Launch Hardware Hub &rarr;
                     </a>
-                    <a href="esp32/weather_station.html" class="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-transparent hover:bg-black/[0.04] dark:hover:bg-white/[0.06] px-3.5 py-2 text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
-                        <span>Weather Telemetry</span>
+                    <a href="esp32/weather_station.html" class="rounded-full border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] px-4 py-2.5 text-xs sm:text-sm font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
+                        Weather Telemetry
                     </a>
-                    <a href="esp32/led_control.html" class="inline-flex items-center gap-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-transparent hover:bg-black/[0.04] dark:hover:bg-white/[0.06] px-3.5 py-2 text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
-                        <span>LED Controller</span>
+                    <a href="esp32/led_control.html" class="rounded-full border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] px-4 py-2.5 text-xs sm:text-sm font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
+                        LED Controller
                     </a>
                 </div>
             </div>
@@ -1541,12 +1565,16 @@
                 </div>
             </div>
 
-            <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#86868b]">
+            <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#86868b] pt-4">
                 <div>
-                    © 2026 EduSphere Hub • Maintained by Dhyan Krishna M • Open Academic Educational Platform
+                    Copyright © 2026 EduSphere. Created by Dhyan Krishna M, student of Loyola School, Thiruvananthapuram. All rights reserved.
                 </div>
-                <div>
-                    All trademarks and institution references belong to their respective holders.
+                <div class="flex items-center gap-4">
+                    <button onclick="openTermsModal()" class="hover:underline">Terms of Service</button>
+                    <span>·</span>
+                    <button onclick="openPrivacyModal()" class="hover:underline">Privacy Policy</button>
+                    <span>·</span>
+                    <a href="LICENSE" class="hover:underline">MIT License</a>
                 </div>
             </div>
         </div>
