@@ -160,12 +160,201 @@
                 scroll-behavior: auto !important;
             }
         }
+    
+        /* ===================================================
+           EXTREME LIQUID GLASS (VisionOS Refractive Caustics)
+           =================================================== */
+
+        /* Liquid Caustics Ambient Canvas */
+        .liquid-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .liquid-orb-1 {
+            position: absolute;
+            top: -15%;
+            left: 10%;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 113, 227, 0.32) 0%, rgba(56, 189, 248, 0.15) 45%, transparent 70%);
+            filter: blur(90px);
+            animation: liquidFloat1 18s ease-in-out infinite alternate;
+        }
+
+        .liquid-orb-2 {
+            position: absolute;
+            top: 30%;
+            right: -8%;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.28) 0%, rgba(99, 102, 241, 0.14) 45%, transparent 70%);
+            filter: blur(100px);
+            animation: liquidFloat2 24s ease-in-out infinite alternate;
+        }
+
+        .liquid-orb-3 {
+            position: absolute;
+            bottom: 0%;
+            left: 15%;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(20, 184, 166, 0.25) 0%, rgba(59, 130, 246, 0.14) 45%, transparent 70%);
+            filter: blur(95px);
+            animation: liquidFloat3 22s ease-in-out infinite alternate;
+        }
+
+        .liquid-orb-4 {
+            position: absolute;
+            top: 65%;
+            right: 25%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, rgba(244, 63, 94, 0.1) 45%, transparent 70%);
+            filter: blur(90px);
+            animation: liquidFloat4 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes liquidFloat1 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(90px, 70px) scale(1.15); }
+        }
+
+        @keyframes liquidFloat2 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-80px, -60px) scale(1.1); }
+        }
+
+        @keyframes liquidFloat3 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(70px, -80px) scale(1.18); }
+        }
+
+        @keyframes liquidFloat4 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-60px, 70px) scale(1.12); }
+        }
+
+        /* Pure Refractive Liquid Glass Slab */
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: 
+                inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95),
+                inset 0 -1px 2px 0 rgba(0, 0, 0, 0.04),
+                0 20px 60px rgba(0, 0, 0, 0.07),
+                0 4px 16px rgba(0, 0, 0, 0.03);
+        }
+
+        .dark .liquid-glass {
+            background: rgba(20, 20, 26, 0.65);
+            backdrop-filter: blur(44px) saturate(210%);
+            -webkit-backdrop-filter: blur(44px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow: 
+                inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.28),
+                inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.6),
+                0 30px 80px rgba(0, 0, 0, 0.65),
+                0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Deep Refractive Glass Slab (Hero Stage, Modals, Displays) */
+        .liquid-glass-deep {
+            background: rgba(16, 16, 24, 0.78);
+            backdrop-filter: blur(52px) saturate(220%);
+            -webkit-backdrop-filter: blur(52px) saturate(220%);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            box-shadow: 
+                inset 0 2px 3px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -2px 3px 0 rgba(0, 0, 0, 0.8),
+                0 40px 120px rgba(0, 0, 0, 0.55),
+                0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Liquid Glass Pill / Button */
+        .liquid-pill {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(24px) saturate(190%);
+            -webkit-backdrop-filter: blur(24px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9), 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .liquid-pill:hover {
+            background: rgba(255, 255, 255, 0.75);
+            border-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                inset 0 1px 1.5px 0 rgba(255, 255, 255, 1),
+                0 10px 28px rgba(0, 0, 0, 0.09);
+            transform: translateY(-1.5px);
+        }
+
+        .dark .liquid-pill {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(24px) saturate(190%);
+            -webkit-backdrop-filter: blur(24px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .dark .liquid-pill:hover {
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35),
+                0 10px 32px rgba(0, 0, 0, 0.45);
+            transform: translateY(-1.5px);
+        }
+
+        /* Liquid Sapphire Accent Button */
+        .liquid-accent-btn {
+            background: linear-gradient(135deg, rgba(0, 113, 227, 0.92), rgba(41, 151, 255, 0.92));
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.75),
+                0 10px 30px rgba(0, 113, 227, 0.4);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .liquid-accent-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 119, 237, 0.98), rgba(64, 169, 255, 0.98));
+            box-shadow: 
+                inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.9),
+                0 14px 42px rgba(0, 113, 227, 0.52);
+            transform: translateY(-1.5px);
+        }
+
+        /* Glass Specular Highlights */
+        .glass-bevel {
+            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+        }
+    
     </style>
 </head>
 <body class="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] dark:bg-[#000000] dark:text-[#f5f5f7] transition-colors duration-200">
 
+    <!-- Extreme Liquid Glass Ambient Caustics Canvas -->
+    <div class="liquid-canvas" aria-hidden="true">
+        <div class="liquid-orb-1"></div>
+        <div class="liquid-orb-2"></div>
+        <div class="liquid-orb-3"></div>
+        <div class="liquid-orb-4"></div>
+    </div>
+
     <!-- Apple-Grade Global Navigation (44px) -->
-    <header class="sticky top-0 z-50 h-[44px] border-b border-black/[0.08] dark:border-white/[0.08] bg-[#f5f5f7]/80 dark:bg-[#161617]/80 backdrop-blur-xl transition-colors">
+    <header class="sticky top-0 z-50 h-[44px] border-b border-white/30 dark:border-white/10 bg-white/40 dark:bg-[#121214]/50 backdrop-blur-2xl shadow-[inset_0_-1px_0_rgba(255,255,255,0.2)] transition-colors">
         <div class="mx-auto flex max-w-5xl h-full items-center justify-between px-4 sm:px-6 text-[12px] font-normal tracking-[-0.01em]">
             
             <!-- Brand Mark -->
@@ -210,7 +399,7 @@
     </header>
 
     <!-- Apple Product Local Subnav Ribbon (Sticky) -->
-    <div class="sticky top-[44px] z-40 border-b border-black/[0.08] dark:border-white/[0.08] bg-white/80 dark:bg-[#161617]/80 backdrop-blur-md">
+    <div class="sticky top-[44px] z-40 border-b border-white/30 dark:border-white/10 bg-white/45 dark:bg-[#161617]/50 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <div class="mx-auto flex max-w-5xl h-12 items-center justify-between px-4 sm:px-6">
             <div class="flex items-center gap-2">
                 <span class="text-sm font-semibold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">EduSphere</span>
@@ -263,7 +452,7 @@
             <!-- Spotlight Search Pill -->
             <div class="mt-10 max-w-xl mx-auto">
                 <div class="relative flex items-center">
-                    <input id="hero-search-input" type="text" placeholder="Search presentations by title, topic, or discipline..." class="w-full rounded-full border border-black/[0.1] dark:border-white/[0.12] bg-white/90 dark:bg-[#1c1c1e]/90 backdrop-blur-md py-3 pl-11 pr-24 text-xs text-[#1d1d1f] dark:text-[#f5f5f7] shadow-sm focus:outline-none focus:border-[#0071e3] dark:focus:border-[#2997ff] transition-all">
+                    <input id="hero-search-input" type="text" placeholder="Search presentations by title, topic, or discipline..." class="w-full rounded-full liquid-pill py-3.5 pl-11 pr-24 text-xs text-[#1d1d1f] dark:text-[#f5f5f7] shadow-[0_8px_30px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0071e3] dark:focus:border-[#2997ff] transition-all">
                     <div class="pointer-events-none absolute left-4 text-[#86868b]">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
@@ -282,7 +471,7 @@
             </div>
 
             <!-- PRODUCT AS HERO: Apple Studio Hardware Stage -->
-            <div class="mt-14 rounded-[28px] sm:rounded-[36px] bg-[#1d1d1f] border border-white/[0.12] shadow-[0_30px_100px_rgba(0,0,0,0.25)] dark:shadow-[0_40px_120px_rgba(0,0,0,0.7)] p-4 sm:p-7 text-left text-white overflow-hidden">
+            <div class="mt-14 rounded-[32px] sm:rounded-[42px] liquid-glass-deep p-5 sm:p-8 text-left text-white overflow-hidden relative">
                 
                 <!-- Display Bezel Header -->
                 <div class="flex items-center justify-between pb-3 mb-4 border-b border-white/10">
@@ -471,7 +660,7 @@
     </main>
 
     <!-- Interactive Academic Toolkit Section -->
-    <section id="toolkit-section" class="border-t border-black/[0.06] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.02] py-14">
+    <section id="toolkit-section" class="border-t border-white/20 dark:border-white/10 py-16">
         <div class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="text-center max-w-2xl mx-auto">
                 <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[#0071e3] dark:text-[#2997ff]">STAGE & REHEARSAL TOOLS</span>
@@ -508,7 +697,7 @@
             </div>
 
             <!-- Tool Container 1: Seminar Timer -->
-            <div id="tool-pane-timer" class="tool-pane mt-8 max-w-xl mx-auto rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8 text-center">
+            <div id="tool-pane-timer" class="tool-pane mt-8 max-w-xl mx-auto rounded-[32px] liquid-glass p-6 sm:p-8 text-center">
                 <h3 class="text-lg font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Seminar Presentation Timer</h3>
                 <p class="text-xs text-[#6e6e73] dark:text-[#86868b] mt-1">Practice slide delivery strictly within standard academic time limits.</p>
 
@@ -574,7 +763,7 @@
             </div>
 
             <!-- Tool Container 2: Ohm's Law Solver -->
-            <div id="tool-pane-ohms" class="tool-pane hidden mt-8 max-w-xl mx-auto rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8">
+            <div id="tool-pane-ohms" class="tool-pane hidden mt-8 max-w-xl mx-auto rounded-[32px] liquid-glass p-6 sm:p-8">
                 <div class="text-center mb-6">
                     <h3 class="text-lg font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Ohm's Law & Power Solver</h3>
                     <p class="text-xs text-[#6e6e73] dark:text-[#86868b] mt-1">Enter any 2 known values to calculate the other electrical quantities automatically.</p>
@@ -614,7 +803,7 @@
             </div>
 
             <!-- Tool Container 3: Speech Pacing Estimator -->
-            <div id="tool-pane-speech" class="tool-pane hidden mt-8 max-w-xl mx-auto rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8">
+            <div id="tool-pane-speech" class="tool-pane hidden mt-8 max-w-xl mx-auto rounded-[32px] liquid-glass p-6 sm:p-8">
                 <div class="text-center mb-6">
                     <h3 class="text-lg font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Speech Pacing & Timing Estimator</h3>
                     <p class="text-xs text-[#6e6e73] dark:text-[#86868b] mt-1">Paste your presentation script to estimate delivery duration.</p>
@@ -645,7 +834,7 @@
             </div>
 
             <!-- Tool Container 4: Big-O Benchmarker -->
-            <div id="tool-pane-bigo" class="tool-pane hidden mt-8 max-w-2xl mx-auto rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8">
+            <div id="tool-pane-bigo" class="tool-pane hidden mt-8 max-w-2xl mx-auto rounded-[32px] liquid-glass p-6 sm:p-8">
                 <div class="text-center mb-6">
                     <h3 class="text-lg font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Big-O Algorithmic Growth Comparison</h3>
                     <p class="text-xs text-[#6e6e73] dark:text-[#86868b] mt-1">Adjust the input size slider (N) to compare algorithmic complexity growth.</p>
@@ -663,7 +852,7 @@
             </div>
 
             <!-- Tool Container 5: Flashcards & Quiz -->
-            <div id="tool-pane-quiz" class="tool-pane hidden mt-8 max-w-2xl mx-auto rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8">
+            <div id="tool-pane-quiz" class="tool-pane hidden mt-8 max-w-2xl mx-auto rounded-[32px] liquid-glass p-6 sm:p-8">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 pb-4 border-b border-black/[0.06] dark:border-white/[0.06]">
                     <div>
                         <h3 class="text-lg font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Flashcards & Seminar Quiz Trainer</h3>
@@ -791,7 +980,7 @@
             </div>
 
             <!-- Tool Container 6: Scientific Formulas -->
-            <div id="tool-pane-formulas" class="tool-pane hidden mt-8 max-w-3xl mx-auto rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8">
+            <div id="tool-pane-formulas" class="tool-pane hidden mt-8 max-w-3xl mx-auto rounded-[32px] liquid-glass p-6 sm:p-8">
                 <div class="text-center mb-6">
                     <h3 class="text-lg font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Scientific Formulas Directory</h3>
                     <p class="text-xs text-[#6e6e73] dark:text-[#86868b] mt-1">Quick-reference equations across electronics, computing, mathematics, and biometrics.</p>
@@ -815,7 +1004,7 @@
             </div>
 
             <!-- Tool Container 7: Ambient Focus Audio -->
-            <div id="tool-pane-focus" class="tool-pane hidden mt-8 max-w-xl mx-auto rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8 text-center">
+            <div id="tool-pane-focus" class="tool-pane hidden mt-8 max-w-xl mx-auto rounded-[32px] liquid-glass p-6 sm:p-8 text-center">
                 <h3 class="text-lg font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Ambient Study Focus Audio</h3>
                 <p class="text-xs text-[#6e6e73] dark:text-[#86868b] mt-1">Synthesized brown, white, and binaural alpha noise to support concentration.</p>
 
@@ -857,7 +1046,7 @@
                 </div>
             
             <!-- Tool Container 8: ESP32 Circuit Wiring Assistant -->
-            <div id="tool-pane-circuit" class="tool-pane hidden mt-8 max-w-3xl mx-auto rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 sm:p-8">
+            <div id="tool-pane-circuit" class="tool-pane hidden mt-8 max-w-3xl mx-auto rounded-[32px] liquid-glass p-6 sm:p-8">
                 <div class="text-center mb-6">
                     <span class="text-xs font-semibold uppercase tracking-wider text-[#0071e3] dark:text-[#2997ff]">Hardware Engineering</span>
                     <h3 class="text-lg font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] mt-0.5">ESP32 Pinout & Circuit Wiring Assistant</h3>
@@ -940,7 +1129,7 @@
 
     <!-- Apple Hardware Chapter: ESP32 Lab Spotlight Banner -->
     <section id="iot-lab-section" class="mx-auto max-w-7xl px-4 sm:px-6 py-16">
-        <div class="rounded-[28px] sm:rounded-[36px] border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#161617] p-8 sm:p-12 shadow-sm">
+        <div class="rounded-[32px] sm:rounded-[42px] liquid-glass p-8 sm:p-12 shadow-2xl relative overflow-hidden">
             <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
                 <div class="space-y-2 max-w-2xl">
                     <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[#0071e3] dark:text-[#2997ff]">PHYSICAL COMPUTING</span>
@@ -1810,7 +1999,7 @@
             }
 
             return `
-                <div class="relative w-full aspect-[16/9] rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-[#1c1c1e] to-[#121214] border border-black/[0.08] dark:border-white/[0.08] flex flex-col justify-between p-4 group-hover:border-[#0071e3]/40 transition-all duration-200">
+                <div class="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-4 bg-gradient-to-br from-white/10 to-white/5 dark:from-white/[0.08] dark:to-white/[0.02] backdrop-blur-xl border border-white/25 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] flex flex-col justify-between p-4 group-hover:border-[#0071e3]/60 transition-all duration-300">
                     <div class="flex items-center justify-between">
                         <span class="rounded border px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider ${tagColor}">
                             ${item.category}
@@ -1929,7 +2118,7 @@
                 `).join(' ');
 
                 return `
-                    <article class="group flex flex-col justify-between rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] p-6 transition-colors duration-150 hover:border-black/[0.18] dark:hover:border-white/[0.18]">
+                    <article class="group flex flex-col justify-between rounded-[28px] liquid-glass p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_30px_70px_rgba(0,113,227,0.18)] dark:hover:shadow-[0_35px_80px_rgba(0,0,0,0.7)]">
                         <div>
                             ${getDeckCoverArtwork(item)}
                             <div class="flex items-center justify-between gap-2 mb-3">
