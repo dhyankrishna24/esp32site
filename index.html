@@ -474,80 +474,127 @@
             <div class="mt-14 rounded-[32px] sm:rounded-[42px] liquid-glass-deep p-5 sm:p-8 text-left text-white overflow-hidden relative">
                 
                 <!-- Display Bezel Header -->
-                <div class="flex items-center justify-between pb-3 mb-4 border-b border-white/10">
+                <div class="flex flex-wrap items-center justify-between gap-3 pb-3 mb-4 border-b border-white/10">
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f57]"></span>
                         <span class="w-2.5 h-2.5 rounded-full bg-[#febc2e]"></span>
                         <span class="w-2.5 h-2.5 rounded-full bg-[#28c840]"></span>
-                        <span class="ml-2 text-xs font-mono text-white/50">Studio Display Stage</span>
+                        <span class="ml-2 text-xs font-mono text-white/70 font-medium">Apple Studio Display — Presentation Stage</span>
+                    </div>
+
+                    <!-- View Switcher: Direct PPT vs Analysis -->
+                    <div class="flex items-center gap-1.5 rounded-full bg-white/10 p-1 border border-white/10 text-xs">
+                        <button id="hero-mode-ppt-btn" onclick="setHeroStageMode('ppt')" class="rounded-full px-3 py-1 font-medium text-white bg-white/20 transition-all">
+                            🖥️ Direct PPT Viewer
+                        </button>
+                        <button id="hero-mode-analysis-btn" onclick="setHeroStageMode('analysis')" class="rounded-full px-3 py-1 font-medium text-white/60 hover:text-white transition-all">
+                            📋 Slide Breakdown
+                        </button>
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <span id="hero-stage-counter" class="text-xs font-mono text-white/60">Slide 1 of 8</span>
-                        <button onclick="openHeroDeckInTheater()" class="rounded-full border border-white/20 bg-white/10 hover:bg-white/20 px-3 py-1 text-xs font-medium text-white transition-colors">
-                            Full Theater ↗
+                        <span id="hero-stage-counter" class="text-xs font-mono text-white/60 hidden">Slide 1 of 8</span>
+                        <button onclick="openHeroDeckInTheater()" class="rounded-full border border-white/20 bg-white/10 hover:bg-white/20 px-3.5 py-1 text-xs font-medium text-white transition-colors inline-flex items-center gap-1.5">
+                            <span>Full Theater</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                         </button>
                     </div>
                 </div>
 
-                <!-- Widescreen 16:9 Presentation Stage -->
-                <div class="py-4 min-h-[300px]">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                        
-                        <!-- Left Presentation Content (7 cols) -->
-                        <div class="lg:col-span-7 space-y-4">
-                            <div>
-                                <span class="rounded font-mono px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-white/10 text-[#2997ff]">
-                                    Slide Presentation Theater
-                                </span>
-                                <h2 id="hero-stage-title" class="text-xl sm:text-2xl font-semibold tracking-tight text-white mt-2 leading-snug">
-                                    The Architecture of Computer Viruses: Vectors, Payloads & System Containment
-                                </h2>
-                                <p id="hero-stage-sub" class="text-xs sm:text-sm font-medium text-white/60 mt-0.5">
-                                    A Technical Investigation into Malicious Executable Propagation
-                                </p>
-                            </div>
+                <!-- VIEW 1: DIRECT POWERPOINT PRESENTATION (ACTIVE BY DEFAULT) -->
+                <div id="hero-direct-ppt-view" class="w-full">
+                    <div class="relative w-full aspect-[16/9] min-h-[360px] sm:min-h-[460px] max-h-[640px] rounded-2xl overflow-hidden bg-black/60 border border-white/15 shadow-2xl backdrop-blur-xl">
+                        <iframe id="hero-stage-ppt-frame"
+                                src="https://docs.google.com/viewer?embedded=true&url=https://dhyankrishna24.github.io/esp32site/slides/Spread%20of%20Computer%20Viruses%20-%20Copy.pptx"
+                                class="w-full h-full border-0 rounded-2xl"
+                                allowfullscreen
+                                title="Featured PowerPoint Slide Deck">
+                        </iframe>
+                    </div>
 
-                            <ul id="hero-stage-bullets" class="space-y-2.5 text-white/80"></ul>
-
-                            <!-- Core Takeaway Box -->
-                            <div class="rounded-xl border border-white/10 bg-white/5 p-3.5">
-                                <span class="text-[10px] font-semibold uppercase tracking-wider text-white/50">Core Technical Takeaway</span>
-                                <p id="hero-stage-takeaway" class="mt-0.5 text-xs text-white/90 leading-relaxed">
-                                    Loading takeaway...
-                                </p>
-                            </div>
+                    <!-- Stage Footer Controls & Info -->
+                    <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-white/70">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-medium text-xs">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Live PPT Presentation
+                            </span>
+                            <span class="text-white/40">•</span>
+                            <span id="hero-deck-name-badge" class="font-medium text-white/90">Spread of Computer Viruses: Vectors, Network Risk & Cyber Hygiene</span>
                         </div>
-
-                        <!-- Right Column: Interactive Slide Architectural Diagram (5 cols) -->
-                        <div class="lg:col-span-5 flex flex-col justify-center h-full">
-                            <div class="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-                                <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
-                                    <span class="text-[11px] font-semibold text-white/90">Concept Schematic</span>
-                                    <span class="text-[10px] font-mono text-white/50">Interactive Diagram</span>
-                                </div>
-                                <div id="hero-stage-diagram-container">
-                                    <!-- Populated dynamically by getHeroSlideVisualDiagram -->
-                                </div>
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center rounded-full bg-white/10 border border-white/10 p-0.5">
+                                <button onclick="setHeroProvider('google')" id="hero-provider-google-btn" class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-white/20 text-white transition-all">Google Viewer</button>
+                                <button onclick="setHeroProvider('office')" id="hero-provider-office-btn" class="px-2.5 py-0.5 rounded-full text-[11px] font-medium text-white/60 hover:text-white transition-all">Office 365</button>
                             </div>
+                            <a id="hero-download-deck-btn" href="slides/Spread of Computer Viruses - Copy.pptx" download class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-xs transition-colors shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                <span>Download PPTX</span>
+                            </a>
                         </div>
-
                     </div>
                 </div>
 
-                <!-- Floating Apple Playback Control Bar -->
-                <div class="flex items-center justify-between pt-4 border-t border-white/10 mt-2">
-                    <button id="hero-stage-prev" onclick="prevHeroSlide()" class="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium text-white hover:bg-white/10 disabled:opacity-30 transition-colors">
-                        ← Previous
-                    </button>
+                <!-- VIEW 2: INTERACTIVE SLIDE ANALYSIS & SCHEMATICS (TOGGLABLE) -->
+                <div id="hero-analysis-view" class="hidden">
+                    <div class="py-4 min-h-[300px]">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                            
+                            <!-- Left Presentation Content (7 cols) -->
+                            <div class="lg:col-span-7 space-y-4">
+                                <div>
+                                    <span class="rounded font-mono px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-white/10 text-[#2997ff]">
+                                        Slide Presentation Theater
+                                    </span>
+                                    <h2 id="hero-stage-title" class="text-xl sm:text-2xl font-semibold tracking-tight text-white mt-2 leading-snug">
+                                        The Architecture of Computer Viruses: Vectors, Payloads & System Containment
+                                    </h2>
+                                    <p id="hero-stage-sub" class="text-xs sm:text-sm font-medium text-white/60 mt-0.5">
+                                        A Technical Investigation into Malicious Executable Propagation
+                                    </p>
+                                </div>
 
-                    <div id="hero-stage-dots" class="flex items-center gap-1.5">
-                        <!-- Dots populated by JavaScript -->
+                                <ul id="hero-stage-bullets" class="space-y-2.5 text-white/80"></ul>
+
+                                <!-- Core Takeaway Box -->
+                                <div class="rounded-xl border border-white/10 bg-white/5 p-3.5">
+                                    <span class="text-[10px] font-semibold uppercase tracking-wider text-white/50">Core Technical Takeaway</span>
+                                    <p id="hero-stage-takeaway" class="mt-0.5 text-xs text-white/90 leading-relaxed">
+                                        Loading takeaway...
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Right Column: Interactive Slide Architectural Diagram (5 cols) -->
+                            <div class="lg:col-span-5 flex flex-col justify-center h-full">
+                                <div class="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                                    <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10">
+                                        <span class="text-[11px] font-semibold text-white/90">Concept Schematic</span>
+                                        <span class="text-[10px] font-mono text-white/50">Interactive Diagram</span>
+                                    </div>
+                                    <div id="hero-stage-diagram-container">
+                                        <!-- Populated dynamically by getHeroSlideVisualDiagram -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
-                    <button id="hero-stage-next" onclick="nextHeroSlide()" class="inline-flex items-center gap-1 rounded-full bg-[#0071e3] hover:bg-[#0077ed] px-4 py-1.5 text-xs font-medium text-white disabled:opacity-30 transition-colors">
-                        Next →
-                    </button>
+                    <!-- Floating Apple Playback Control Bar -->
+                    <div class="flex items-center justify-between pt-4 border-t border-white/10 mt-2">
+                        <button id="hero-stage-prev" onclick="prevHeroSlide()" class="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium text-white hover:bg-white/10 disabled:opacity-30 transition-colors">
+                            ← Previous
+                        </button>
+
+                        <div id="hero-stage-dots" class="flex items-center gap-1.5">
+                            <!-- Dots populated by JavaScript -->
+                        </div>
+
+                        <button id="hero-stage-next" onclick="nextHeroSlide()" class="inline-flex items-center gap-1 rounded-full bg-[#0071e3] hover:bg-[#0077ed] px-4 py-1.5 text-xs font-medium text-white disabled:opacity-30 transition-colors">
+                            Next →
+                        </button>
+                    </div>
                 </div>
 
             </div>
@@ -1201,8 +1248,47 @@
                 </div>
 
                 
-                <!-- SLIDE THEATER STAGE -->
-                <div id="native-slide-stage" class="relative rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.01] dark:bg-white/[0.02] p-6 sm:p-8 overflow-hidden">
+                <!-- EMBED / POWERPOINT VIEWER CONTAINER (PRIMARY DIRECT PRESENTATION VIEW) -->
+                <div id="iframe-viewer-container" class="rounded-2xl border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.02] p-4 sm:p-5">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium text-xs">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                Live PowerPoint Presentation
+                            </span>
+                            <span class="text-xs text-[#86868b] hidden sm:inline">Interactive High-Fidelity Slide Viewer</span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <!-- Engine selector -->
+                            <div class="flex items-center rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] p-0.5 text-xs">
+                                <button onclick="switchModalProvider('google')" id="modal-provider-google" class="px-2.5 py-0.5 rounded-md text-[11px] font-medium bg-[#0071e3] text-white transition-all">Google Viewer</button>
+                                <button onclick="switchModalProvider('office')" id="modal-provider-office" class="px-2.5 py-0.5 rounded-md text-[11px] font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-all">Office 365</button>
+                            </div>
+
+                            <a id="modal-open-tab" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-medium text-[#0071e3] dark:text-[#2997ff] hover:underline px-2 py-1">
+                                <span>Open in Tab</span>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="relative w-full aspect-[16/9] min-h-[380px] rounded-xl overflow-hidden border border-black/[0.1] dark:border-white/[0.1] bg-[#1a1a1c] shadow-inner">
+                        <iframe id="modal-iframe" src="" class="w-full h-full border-0" allowfullscreen title="PowerPoint Presentation Slide Deck"></iframe>
+                    </div>
+
+                    <!-- Slide Viewer Helper Footer -->
+                    <div class="mt-3 flex items-center justify-between text-[11px] text-[#86868b]">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-[#0071e3] dark:text-[#2997ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Use embedded slide controls to advance, zoom, or enter full screen.
+                        </span>
+                        <span>Click <button onclick="toggleSlideCarouselMode()" class="text-[#0071e3] dark:text-[#2997ff] underline font-medium">Notes & Bullets</button> for speaker cues</span>
+                    </div>
+                </div>
+
+                <!-- SLIDE THEATER STAGE (STRUCTURED BULLETS & SPEAKER NOTES VIEW) -->
+                <div id="native-slide-stage" class="hidden relative rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.01] dark:bg-white/[0.02] p-6 sm:p-8 overflow-hidden">
                     <canvas id="slide-pen-canvas" class="pointer-events-none absolute inset-0 z-20 w-full h-full"></canvas>
                     
                     <!-- Pen Controls Palette -->
@@ -1253,7 +1339,6 @@
                     </div>
                 </div>
 
-                
                 <!-- Slide Filmstrip Drawer -->
                 <div id="slide-filmstrip-drawer" class="hidden rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] p-4">
                     <div class="flex items-center justify-between mb-2">
@@ -1261,22 +1346,6 @@
                         <span class="text-[11px] text-[#86868b]">Click any thumbnail to jump</span>
                     </div>
                     <div id="slide-filmstrip-tray" class="flex items-center gap-2.5 overflow-x-auto pb-2"></div>
-                </div>
-
-                <!-- EMBED / SMARTBOARD SIMULATOR IFRAME CONTAINER -->
-                <div id="iframe-viewer-container" class="hidden rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] p-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-xs font-medium text-[#6e6e73] dark:text-[#86868b]">
-                            Interactive App / Web Document Viewer
-                        </span>
-                        <a id="modal-open-tab" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-[#0071e3] dark:text-[#2997ff] hover:underline">
-                            Open in New Tab ↗
-                        </a>
-                    </div>
-                    
-                    <div class="relative w-full aspect-video rounded-lg overflow-hidden border border-black/[0.08] dark:border-white/[0.08] bg-black">
-                        <iframe id="modal-iframe" src="" class="w-full h-full border-0" allowfullscreen></iframe>
-                    </div>
                 </div>
 
             </div>
@@ -2199,6 +2268,54 @@
         // ==========================================
         // SLIDE MODAL & NATIVE CAROUSEL THEATER LOGIC
         // ==========================================
+        let currentModalProvider = 'google';
+
+        function getPresentationEmbedUrl(item, provider = 'google') {
+            if (!item) return '';
+            if (item.embedUrl) return item.embedUrl;
+
+            const file = item.fileUrl || '';
+            if (!file || file === '#' || file.startsWith('#')) return '';
+
+            // Direct web apps / HTML presentations & PDF
+            if (file.endsWith('.html') || file.endsWith('.pdf')) {
+                return file;
+            }
+
+            // PPTX / PPT slides
+            if (file.endsWith('.pptx') || file.endsWith('.ppt')) {
+                const fullTargetUrl = file.startsWith('http')
+                    ? file
+                    : `https://dhyankrishna24.github.io/esp32site/${encodeURI(file)}`;
+
+                if (provider === 'office') {
+                    return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fullTargetUrl)}`;
+                }
+                return `https://docs.google.com/viewer?embedded=true&url=${encodeURIComponent(fullTargetUrl)}`;
+            }
+
+            if (item.previewUrl) return item.previewUrl;
+            return '';
+        }
+
+        function switchModalProvider(provider) {
+            currentModalProvider = provider;
+            if (!currentModalSlide) return;
+            const iframe = document.getElementById('modal-iframe');
+            const embedSrc = getPresentationEmbedUrl(currentModalSlide, provider);
+            if (iframe && embedSrc) {
+                iframe.src = embedSrc;
+            }
+            const googleBtn = document.getElementById('modal-provider-google');
+            const officeBtn = document.getElementById('modal-provider-office');
+            if (googleBtn) {
+                googleBtn.className = `px-2.5 py-0.5 rounded-md text-[11px] font-medium transition-all ${provider === 'google' ? 'bg-[#0071e3] text-white' : 'text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'}`;
+            }
+            if (officeBtn) {
+                officeBtn.className = `px-2.5 py-0.5 rounded-md text-[11px] font-medium transition-all ${provider === 'office' ? 'bg-[#0071e3] text-white' : 'text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]'}`;
+            }
+        }
+
         function openSlideModal(id) {
             const allItems = getAllResources();
             const item = allItems.find(r => r.id === id);
@@ -2217,27 +2334,39 @@
             const iframe = document.getElementById('modal-iframe');
             const openTab = document.getElementById('modal-open-tab');
             const downloadBtn = document.getElementById('modal-download-btn');
+            const carouselBtn = document.getElementById('carousel-mode-btn');
 
-            downloadBtn.href = item.fileUrl;
-            if (item.fileUrl && item.fileUrl.startsWith('http')) {
-                downloadBtn.target = "_blank";
-                downloadBtn.removeAttribute('download');
-                downloadBtn.querySelector('span').textContent = "Open Presentation";
-            } else {
-                downloadBtn.removeAttribute('target');
-                downloadBtn.setAttribute('download', (item.fileUrl || '').split('/').pop());
-                downloadBtn.querySelector('span').textContent = "Download Slide File";
+            if (downloadBtn) {
+                downloadBtn.href = item.fileUrl;
+                if (item.fileUrl && item.fileUrl.startsWith('http')) {
+                    downloadBtn.target = "_blank";
+                    downloadBtn.removeAttribute('download');
+                    downloadBtn.querySelector('span').textContent = "Open Presentation";
+                } else {
+                    downloadBtn.removeAttribute('target');
+                    downloadBtn.setAttribute('download', (item.fileUrl || '').split('/').pop());
+                    downloadBtn.querySelector('span').textContent = "Download Slide File";
+                }
             }
 
-            // Embed / SmartBoard Viewer
-            const embedSrc = item.embedUrl || (item.fileUrl && item.fileUrl.endsWith('.html') ? item.fileUrl : '');
+            // Direct PowerPoint / Presentation Embed
+            const embedSrc = getPresentationEmbedUrl(item, currentModalProvider);
             if (embedSrc) {
-                iframeContainer.classList.remove('hidden');
-                iframe.src = embedSrc;
-                openTab.href = item.fileUrl;
+                if (iframeContainer) iframeContainer.classList.remove('hidden');
+                if (nativeStage) nativeStage.classList.add('hidden');
+                if (iframe) iframe.src = embedSrc;
+                if (openTab) {
+                    openTab.href = item.fileUrl && item.fileUrl.startsWith('http') ? item.fileUrl : (embedSrc.startsWith('http') ? embedSrc : item.fileUrl);
+                }
+                if (carouselBtn) {
+                    carouselBtn.classList.remove('hidden');
+                    carouselBtn.textContent = '📝 Slide Notes & Bullets';
+                }
             } else {
-                iframeContainer.classList.add('hidden');
-                iframe.src = '';
+                if (iframeContainer) iframeContainer.classList.add('hidden');
+                if (nativeStage) nativeStage.classList.remove('hidden');
+                if (iframe) iframe.src = '';
+                if (carouselBtn) carouselBtn.classList.add('hidden');
             }
 
             renderCurrentSlideStage();
@@ -2334,10 +2463,18 @@
         function toggleSlideCarouselMode() {
             const nativeStage = document.getElementById('native-slide-stage');
             const iframeContainer = document.getElementById('iframe-viewer-container');
-            if (iframeContainer.classList.contains('hidden') && currentModalSlide?.fileUrl.endsWith('.html')) {
-                iframeContainer.classList.remove('hidden');
-            } else if (!iframeContainer.classList.contains('hidden')) {
+            const btn = document.getElementById('carousel-mode-btn');
+            if (!iframeContainer || !nativeStage) return;
+
+            const isIframeVisible = !iframeContainer.classList.contains('hidden');
+            if (isIframeVisible) {
                 iframeContainer.classList.add('hidden');
+                nativeStage.classList.remove('hidden');
+                if (btn) btn.textContent = '🖥️ Direct PPT Viewer';
+            } else {
+                iframeContainer.classList.remove('hidden');
+                nativeStage.classList.add('hidden');
+                if (btn) btn.textContent = '📝 Slide Notes & Bullets';
             }
         }
 
@@ -2371,15 +2508,19 @@
         }
 
         function toggleFullscreenStage() {
-            const stage = document.getElementById('native-slide-stage');
-            if (!stage) return;
+            const iframeContainer = document.getElementById('iframe-viewer-container');
+            const nativeStage = document.getElementById('native-slide-stage');
+            const isIframeVisible = iframeContainer && !iframeContainer.classList.contains('hidden');
+            const target = (isIframeVisible ? iframeContainer : nativeStage) || document.getElementById('slide-preview-modal');
+            if (!target) return;
+
             if (!document.fullscreenElement) {
-                if (stage.requestFullscreen) {
-                    stage.requestFullscreen();
-                } else if (stage.webkitRequestFullscreen) {
-                    stage.webkitRequestFullscreen();
-                } else if (stage.msRequestFullscreen) {
-                    stage.msRequestFullscreen();
+                if (target.requestFullscreen) {
+                    target.requestFullscreen();
+                } else if (target.webkitRequestFullscreen) {
+                    target.webkitRequestFullscreen();
+                } else if (target.msRequestFullscreen) {
+                    target.msRequestFullscreen();
                 }
             } else {
                 if (document.exitFullscreen) {
@@ -3874,12 +4015,76 @@
         // ==========================================
         let heroDeck = null;
         let heroSlideIndex = 0;
+        let currentHeroProvider = 'google';
 
         function initHeroSlideStage() {
             const resources = getAllResources();
             if (!resources || resources.length === 0) return;
             heroDeck = resources[0];
+
+            // Set up direct PPT presentation frame
+            const frame = document.getElementById('hero-stage-ppt-frame');
+            const nameBadge = document.getElementById('hero-deck-name-badge');
+            const downloadBtn = document.getElementById('hero-download-deck-btn');
+
+            if (nameBadge) nameBadge.textContent = heroDeck.title;
+            if (downloadBtn && heroDeck.fileUrl) downloadBtn.href = heroDeck.fileUrl;
+
+            const embedSrc = getPresentationEmbedUrl(heroDeck, currentHeroProvider);
+            if (frame && embedSrc) {
+                frame.src = embedSrc;
+            }
+
             renderHeroSlideStage();
+        }
+
+        function setHeroStageMode(mode) {
+            const directView = document.getElementById('hero-direct-ppt-view');
+            const analysisView = document.getElementById('hero-analysis-view');
+            const pptBtn = document.getElementById('hero-mode-ppt-btn');
+            const analysisBtn = document.getElementById('hero-mode-analysis-btn');
+            const counter = document.getElementById('hero-stage-counter');
+
+            if (mode === 'ppt') {
+                if (directView) directView.classList.remove('hidden');
+                if (analysisView) analysisView.classList.add('hidden');
+                if (counter) counter.classList.add('hidden');
+                if (pptBtn) {
+                    pptBtn.className = 'rounded-full px-3 py-1 font-medium text-white bg-white/20 transition-all';
+                }
+                if (analysisBtn) {
+                    analysisBtn.className = 'rounded-full px-3 py-1 font-medium text-white/60 hover:text-white transition-all';
+                }
+            } else {
+                if (directView) directView.classList.add('hidden');
+                if (analysisView) analysisView.classList.remove('hidden');
+                if (counter) counter.classList.remove('hidden');
+                if (pptBtn) {
+                    pptBtn.className = 'rounded-full px-3 py-1 font-medium text-white/60 hover:text-white transition-all';
+                }
+                if (analysisBtn) {
+                    analysisBtn.className = 'rounded-full px-3 py-1 font-medium text-white bg-white/20 transition-all';
+                }
+                renderHeroSlideStage();
+            }
+        }
+
+        function setHeroProvider(provider) {
+            currentHeroProvider = provider;
+            if (!heroDeck) return;
+            const frame = document.getElementById('hero-stage-ppt-frame');
+            const embedSrc = getPresentationEmbedUrl(heroDeck, provider);
+            if (frame && embedSrc) {
+                frame.src = embedSrc;
+            }
+            const googleBtn = document.getElementById('hero-provider-google-btn');
+            const officeBtn = document.getElementById('hero-provider-office-btn');
+            if (googleBtn) {
+                googleBtn.className = `px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-all ${provider === 'google' ? 'bg-white/20 text-white' : 'text-white/60 hover:text-white'}`;
+            }
+            if (officeBtn) {
+                officeBtn.className = `px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-all ${provider === 'office' ? 'bg-white/20 text-white' : 'text-white/60 hover:text-white'}`;
+            }
         }
 
         

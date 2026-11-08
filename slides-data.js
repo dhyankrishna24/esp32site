@@ -756,6 +756,7 @@ const academicResources = [
       "Shor's and Grover's algorithms: Complexity advantages vs classical computing"
     ],
     fileUrl: "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/view?usp=sharing",
+    previewUrl: "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/preview",
     embedUrl: "https://drive.google.com/file/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/preview",
     tags: ["quantum", "algorithms", "qubits", "computer science", "physics", "StudentDeck"],
     citation: {
