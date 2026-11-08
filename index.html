@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduSphere: Academic Presentations & Seminar Slides</title>
     <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sf-pro-display">
     <meta name="theme-color" content="#0071e3">
     <meta name="description" content="Open academic repository and presentation viewer for university students, educators, and researchers. Preview seminar slides, download lecture materials, test scientific formulas, and rehearse speeches.">
     <meta name="author" content="Dhyan Krishna M">
@@ -25,13 +26,24 @@
                         sans: [
                             '-apple-system',
                             'BlinkMacSystemFont',
-                            '"SF Pro Text"',
                             '"SF Pro Display"',
-                            '"Segoe UI"',
-                            'Roboto',
+                            '"SF Pro Text"',
+                            '"SF Pro"',
+                            '"Helvetica Neue"',
                             'Helvetica',
                             'Arial',
                             'sans-serif'
+                        ],
+                        mono: [
+                            'ui-monospace',
+                            '"SF Mono"',
+                            'SFMono-Regular',
+                            'Menlo',
+                            'Monaco',
+                            'Consolas',
+                            '"Liberation Mono"',
+                            '"Courier New"',
+                            'monospace'
                         ]
                     },
                     colors: {
@@ -84,7 +96,7 @@
         body {
             background-color: var(--bg-page);
             color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }

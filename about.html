@@ -9,6 +9,7 @@
     <meta name="keywords" content="Dhyan Krishna M, Dhyan Krishna, IoT Developer, Embedded Systems Developer, ESP32 Developer, Web Developer, MQTT, ESP32 Weather Station">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://dhyankrishna24.github.io/esp32site/about.html">
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sf-pro-display">
 
     <!-- Open Graph / Facebook / LinkedIn Meta Tags -->
     <meta property="og:type" content="profile">
@@ -60,6 +61,28 @@
             darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: [
+                            '-apple-system',
+                            'BlinkMacSystemFont',
+                            '"SF Pro Display"',
+                            '"SF Pro Text"',
+                            '"SF Pro"',
+                            '"Helvetica Neue"',
+                            'Helvetica',
+                            'Arial',
+                            'sans-serif'
+                        ],
+                        mono: [
+                            'ui-monospace',
+                            '"SF Mono"',
+                            'SFMono-Regular',
+                            'Menlo',
+                            'Monaco',
+                            'Consolas',
+                            'monospace'
+                        ]
+                    },
                     colors: {
                         brand: {
                             50: '#f0fdfa',
@@ -82,6 +105,11 @@
         }
     </script>
     <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
         @keyframes pulse-glow {
             0%, 100% { opacity: 0.4; transform: scale(1); }
             50% { opacity: 0.8; transform: scale(1.05); }

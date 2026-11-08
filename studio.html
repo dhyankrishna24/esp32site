@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduSphere Studio — Visual slides-data.js Editor</title>
     <meta name="description" content="Visual graphical editor to manage and edit presentation decks, slides, and academic formulas in slides-data.js without writing raw code.">
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sf-pro-display">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233b82f6'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
     
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
@@ -13,6 +14,28 @@
             darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: [
+                            '-apple-system',
+                            'BlinkMacSystemFont',
+                            '"SF Pro Display"',
+                            '"SF Pro Text"',
+                            '"SF Pro"',
+                            '"Helvetica Neue"',
+                            'Helvetica',
+                            'Arial',
+                            'sans-serif'
+                        ],
+                        mono: [
+                            'ui-monospace',
+                            '"SF Mono"',
+                            'SFMono-Regular',
+                            'Menlo',
+                            'Monaco',
+                            'Consolas',
+                            'monospace'
+                        ]
+                    },
                     colors: {
                         slate: { 850: '#111827', 950: '#030712' }
                     }
@@ -21,6 +44,11 @@
         };
     </script>
     <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
@@ -70,7 +98,7 @@
                 </button>
 
                 <button onclick="applyToLivePortal()" class="inline-flex items-center gap-1 rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800 shadow-sm hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 transition" title="Save in browser cache so changes appear immediately on index.html">
-                    <span>⚡ Live Sync</span>
+                    <span>Live Sync</span>
                 </button>
 
                 <button id="theme-toggle" class="rounded-xl border border-slate-200 bg-white p-2 text-slate-500 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400" title="Toggle Theme">
@@ -917,7 +945,7 @@
                     });
                     if (res.ok) {
                         persistStudioToLocalStorage();
-                        showToast("🎉 Saved directly to slides-data.js via Python!");
+                        showToast("Saved directly to slides-data.js via Python.");
                         return;
                     }
                 } catch(e) {
@@ -939,7 +967,7 @@
                     await writable.write(code);
                     await writable.close();
                     persistStudioToLocalStorage();
-                    showToast("🎉 slides-data.js directly saved to disk!");
+                    showToast("slides-data.js directly saved to disk.");
                 } else {
                     downloadSlidesDataFile();
                 }
@@ -958,7 +986,7 @@
 
         function applyToLivePortal() {
             persistStudioToLocalStorage();
-            showToast("⚡ Changes synced live to EduSphere Portal!");
+            showToast("Changes synced live to EduSphere Portal.");
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 800);
