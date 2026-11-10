@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Lounge & Discord Community — EduSphere</title>
+    <meta name="description" content="Real-time student Discord lounge for EduSphere and Loyola School Thiruvananthapuram. Chat, share PowerPoint seminars, discuss computer science, and join voice study rooms.">
+    <meta name="author" content="Dhyan Krishna M">
+    <meta name="theme-color" content="#0071e3">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230071e3'/><path d='M30 45 L50 25 L70 45 L50 65 Z' fill='%23ffffff'/><circle cx='50' cy='50' r='10' fill='%232997ff'/></svg>">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="fonts/fonts.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"SF Pro Display"', '"SF Pro Text"', '-apple-system', 'BlinkMacSystemFont', '"SF Pro"', 'sans-serif'],
+                        mono: ['"SF Mono"', 'SFMono-Regular', 'ui-monospace', 'Menlo', 'monospace']
+                    },
+                    colors: {
+                        apple: {
+                            blue: '#0071e3',
+                            hover: '#0077ed',
+                            dark: '#1d1d1f',
+                            subtle: '#6e6e73',
+                            bg: '#f5f5f7',
+                            card: '#ffffff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Firebase SDK (Compat v9) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="slides-data.js"></script>
+    <script src="chat.js"></script>
+
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            letter-spacing: -0.011em;
+        }
+
+        /* Ambient Fluid Caustics Background */
+        .liquid-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .liquid-orb-1 {
+            position: absolute;
+            top: -10%;
+            left: 5%;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 113, 227, 0.28) 0%, rgba(56, 189, 248, 0.12) 45%, transparent 70%);
+            filter: blur(95px);
+            animation: liquidFloat1 20s ease-in-out infinite alternate;
+        }
+
+        .liquid-orb-2 {
+            position: absolute;
+            top: 25%;
+            right: -5%;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, rgba(99, 102, 241, 0.12) 45%, transparent 70%);
+            filter: blur(100px);
+            animation: liquidFloat2 24s ease-in-out infinite alternate;
+        }
+
+        .liquid-orb-3 {
+            position: absolute;
+            bottom: -5%;
+            left: 20%;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(20, 184, 166, 0.22) 0%, rgba(59, 130, 246, 0.12) 45%, transparent 70%);
+            filter: blur(90px);
+            animation: liquidFloat3 22s ease-in-out infinite alternate;
+        }
+
+        @keyframes liquidFloat1 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(60px, 80px) scale(1.15); }
+        }
+
+        @keyframes liquidFloat2 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-80px, -60px) scale(1.1); }
+        }
+
+        @keyframes liquidFloat3 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(70px, -70px) scale(1.16); }
+        }
+
+        /* Apple VisionOS Refractive Liquid Glass */
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: 
+                inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95),
+                inset 0 -1px 2px 0 rgba(0, 0, 0, 0.04),
+                0 20px 60px rgba(0, 0, 0, 0.07),
+                0 4px 16px rgba(0, 0, 0, 0.03);
+        }
+
+        .dark .liquid-glass {
+            background: rgba(20, 20, 26, 0.72);
+            backdrop-filter: blur(44px) saturate(210%);
+            -webkit-backdrop-filter: blur(44px) saturate(210%);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow: 
+                inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.28),
+                inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.6),
+                0 30px 80px rgba(0, 0, 0, 0.65),
+                0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .liquid-glass-deep {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(52px) saturate(220%);
+            -webkit-backdrop-filter: blur(52px) saturate(220%);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 
+                inset 0 2px 3px 0 rgba(255, 255, 255, 0.95),
+                inset 0 -2px 3px 0 rgba(0, 0, 0, 0.05),
+                0 40px 120px rgba(0, 0, 0, 0.1),
+                0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .liquid-glass-deep {
+            background: rgba(16, 16, 24, 0.82);
+            backdrop-filter: blur(52px) saturate(220%);
+            -webkit-backdrop-filter: blur(52px) saturate(220%);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            box-shadow: 
+                inset 0 2px 3px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -2px 3px 0 rgba(0, 0, 0, 0.8),
+                0 40px 120px rgba(0, 0, 0, 0.55),
+                0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .liquid-pill {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(24px) saturate(190%);
+            -webkit-backdrop-filter: blur(24px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9), 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dark .liquid-pill {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .liquid-accent-btn {
+            background: linear-gradient(135deg, rgba(0, 113, 227, 0.92), rgba(41, 151, 255, 0.92));
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.75),
+                0 10px 30px rgba(0, 113, 227, 0.4);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .liquid-accent-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 119, 237, 0.98), rgba(64, 169, 255, 0.98));
+            transform: translateY(-1px);
+        }
+
+        /* Discord message custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(150, 150, 150, 0.25);
+            border-radius: 999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(150, 150, 150, 0.45);
+        }
+
+        /* Equalizer wave animation for active voice lounge */
+        @keyframes eqBounce {
+            0%, 100% { height: 4px; }
+            50% { height: 16px; }
+        }
+        .eq-bar-1 { animation: eqBounce 0.8s ease-in-out infinite alternate; }
+        .eq-bar-2 { animation: eqBounce 0.6s ease-in-out infinite alternate 0.2s; }
+        .eq-bar-3 { animation: eqBounce 0.9s ease-in-out infinite alternate 0.4s; }
+    </style>
+</head>
+<body class="h-screen overflow-hidden bg-[#f5f5f7] text-[#1d1d1f] dark:bg-[#000000] dark:text-[#f5f5f7] flex flex-col transition-colors duration-200">
+
+    <!-- Ambient Caustics Background -->
+    <div class="liquid-canvas" aria-hidden="true">
+        <div class="liquid-orb-1"></div>
+        <div class="liquid-orb-2"></div>
+        <div class="liquid-orb-3"></div>
+    </div>
+
+    <!-- Apple-Grade Global Navigation Bar (44px) -->
+    <header class="h-[44px] shrink-0 border-b border-white/40 dark:border-white/10 bg-white/40 dark:bg-[#121214]/60 backdrop-blur-2xl z-40">
+        <div class="mx-auto flex max-w-7xl h-full items-center justify-between px-4 sm:px-6 text-[12px]">
+            <a href="index.html" class="flex items-center gap-2 hover:opacity-75 transition-opacity">
+                <svg class="w-4 h-4 text-[#0071e3] dark:text-[#2997ff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <span class="font-semibold tracking-tight text-[13px]">EduSphere</span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-7 text-[#6e6e73] dark:text-[#a1a1a6]">
+                <a href="index.html#slides-section" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Presentations</a>
+                <a href="index.html#toolkit-section" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Rehearsal Stage</a>
+                <a href="index.html#iot-lab-section" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Hardware Lab</a>
+                <a href="studio.html" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">Slide Studio</a>
+                <a href="community.html" class="text-[#0071e3] dark:text-[#2997ff] font-medium border-b border-[#0071e3] pb-0.5">Student Lounge</a>
+                <a href="about.html" class="hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">About</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button onclick="toggleTheme()" class="rounded-full p-1 text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors" title="Toggle Light/Dark Theme">
+                    <svg id="theme-icon-sun" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" stroke-width="2"></circle><path stroke-width="2" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+                    <svg id="theme-icon-moon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path></svg>
+                </button>
+                <a href="index.html" class="text-[11px] font-medium text-[#0071e3] dark:text-[#2997ff] hover:underline">
+                    ← Back to Decks
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Discord App Container -->
+    <main class="flex-1 flex overflow-hidden p-2 sm:p-4 gap-3 max-w-[1600px] w-full mx-auto">
+        
+        <!-- ============================================== -->
+        <!-- LEFT COLUMN: SERVERS, CHANNELS & VOICE LOUNGE -->
+        <!-- ============================================== -->
+        <aside class="w-72 shrink-0 flex flex-col rounded-3xl liquid-glass overflow-hidden transition-all shadow-xl">
+            
+            <!-- Window Bezel Header -->
+            <div class="px-4 py-3.5 border-b border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-[#ff5f57] border border-black/10"></span>
+                    <span class="w-3 h-3 rounded-full bg-[#febc2e] border border-black/10"></span>
+                    <span class="w-3 h-3 rounded-full bg-[#28c840] border border-black/10"></span>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs font-semibold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">
+                    <span>EduSphere Discord</span>
+                    <span class="px-1.5 py-0.2 rounded-full bg-blue-500/10 text-[#0071e3] dark:text-[#2997ff] text-[10px]">v2.4</span>
+                </div>
+            </div>
+
+            <!-- Server Banner -->
+            <div class="p-3 border-b border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02]">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#0071e3] to-[#2997ff] flex items-center justify-center text-white font-bold text-lg shadow-md">
+                        🎓
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1">
+                            <h2 class="text-xs font-bold truncate text-[#1d1d1f] dark:text-[#f5f5f7]">Loyola Student Lounge</h2>
+                            <svg class="w-3.5 h-3.5 text-[#0071e3] shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <p class="text-[11px] text-[#6e6e73] dark:text-[#86868b] truncate">Loyola School Thiruvananthapuram</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollable Channels Section -->
+            <div class="flex-1 overflow-y-auto px-2 py-3 space-y-4">
+                
+                <!-- Text Channels Category -->
+                <div>
+                    <div class="flex items-center justify-between px-2 mb-1.5 text-[10px] font-bold tracking-wider uppercase text-[#86868b]">
+                        <span>Text Channels</span>
+                        <span id="channel-count-badge" class="font-mono text-[9px]">5</span>
+                    </div>
+                    <div id="channels-list" class="space-y-0.5">
+                        <!-- Populated by JavaScript from CHAT_CHANNELS -->
+                    </div>
+                </div>
+
+                <!-- Voice Channels Category -->
+                <div>
+                    <div class="flex items-center justify-between px-2 mb-1.5 text-[10px] font-bold tracking-wider uppercase text-[#86868b]">
+                        <span>Voice Study Rooms</span>
+                        <span class="font-mono text-[9px]">LIVE</span>
+                    </div>
+                    <div id="voice-rooms-list" class="space-y-1">
+                        <!-- Populated by JavaScript from VOICE_ROOMS -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Active Voice Status Bar (Shown when joined) -->
+            <div id="voice-connected-bar" class="hidden p-3 border-t border-emerald-500/20 bg-emerald-500/10 flex items-center justify-between">
+                <div class="flex items-center gap-2 min-w-0">
+                    <div class="flex items-end gap-0.5 h-4 w-3.5">
+                        <span class="w-1 bg-emerald-500 rounded-full eq-bar-1"></span>
+                        <span class="w-1 bg-emerald-500 rounded-full eq-bar-2"></span>
+                        <span class="w-1 bg-emerald-500 rounded-full eq-bar-3"></span>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 truncate" id="active-voice-name">Study Room A</div>
+                        <div class="text-[9px] text-[#86868b]">Voice Connected • Low Latency</div>
+                    </div>
+                </div>
+                <button onclick="leaveCurrentVoiceRoom()" class="rounded-lg p-1.5 text-red-500 hover:bg-red-500/10 transition-colors" title="Disconnect from voice room">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.128a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z"></path></svg>
+                </button>
+            </div>
+
+            <!-- Current User Profile Footer -->
+            <div class="p-2.5 border-t border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] flex items-center justify-between">
+                <div class="flex items-center gap-2 min-w-0 cursor-pointer hover:opacity-80 transition-opacity" onclick="openProfileModal()">
+                    <div class="relative">
+                        <span id="user-avatar-badge" class="w-8 h-8 rounded-xl bg-blue-500/10 text-base flex items-center justify-center">👨‍💻</span>
+                        <span id="user-status-dot" class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#121214]"></span>
+                    </div>
+                    <div class="min-w-0">
+                        <div id="user-name-display" class="text-xs font-semibold truncate text-[#1d1d1f] dark:text-[#f5f5f7]">Student</div>
+                        <div id="user-badge-display" class="text-[10px] text-[#86868b] truncate">Loyola Scholar</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-0.5">
+                    <button onclick="toggleMicrophone()" id="mic-btn" class="p-1.5 rounded-lg text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] hover:bg-black/5 dark:hover:bg-white/5 transition-colors" title="Mute/Unmute Mic">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                    </button>
+                    <button onclick="toggleHeadphones()" id="deafen-btn" class="p-1.5 rounded-lg text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] hover:bg-black/5 dark:hover:bg-white/5 transition-colors" title="Deafen Audio">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                    </button>
+                    <button onclick="openProfileModal()" class="p-1.5 rounded-lg text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] hover:bg-black/5 dark:hover:bg-white/5 transition-colors" title="Edit Profile & Badges">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><circle cx="12" cy="12" r="3" stroke-width="2"></circle></svg>
+                    </button>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- ============================================== -->
+        <!-- CENTER COLUMN: ACTIVE CHAT STREAM & INPUT -->
+        <!-- ============================================== -->
+        <section class="flex-1 flex flex-col rounded-3xl liquid-glass overflow-hidden shadow-xl min-w-0">
+            
+            <!-- Channel Header -->
+            <div class="h-14 px-5 border-b border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between shrink-0 bg-white/30 dark:bg-black/20 backdrop-blur-xl">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <span class="text-lg text-[#86868b]">#</span>
+                    <h3 id="active-channel-title" class="text-sm font-bold text-[#1d1d1f] dark:text-[#f5f5f7] truncate">general-lounge</h3>
+                    <div class="h-3 w-px bg-black/10 dark:bg-white/10 hidden sm:block"></div>
+                    <p id="active-channel-topic" class="text-xs text-[#86868b] truncate hidden sm:block">Open discussion, peer study banter, and announcements</p>
+                </div>
+
+                <div class="flex items-center gap-2 shrink-0">
+                    <button onclick="openSlideShareModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full liquid-pill text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] hover:border-[#0071e3] transition-colors" title="Share a presentation deck to this channel">
+                        <span>📊 Share Deck</span>
+                    </button>
+                    <button onclick="toggleMembersSidebar()" class="p-1.5 rounded-lg text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] hover:bg-black/5 dark:hover:bg-white/5 transition-colors" title="Toggle Members Sidebar">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Messages Stream Area -->
+            <div id="messages-container" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+                <!-- Populated dynamically via Firebase onValue listener -->
+            </div>
+
+            <!-- Typing Indicator Bar -->
+            <div id="typing-indicator" class="hidden px-5 py-1 text-[11px] text-[#86868b] italic flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#0071e3] animate-pulse"></span>
+                <span>Classmates are typing...</span>
+            </div>
+
+            <!-- Message Input Capsule Bar -->
+            <div class="p-3 sm:p-4 border-t border-black/[0.06] dark:border-white/[0.08] bg-white/40 dark:bg-black/30 backdrop-blur-xl">
+                <div class="relative flex items-center gap-2 rounded-2xl liquid-glass p-1.5 sm:p-2 border border-black/10 dark:border-white/10 shadow-inner">
+                    
+                    <!-- Quick Slide Attach Button -->
+                    <button onclick="openSlideShareModal()" class="p-2 rounded-xl text-[#86868b] hover:text-[#0071e3] hover:bg-blue-500/10 transition-colors" title="Attach Presentation Slide Deck">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    </button>
+
+                    <!-- Text input -->
+                    <input type="text" id="chat-input" placeholder="Message #general-lounge..." autocomplete="off" class="flex-1 bg-transparent px-2 text-xs sm:text-sm text-[#1d1d1f] dark:text-[#f5f5f7] placeholder-[#86868b] focus:outline-none">
+
+                    <!-- Emoji Quick Picker Button -->
+                    <button onclick="insertQuickEmoji('🚀')" class="p-1 text-base hover:scale-125 transition-transform" title="Add Rocket">🚀</button>
+                    <button onclick="insertQuickEmoji('💡')" class="p-1 text-base hover:scale-125 transition-transform" title="Add Idea">💡</button>
+                    <button onclick="insertQuickEmoji('🔥')" class="p-1 text-base hover:scale-125 transition-transform" title="Add Fire">🔥</button>
+
+                    <!-- Send Button -->
+                    <button onclick="sendChatMessage()" class="liquid-accent-btn px-4 py-2 rounded-xl text-xs font-semibold text-white flex items-center gap-1 shadow-md">
+                        <span>Send</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+                <div class="mt-1.5 flex items-center justify-between text-[10px] text-[#86868b] px-2">
+                    <span>Press <strong>Enter</strong> to send • Markdown & code backticks supported</span>
+                    <span class="flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        Encrypted Real-Time Sync
+                    </span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ============================================== -->
+        <!-- RIGHT COLUMN: ONLINE MEMBERS & LOYOLA ROSTER -->
+        <!-- ============================================== -->
+        <aside id="members-sidebar" class="w-64 shrink-0 hidden lg:flex flex-col rounded-3xl liquid-glass overflow-hidden shadow-xl p-3.5 space-y-4">
+            
+            <div class="flex items-center justify-between text-xs font-bold text-[#86868b] uppercase tracking-wider px-2">
+                <span>Roster</span>
+                <span id="online-total-count" class="font-mono text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">4 Online</span>
+            </div>
+
+            <div class="flex-1 overflow-y-auto space-y-4 pr-1">
+                
+                <!-- Loyola Hosts & Featured Speakers -->
+                <div>
+                    <div class="text-[10px] font-bold text-[#86868b] uppercase tracking-wider px-2 mb-2">Loyola Hosts & Speakers — 1</div>
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group">
+                            <div class="relative">
+                                <span class="w-8 h-8 rounded-xl bg-blue-500/20 text-base flex items-center justify-center">👨‍💻</span>
+                                <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#121214]"></span>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-1">
+                                    <span class="text-xs font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] truncate">Dhyan Krishna M</span>
+                                    <span class="text-[9px] px-1 py-0.2 rounded bg-[#0071e3] text-white font-bold">HOST</span>
+                                </div>
+                                <p class="text-[10px] text-[#0071e3] dark:text-[#2997ff] truncate">Loyola School Thiruvananthapuram</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Peers & Online Students -->
+                <div>
+                    <div class="text-[10px] font-bold text-[#86868b] uppercase tracking-wider px-2 mb-2">Classmates & Scholars</div>
+                    <div id="online-members-list" class="space-y-1">
+                        <!-- Populated by presence listeners -->
+                    </div>
+                </div>
+
+                <!-- Loyola Community Info Card -->
+                <div class="rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.02] p-3 text-xs space-y-2">
+                    <div class="flex items-center gap-1.5 font-bold text-[#1d1d1f] dark:text-[#f5f5f7]">
+                        <span>🏫 Loyola School Hub</span>
+                    </div>
+                    <p class="text-[11px] text-[#6e6e73] dark:text-[#86868b] leading-relaxed">
+                        Dedicated study circle for Loyola School Thiruvananthapuram students. All academic discussions are peer-moderated.
+                    </p>
+                </div>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+    <!-- ============================================== -->
+    <!-- EDIT STUDENT PROFILE MODAL -->
+    <!-- ============================================== -->
+    <div id="profile-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="relative w-full max-w-md rounded-3xl liquid-glass-deep p-6 text-left shadow-2xl border border-white/20">
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-black/10 dark:border-white/10">
+                <h3 class="text-base font-bold text-[#1d1d1f] dark:text-[#f5f5f7]">Student Profile & Identity</h3>
+                <button onclick="closeProfileModal()" class="rounded-lg p-1 text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]">✕</button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-[#86868b] mb-1">Display Name</label>
+                    <input type="text" id="edit-user-name" class="w-full rounded-xl border border-black/10 dark:border-white/15 bg-white/50 dark:bg-black/50 px-3 py-2 text-sm text-[#1d1d1f] dark:text-[#f5f5f7] focus:outline-none focus:border-[#0071e3]">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-[#86868b] mb-1">School Affiliation & Badge</label>
+                    <input type="text" id="edit-user-badge" placeholder="e.g. Loyola School Thiruvananthapuram" class="w-full rounded-xl border border-black/10 dark:border-white/15 bg-white/50 dark:bg-black/50 px-3 py-2 text-sm text-[#1d1d1f] dark:text-[#f5f5f7] focus:outline-none focus:border-[#0071e3]">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-[#86868b] mb-1">Avatar Emoji</label>
+                    <div class="flex items-center gap-2 overflow-x-auto py-1" id="avatar-picker-options">
+                        <button onclick="selectAvatarEmoji('👨‍💻')" class="w-10 h-10 rounded-xl border border-black/10 dark:border-white/15 text-lg hover:scale-110">👨‍💻</button>
+                        <button onclick="selectAvatarEmoji('👩‍💻')" class="w-10 h-10 rounded-xl border border-black/10 dark:border-white/15 text-lg hover:scale-110">👩‍💻</button>
+                        <button onclick="selectAvatarEmoji('🎓')" class="w-10 h-10 rounded-xl border border-black/10 dark:border-white/15 text-lg hover:scale-110">🎓</button>
+                        <button onclick="selectAvatarEmoji('🔬')" class="w-10 h-10 rounded-xl border border-black/10 dark:border-white/15 text-lg hover:scale-110">🔬</button>
+                        <button onclick="selectAvatarEmoji('🚀')" class="w-10 h-10 rounded-xl border border-black/10 dark:border-white/15 text-lg hover:scale-110">🚀</button>
+                        <button onclick="selectAvatarEmoji('⚡')" class="w-10 h-10 rounded-xl border border-black/10 dark:border-white/15 text-lg hover:scale-110">⚡</button>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex items-center justify-end gap-2">
+                    <button onclick="closeProfileModal()" class="px-4 py-2 text-xs font-medium text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]">Cancel</button>
+                    <button onclick="saveProfileChanges()" class="liquid-accent-btn px-4 py-2 rounded-xl text-xs font-semibold text-white shadow-md">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SHARE SLIDE PICKER MODAL -->
+    <!-- ============================================== -->
+    <div id="slide-share-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="relative w-full max-w-lg rounded-3xl liquid-glass-deep p-6 text-left shadow-2xl border border-white/20">
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-black/10 dark:border-white/10">
+                <h3 class="text-base font-bold text-[#1d1d1f] dark:text-[#f5f5f7]">Share Slide Deck to #channel</h3>
+                <button onclick="closeSlideShareModal()" class="rounded-lg p-1 text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7]">✕</button>
+            </div>
+            
+            <p class="text-xs text-[#86868b] mb-4">Select an academic presentation to embed into your message:</p>
+
+            <div id="slide-share-list" class="space-y-2 max-h-80 overflow-y-auto pr-1">
+                <!-- Populated dynamically from academicResources in slides-data.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Theme initialization
+        function initTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+        initTheme();
+
+        // Render Channels
+        function renderChannelsList() {
+            const container = document.getElementById('channels-list');
+            if (!container) return;
+            container.innerHTML = CHAT_CHANNELS.map(ch => {
+                const isActive = ch.id === window.EduSphereChat.currentChannelId;
+                return `
+                    <button onclick="switchChatChannel('${ch.id}')" class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-left text-xs transition-colors ${isActive ? 'bg-[#0071e3] text-white font-semibold shadow-sm' : 'text-[#6e6e73] dark:text-[#a1a1a6] hover:bg-black/5 dark:hover:bg-white/5'}">
+                        <span class="text-sm opacity-80">${ch.icon}</span>
+                        <span class="truncate"># ${ch.name}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Render Voice Rooms
+        function renderVoiceRoomsList() {
+            const container = document.getElementById('voice-rooms-list');
+            if (!container) return;
+            container.innerHTML = VOICE_ROOMS.map(vr => {
+                const isJoined = window.EduSphereChat.activeVoiceRoom === vr.id;
+                return `
+                    <div class="rounded-xl p-2 transition-colors ${isJoined ? 'bg-emerald-500/15 border border-emerald-500/30' : 'hover:bg-black/5 dark:hover:bg-white/5'}">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="text-sm">${vr.icon}</span>
+                                <span class="text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] truncate">${vr.name}</span>
+                            </div>
+                            <button onclick="toggleVoiceRoom('${vr.id}')" class="px-2 py-0.5 rounded-lg text-[10px] font-bold ${isJoined ? 'bg-red-500 text-white' : 'bg-emerald-600 text-white hover:bg-emerald-700'}">
+                                ${isJoined ? 'Leave' : 'Join'}
+                            </button>
+                        </div>
+                        <div class="mt-1.5 pl-6 flex items-center gap-1.5 text-[10px] text-[#86868b]">
+                            ${vr.users.map(u => `
+                                <span class="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-black/5 dark:bg-white/5">
+                                    <span>${u.avatar}</span>
+                                    <span class="truncate max-w-[80px]">${u.name}</span>
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Switch Active Text Channel
+        function switchChatChannel(channelId) {
+            window.EduSphereChat.subscribeToChannel(channelId, onMessagesReceived);
+            const ch = CHAT_CHANNELS.find(c => c.id === channelId);
+            if (ch) {
+                document.getElementById('active-channel-title').textContent = ch.name;
+                document.getElementById('active-channel-topic').textContent = ch.topic;
+                document.getElementById('chat-input').placeholder = `Message #${ch.name}...`;
+            }
+            renderChannelsList();
+        }
+
+        // Callback when messages update from Firebase
+        function onMessagesReceived(messages) {
+            const container = document.getElementById('messages-container');
+            if (!container) return;
+
+            if (messages.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 text-[#86868b]">
+                        <span class="text-3xl">💬</span>
+                        <h4 class="mt-2 text-sm font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Welcome to #${window.EduSphereChat.currentChannelId}!</h4>
+                        <p class="text-xs mt-1">This is the start of this channel. Say hello to your classmates!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = messages.map(m => {
+                const dateStr = formatChatTimestamp(m.timestamp);
+                const isMe = m.userId === window.EduSphereChat.user.id;
+                const slideCardHtml = renderSlideCardEmbed(m.slideRef);
+
+                const reactionsHtml = Object.entries(m.reactions || {}).map(([emoji, count]) => `
+                    <button onclick="reactToMessage('${m.id}', '${emoji}')" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-black/10 dark:border-white/10 bg-white/40 dark:bg-black/40 text-[11px] hover:scale-105 transition-all">
+                        <span>${emoji}</span>
+                        <span class="font-bold">${count}</span>
+                    </button>
+                `).join('');
+
+                return `
+                    <div class="group flex items-start gap-3 p-2 rounded-2xl hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors relative">
+                        <span class="w-9 h-9 rounded-2xl bg-blue-500/10 text-lg flex items-center justify-center shrink-0 shadow-sm">${m.avatar || '👨‍💻'}</span>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7]">${escapeHtml(m.user || 'Student')}</span>
+                                ${m.badge ? `<span class="text-[9px] px-1.5 py-0.2 rounded-full font-medium ${m.role === 'Host' ? 'bg-[#0071e3] text-white' : 'bg-black/5 dark:bg-white/10 text-[#6e6e73] dark:text-[#a1a1a6]'}">${escapeHtml(m.badge)}</span>` : ''}
+                                <span class="text-[10px] text-[#86868b]">${dateStr}</span>
+                            </div>
+                            <div class="mt-1 text-xs sm:text-[13px] text-[#2c2c2e] dark:text-[#e5e5ea] leading-relaxed break-words">
+                                ${formatMessageText(m.text || '')}
+                            </div>
+                            ${slideCardHtml}
+                            <div class="mt-2 flex flex-wrap items-center gap-1.5">
+                                ${reactionsHtml}
+                                <button onclick="quickAddReactionMenu('${m.id}')" class="opacity-0 group-hover:opacity-100 text-xs px-2 py-0.5 rounded-full text-[#86868b] hover:bg-black/5 dark:hover:bg-white/10 transition-all" title="Add reaction">
+                                    + Add Emoji
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Render slide preview card if referenced
+        function renderSlideCardEmbed(slideId) {
+            if (!slideId || typeof academicResources === 'undefined') return '';
+            const slide = academicResources.find(r => r.id === slideId);
+            if (!slide) return '';
+
+            return `
+                <div class="mt-2.5 max-w-md rounded-2xl border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.04] p-3 flex items-center justify-between gap-3 shadow-sm">
+                    <div class="min-w-0">
+                        <span class="text-[9px] font-bold uppercase tracking-wider text-[#0071e3] dark:text-[#2997ff]">Seminar Presentation</span>
+                        <h5 class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] truncate">${escapeHtml(slide.title)}</h5>
+                        <p class="text-[10px] text-[#86868b]">${slide.slidesCount} • ${slide.author}</p>
+                    </div>
+                    <a href="index.html#${slide.id}" target="_blank" class="px-3 py-1.5 rounded-xl bg-[#0071e3] text-white text-[11px] font-medium hover:bg-[#0077ed] shrink-0 transition-colors">
+                        View Slide ↗
+                    </a>
+                </div>
+            `;
+        }
+
+        // Send Message
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input ? input.value : '';
+            if (!text || !text.trim()) return;
+
+            window.EduSphereChat.sendMessage(text);
+            input.value = '';
+        }
+
+        // Quick emoji insertion
+        function insertQuickEmoji(emoji) {
+            const input = document.getElementById('chat-input');
+            if (input) {
+                input.value += ' ' + emoji;
+                input.focus();
+            }
+        }
+
+        // Quick add reaction
+        function reactToMessage(msgId, emoji) {
+            window.EduSphereChat.addReaction(window.EduSphereChat.currentChannelId, msgId, emoji);
+        }
+
+        function quickAddReactionMenu(msgId) {
+            const emojis = ['👍', '❤️', '🚀', '💡', '🔥'];
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            reactToMessage(msgId, randomEmoji);
+        }
+
+        // Profile Modal
+        function openProfileModal() {
+            const user = window.EduSphereChat.user;
+            document.getElementById('edit-user-name').value = user.name;
+            document.getElementById('edit-user-badge').value = user.badge;
+            document.getElementById('profile-modal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        let selectedAvatar = '👨‍💻';
+        function selectAvatarEmoji(emoji) {
+            selectedAvatar = emoji;
+        }
+
+        function saveProfileChanges() {
+            const name = document.getElementById('edit-user-name').value;
+            const badge = document.getElementById('edit-user-badge').value;
+            if (name) {
+                window.EduSphereChat.saveUserProfile({
+                    name: name.trim(),
+                    badge: badge ? badge.trim() : 'Loyola School Scholar',
+                    avatar: selectedAvatar
+                });
+                updateUserProfileUI();
+            }
+            closeProfileModal();
+        }
+
+        function updateUserProfileUI() {
+            const user = window.EduSphereChat.user;
+            document.getElementById('user-name-display').textContent = user.name;
+            document.getElementById('user-badge-display').textContent = user.badge;
+            document.getElementById('user-avatar-badge').textContent = user.avatar;
+        }
+
+        // Slide Sharing Modal
+        function openSlideShareModal() {
+            const modal = document.getElementById('slide-share-modal');
+            const list = document.getElementById('slide-share-list');
+            if (!modal || !list || typeof academicResources === 'undefined') return;
+
+            list.innerHTML = academicResources.map(s => `
+                <div class="flex items-center justify-between p-2.5 rounded-xl border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                    <div class="min-w-0 pr-2">
+                        <div class="text-xs font-bold text-[#1d1d1f] dark:text-[#f5f5f7] truncate">${escapeHtml(s.title)}</div>
+                        <div class="text-[10px] text-[#86868b]">${s.category} • ${s.slidesCount}</div>
+                    </div>
+                    <button onclick="shareSlideToCurrentChannel('${s.id}')" class="px-3 py-1 rounded-lg bg-[#0071e3] text-white text-[11px] font-medium hover:bg-[#0077ed] shrink-0">
+                        Share
+                    </button>
+                </div>
+            `).join('');
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeSlideShareModal() {
+            document.getElementById('slide-share-modal')?.classList.add('hidden');
+        }
+
+        function shareSlideToCurrentChannel(slideId) {
+            const slide = academicResources.find(r => r.id === slideId);
+            const msg = slide ? `Check out "${slide.title}" presentation!` : `Shared slide: ${slideId}`;
+            window.EduSphereChat.sendMessage(msg, slideId);
+            closeSlideShareModal();
+        }
+
+        // Voice Controls
+        function toggleVoiceRoom(roomId) {
+            const joined = window.EduSphereChat.toggleVoiceRoom(roomId);
+            const bar = document.getElementById('voice-connected-bar');
+            if (joined) {
+                bar?.classList.remove('hidden');
+                document.getElementById('active-voice-name').textContent = roomId === 'study-room-a' ? 'Study Lounge A' : 'Practice Hall';
+            } else {
+                bar?.classList.add('hidden');
+            }
+            renderVoiceRoomsList();
+        }
+
+        function leaveCurrentVoiceRoom() {
+            if (window.EduSphereChat.activeVoiceRoom) {
+                toggleVoiceRoom(window.EduSphereChat.activeVoiceRoom);
+            }
+        }
+
+        function toggleMicrophone() {
+            const isMuted = window.EduSphereChat.toggleMute();
+            const btn = document.getElementById('mic-btn');
+            if (btn) {
+                btn.classList.toggle('text-red-500', isMuted);
+                btn.title = isMuted ? 'Unmute Mic' : 'Mute Mic';
+            }
+        }
+
+        function toggleHeadphones() {
+            const isDeaf = window.EduSphereChat.toggleDeafen();
+            const btn = document.getElementById('deafen-btn');
+            if (btn) {
+                btn.classList.toggle('text-red-500', isDeaf);
+                btn.title = isDeaf ? 'Undeafen Audio' : 'Deafen Audio';
+            }
+        }
+
+        function toggleMembersSidebar() {
+            const sidebar = document.getElementById('members-sidebar');
+            if (sidebar) sidebar.classList.toggle('hidden');
+        }
+
+        // Utility formatting
+        function formatChatTimestamp(ts) {
+            if (!ts) return 'Just now';
+            const date = new Date(ts);
+            const hours = date.getHours();
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            return `Today at ${formattedHours}:${minutes} ${ampm}`;
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function formatMessageText(text) {
+            let escaped = escapeHtml(text);
+            // inline code backticks `code`
+            escaped = escaped.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10 font-mono text-[11px] text-[#0071e3] dark:text-[#2997ff]">$1</code>');
+            // bold **text**
+            escaped = escaped.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            // italic *text*
+            escaped = escaped.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            return escaped;
+        }
+
+        // Presence listener
+        window.EduSphereChat.onPresenceChanged = function(users) {
+            const list = document.getElementById('online-members-list');
+            const countBadge = document.getElementById('online-total-count');
+            if (countBadge) {
+                countBadge.textContent = `${users.length} Online`;
+            }
+            if (!list) return;
+
+            list.innerHTML = users.map(u => `
+                <div class="flex items-center gap-2 p-1.5 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer">
+                    <div class="relative">
+                        <span class="w-7 h-7 rounded-lg bg-blue-500/10 text-sm flex items-center justify-center">${u.avatar || '🎓'}</span>
+                        <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-1 ring-white dark:ring-[#121214]"></span>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] truncate">${escapeHtml(u.name || 'Student')}</div>
+                        <div class="text-[9px] text-[#86868b] truncate">${escapeHtml(u.badge || 'Online')}</div>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        // Enter key to send
+        document.getElementById('chat-input')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendChatMessage();
+            }
+        });
+
+        // Bootstrap on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            window.EduSphereChat.init();
+            renderChannelsList();
+            renderVoiceRoomsList();
+            updateUserProfileUI();
+            switchChatChannel('general');
+        });
+    </script>
+</body>
+</html>
