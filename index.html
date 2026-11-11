@@ -341,6 +341,36 @@
             box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
         }
     
+    
+        /* --- Hardware Lab & Kiosk Apple Liquid Enhancements --- */
+        @keyframes pinPulse {
+            0%, 100% { filter: drop-shadow(0 0 3px #22d3ee); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 8px #06b6d4); transform: scale(1.1); }
+        }
+        .pin-glow-active {
+            animation: pinPulse 2s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        .pinout-sensor-btn.active, .battery-preset-btn.active, .sleep-preset-btn.active {
+            border-color: var(--accent) !important;
+            background-color: rgba(0, 113, 227, 0.12) !important;
+            color: var(--accent) !important;
+            box-shadow: 0 0 0 1px var(--accent) inset;
+        }
+
+        .dark .pinout-sensor-btn.active, .dark .battery-preset-btn.active, .dark .sleep-preset-btn.active {
+            border-color: #2997ff !important;
+            background-color: rgba(41, 151, 255, 0.16) !important;
+            color: #2997ff !important;
+            box-shadow: 0 0 0 1px #2997ff inset;
+        }
+
+        .kiosk-speed-btn.active {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
     </style>
 </head>
 <body class="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] dark:bg-[#000000] dark:text-[#f5f5f7] transition-colors duration-200">
@@ -409,6 +439,11 @@
             <div class="flex items-center gap-4 text-xs font-normal">
                 <a href="#slides-section" class="text-[#6e6e73] dark:text-[#a1a1a6] hover:text-[#0071e3] transition-colors hidden sm:inline">Decks</a>
                 <a href="#toolkit-section" class="text-[#6e6e73] dark:text-[#a1a1a6] hover:text-[#0071e3] transition-colors hidden sm:inline">Tools</a>
+                <a href="#iot-lab-section" class="text-[#6e6e73] dark:text-[#a1a1a6] hover:text-[#0071e3] transition-colors hidden sm:inline">Hardware Lab</a>
+                <button onclick="openKioskMode()" class="rounded-full border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] px-3.5 py-1 text-xs font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-all duration-200 flex items-center gap-1.5" title="Full-screen booth & science exhibition kiosk">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Exhibition Kiosk</span>
+                </button>
                 <button onclick="openHeroDeckInTheater()" class="rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white px-3.5 py-1 text-xs font-medium transition-all duration-200">
                     Open Theater
                 </button>
@@ -1175,28 +1210,417 @@
     </section>
 
     <!-- Apple Hardware Chapter: ESP32 Lab Spotlight Banner -->
-    <section id="iot-lab-section" class="mx-auto max-w-7xl px-4 sm:px-6 py-16">
-        <div class="rounded-[32px] sm:rounded-[42px] liquid-glass p-8 sm:p-12 shadow-2xl relative overflow-hidden">
-            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+        <!-- PHYSICAL COMPUTING & HARDWARE LAB -->
+    <section id="iot-lab-section" class="mx-auto max-w-7xl px-4 sm:px-6 py-16 scroll-mt-20">
+        <div class="rounded-[32px] sm:rounded-[42px] liquid-glass p-6 sm:p-12 shadow-2xl relative overflow-hidden border border-white/40 dark:border-white/10">
+            <!-- Lab Eyebrow & Headline -->
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-10 pb-8 border-b border-black/[0.06] dark:border-white/[0.08]">
                 <div class="space-y-2 max-w-2xl">
-                    <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[#0071e3] dark:text-[#2997ff]">PHYSICAL COMPUTING</span>
-                    <h2 class="text-3xl sm:text-4xl font-semibold tracking-[-0.025em] text-[#1d1d1f] dark:text-[#f5f5f7]">
-                        From theory to silicon.
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-[#0071e3] dark:text-[#2997ff]">PHYSICAL COMPUTING &amp; IOT STUDIO</span>
+                    <h2 class="text-3xl sm:text-5xl font-semibold tracking-[-0.03em] text-[#1d1d1f] dark:text-[#f5f5f7]">
+                        Silicon meets software.
                     </h2>
                     <p class="text-sm sm:text-base text-[#6e6e73] dark:text-[#86868b] leading-relaxed">
-                        Connect theoretical research to physical microcontroller hardware with verified ESP32 pinouts, live environmental telemetry, and production C++ firmware.
+                        Debug microcontroller hardware directly in your browser with WebSerial telemetry, interactive 30-pin ESP32 multiplexing schematics, and deep-sleep battery autonomy estimators.
                     </p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
-                    <a href="esp32/index.html" class="rounded-full bg-[#0071e3] hover:bg-[#0077ed] px-6 py-2.5 text-xs sm:text-sm font-medium text-white transition-all shadow-[0_2px_10px_rgba(0,113,227,0.3)]">
-                        Launch Hardware Hub &rarr;
+                    <button onclick="openKioskMode()" class="rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 px-5 py-2.5 text-xs sm:text-sm font-medium text-white transition-all shadow-[0_4px_16px_rgba(16,185,129,0.35)] flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                        <span>Launch Exhibition Kiosk</span>
+                    </button>
+                    <a href="esp32/index.html" class="rounded-full bg-[#0071e3] hover:bg-[#0077ed] px-5 py-2.5 text-xs sm:text-sm font-medium text-white transition-all shadow-[0_2px_10px_rgba(0,113,227,0.3)]">
+                        Hardware Hub &rarr;
                     </a>
-                    <a href="esp32/weather_station.html" class="rounded-full border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] px-4 py-2.5 text-xs sm:text-sm font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
-                        Weather Telemetry
-                    </a>
-                    <a href="esp32/led_control.html" class="rounded-full border border-black/[0.1] dark:border-white/[0.12] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] px-4 py-2.5 text-xs sm:text-sm font-medium text-[#1d1d1f] dark:text-[#f5f5f7] transition-colors">
-                        LED Controller
-                    </a>
+                </div>
+            </div>
+
+            <!-- Segmented Studio Switcher Tabs -->
+            <div class="flex justify-center mb-10">
+                <div class="inline-flex rounded-full p-1.5 liquid-glass border border-white/50 dark:border-white/10 shadow-lg">
+                    <button onclick="switchIoTTab('serial')" id="iot-tab-serial" class="iot-nav-tab active rounded-full px-5 py-2 text-xs sm:text-sm font-medium transition-all duration-300 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-[#0071e3] dark:text-[#2997ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <span>WebSerial Live Monitor</span>
+                    </button>
+                    <button onclick="switchIoTTab('pinout')" id="iot-tab-pinout" class="iot-nav-tab rounded-full px-5 py-2 text-xs sm:text-sm font-medium transition-all duration-300 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                        <span>Smart Pinout &amp; Wiring</span>
+                    </button>
+                    <button onclick="switchIoTTab('battery')" id="iot-tab-battery" class="iot-nav-tab rounded-full px-5 py-2 text-xs sm:text-sm font-medium transition-all duration-300 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2" stroke-width="2"></rect><line x1="20" y1="10" x2="20" y2="14" stroke-width="2" stroke-linecap="round"></line><line x1="6" y1="11" x2="6" y2="13" stroke-width="2" stroke-linecap="round"></line><line x1="10" y1="11" x2="10" y2="13" stroke-width="2" stroke-linecap="round"></line></svg>
+                        <span>Battery &amp; Sleep Estimator</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ================= TAB 1: WEBSERIAL TERMINAL PANE ================= -->
+            <div id="iot-pane-serial" class="iot-lab-pane space-y-6">
+                <!-- Control Toolbar -->
+                <div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.08]">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div id="serial-status-indicator" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium bg-black/[0.04] dark:bg-white/[0.08] text-[#6e6e73] dark:text-[#86868b] border border-black/[0.06] dark:border-white/[0.08]">
+                            <span class="w-2.5 h-2.5 rounded-full bg-gray-400 transition-colors" id="serial-status-dot"></span>
+                            <span id="serial-status-text">Disconnected</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-[#6e6e73] dark:text-[#86868b]">
+                            <label for="serial-baud-select" class="font-medium">Baud:</label>
+                            <select id="serial-baud-select" onchange="onBaudRateChange()" class="rounded-xl bg-white dark:bg-[#1c1c1e] border border-black/[0.1] dark:border-white/[0.1] px-3 py-1.5 text-xs font-mono text-[#1d1d1f] dark:text-[#f5f5f7] focus:outline-none focus:ring-2 focus:ring-[#0071e3]">
+                                <option value="9600">9600</option>
+                                <option value="19200">19200</option>
+                                <option value="38400">38400</option>
+                                <option value="57600">57600</option>
+                                <option value="74880">74880 (Bootloader)</option>
+                                <option value="115200" selected>115200 (Default)</option>
+                                <option value="230400">230400</option>
+                                <option value="921600">921600 (High-Speed)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button id="serial-connect-btn" onclick="toggleWebSerialConnection()" class="liquid-accent-btn rounded-full px-5 py-2 text-xs font-medium text-white flex items-center gap-2 shadow-md">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                            <span id="serial-connect-text">Connect USB ESP32</span>
+                        </button>
+                        <button id="serial-sim-btn" onclick="toggleSerialSimulation()" class="rounded-full border border-[#0071e3]/40 dark:border-[#2997ff]/50 bg-[#0071e3]/10 dark:bg-[#2997ff]/15 hover:bg-[#0071e3]/20 text-[#0071e3] dark:text-[#2997ff] px-4 py-2 text-xs font-medium transition-all flex items-center gap-1.5 shadow-sm">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            <span id="serial-sim-text">⚡ Try Simulator Demo</span>
+                        </button>
+                        <button onclick="clearSerialTerminal()" class="rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] px-3.5 py-2 text-xs text-[#6e6e73] dark:text-[#86868b] transition-colors" title="Clear console output">
+                            Clear
+                        </button>
+                        <button onclick="copySerialLogs()" class="rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] px-3.5 py-2 text-xs text-[#6e6e73] dark:text-[#86868b] transition-colors" title="Copy all output to clipboard">
+                            Copy Logs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- macOS Liquid Glass Console Window -->
+                <div class="rounded-2xl overflow-hidden border border-black/[0.1] dark:border-white/10 shadow-2xl bg-[#090d13] text-[#e6edf3]">
+                    <!-- Window Header -->
+                    <div class="flex items-center justify-between px-4 py-2.5 bg-[#131720] border-b border-white/10 text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#ff5f56] inline-block shadow-sm"></span>
+                            <span class="w-3 h-3 rounded-full bg-[#ffbd2e] inline-block shadow-sm"></span>
+                            <span class="w-3 h-3 rounded-full bg-[#27c93f] inline-block shadow-sm"></span>
+                            <span class="ml-2 font-mono text-[11px] text-[#8b949e]">ESP32 Serial Monitor · <span id="serial-port-name-label">/dev/ttyUSB0</span> @ <span id="serial-active-baud-label">115200</span></span>
+                        </div>
+                        <div class="flex items-center gap-3 text-[11px] text-[#8b949e]">
+                            <label class="flex items-center gap-1.5 cursor-pointer">
+                                <input type="checkbox" id="serial-autoscroll-chk" checked class="rounded border-gray-600 bg-gray-800 text-[#0071e3] focus:ring-0">
+                                <span>Autoscroll</span>
+                            </label>
+                            <label class="flex items-center gap-1.5 cursor-pointer">
+                                <input type="checkbox" id="serial-timestamps-chk" checked class="rounded border-gray-600 bg-gray-800 text-[#0071e3] focus:ring-0">
+                                <span>Timestamps</span>
+                            </label>
+                            <span id="serial-line-count" class="font-mono">0 lines</span>
+                        </div>
+                    </div>
+
+                    <!-- Terminal Log Output Area -->
+                    <div id="serial-terminal-output" class="font-mono text-xs sm:text-[13px] leading-relaxed p-4 h-80 overflow-y-auto space-y-1 select-text scroll-smooth">
+                        <div class="text-[#8b949e] italic">// Connect your physical ESP32 board via USB, or click "⚡ Try Simulator Demo" above.</div>
+                        <div class="text-[#8b949e] italic">// Web Serial API is compatible with Chrome, Edge, and Android Chrome.</div>
+                    </div>
+
+                    <!-- Command TX Bar -->
+                    <div class="p-3 bg-[#131720] border-t border-white/10 flex flex-wrap items-center gap-2">
+                        <div class="flex-1 flex items-center gap-2 bg-[#090d13] border border-white/10 rounded-xl px-3 py-1.5 focus-within:border-[#0071e3]">
+                            <span class="text-[#58a6ff] font-mono text-xs font-bold">&gt;</span>
+                            <input type="text" id="serial-tx-input" placeholder="Type command to send (e.g. AT or restart) and press Enter..." class="flex-1 bg-transparent font-mono text-xs text-white placeholder-[#6e7681] focus:outline-none" onkeydown="handleSerialTxKeydown(event)">
+                        </div>
+                        <select id="serial-line-ending" class="rounded-xl bg-[#090d13] border border-white/10 px-3 py-1.5 text-xs font-mono text-[#8b949e] focus:outline-none">
+                            <option value="\r\n">Both NL &amp; CR (\r\n)</option>
+                            <option value="\n">Newline (\n)</option>
+                            <option value="\r">Carriage Return (\r)</option>
+                            <option value="">No line ending</option>
+                        </select>
+                        <button onclick="sendSerialCommand()" class="liquid-accent-btn rounded-xl px-4 py-1.5 text-xs font-medium text-white transition-all shadow-sm">
+                            Send TX
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Macro Chips -->
+                <div class="flex flex-wrap items-center gap-2 text-xs text-[#6e6e73] dark:text-[#86868b]">
+                    <span class="font-medium mr-1">Quick Macros:</span>
+                    <button onclick="sendQuickSerialCommand('AT')" class="px-2.5 py-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] hover:border-[#0071e3] transition-colors font-mono">AT</button>
+                    <button onclick="sendQuickSerialCommand('AT+GMR')" class="px-2.5 py-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] hover:border-[#0071e3] transition-colors font-mono">AT+GMR</button>
+                    <button onclick="sendQuickSerialCommand('WiFi.status()')" class="px-2.5 py-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] hover:border-[#0071e3] transition-colors font-mono">WiFi.status()</button>
+                    <button onclick="sendQuickSerialCommand('ESP.restart()')" class="px-2.5 py-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] hover:border-[#0071e3] transition-colors font-mono">ESP.restart()</button>
+                    <button onclick="sendQuickSerialCommand('help')" class="px-2.5 py-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] hover:border-[#0071e3] transition-colors font-mono">help</button>
+                </div>
+            </div>
+
+            <!-- ================= TAB 2: SMART PINOUT & WIRING PANE ================= -->
+            <div id="iot-pane-pinout" class="iot-lab-pane hidden space-y-6">
+                <!-- Filters & Presets -->
+                <div class="space-y-4">
+                    <!-- Sensor Selector Buttons -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] mr-1">Sensor Presets:</span>
+                        <button onclick="selectPinoutSensor('dht11')" id="pinout-sensor-dht11" class="pinout-sensor-btn active rounded-full px-3.5 py-1 text-xs font-medium transition-all">DHT11 / DHT22</button>
+                        <button onclick="selectPinoutSensor('oled')" id="pinout-sensor-oled" class="pinout-sensor-btn rounded-full px-3.5 py-1 text-xs font-medium transition-all">SSD1306 OLED (I2C)</button>
+                        <button onclick="selectPinoutSensor('ultrasonic')" id="pinout-sensor-ultrasonic" class="pinout-sensor-btn rounded-full px-3.5 py-1 text-xs font-medium transition-all">HC-SR04 Ultrasonic</button>
+                        <button onclick="selectPinoutSensor('servo')" id="pinout-sensor-servo" class="pinout-sensor-btn rounded-full px-3.5 py-1 text-xs font-medium transition-all">SG90 Servo (PWM)</button>
+                        <button onclick="selectPinoutSensor('neopixel')" id="pinout-sensor-neopixel" class="pinout-sensor-btn rounded-full px-3.5 py-1 text-xs font-medium transition-all">WS2812 NeoPixel</button>
+                        <button onclick="selectPinoutSensor('relay')" id="pinout-sensor-relay" class="pinout-sensor-btn rounded-full px-3.5 py-1 text-xs font-medium transition-all">1-Ch Relay</button>
+                        <button onclick="selectPinoutSensor('potentiometer')" id="pinout-sensor-potentiometer" class="pinout-sensor-btn rounded-full px-3.5 py-1 text-xs font-medium transition-all">Potentiometer (ADC)</button>
+                        <button onclick="selectPinoutSensor('bme280')" id="pinout-sensor-bme280" class="pinout-sensor-btn rounded-full px-3.5 py-1 text-xs font-medium transition-all">BME280 (SPI)</button>
+                    </div>
+
+                    <!-- Type Highlighter Pills -->
+                    <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-black/[0.06] dark:border-white/[0.08] text-xs">
+                        <span class="text-[#6e6e73] dark:text-[#86868b] mr-1">Highlight Mode:</span>
+                        <button onclick="highlightPinType('all')" id="pin-filter-all" class="pinout-type-btn active px-3 py-1 rounded-full text-[11px] font-medium transition-all">All Pins</button>
+                        <button onclick="highlightPinType('power')" id="pin-filter-power" class="pinout-type-btn px-3 py-1 rounded-full text-[11px] font-medium text-red-500 border border-red-500/20 hover:bg-red-500/10 transition-all">Power / GND</button>
+                        <button onclick="highlightPinType('adc')" id="pin-filter-adc" class="pinout-type-btn px-3 py-1 rounded-full text-[11px] font-medium text-amber-500 border border-amber-500/20 hover:bg-amber-500/10 transition-all">ADC Analog</button>
+                        <button onclick="highlightPinType('touch')" id="pin-filter-touch" class="pinout-type-btn px-3 py-1 rounded-full text-[11px] font-medium text-purple-500 border border-purple-500/20 hover:bg-purple-500/10 transition-all">Touch Pins</button>
+                        <button onclick="highlightPinType('i2c')" id="pin-filter-i2c" class="pinout-type-btn px-3 py-1 rounded-full text-[11px] font-medium text-blue-500 border border-blue-500/20 hover:bg-blue-500/10 transition-all">I2C / SPI</button>
+                        <button onclick="highlightPinType('dac')" id="pin-filter-dac" class="pinout-type-btn px-3 py-1 rounded-full text-[11px] font-medium text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/10 transition-all">DAC (Out)</button>
+                    </div>
+                </div>
+
+                <!-- Main Layout: SVG Board & Details Card -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Board Vector SVG Display -->
+                    <div class="lg:col-span-6 rounded-3xl liquid-glass p-6 border border-white/30 dark:border-white/10 relative overflow-hidden flex flex-col items-center">
+                        <div class="w-full flex items-center justify-between mb-4 text-xs">
+                            <span class="font-mono text-[#6e6e73] dark:text-[#86868b] font-semibold">ESP32-WROOM-32D (30-Pin NodeMCU)</span>
+                            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-[#0071e3]/10 text-[#0071e3] dark:text-[#2997ff] font-medium">Interactive Pins</span>
+                        </div>
+                        
+                        <div id="esp32-interactive-svg-container" class="w-full max-w-md mx-auto">
+                            <!-- SVG generated dynamically -->
+                        </div>
+
+                        <!-- Hover Inspector Tooltip -->
+                        <div id="pin-hover-tooltip" class="mt-4 w-full p-3 rounded-2xl bg-black/[0.03] dark:bg-white/[0.05] border border-black/[0.06] dark:border-white/[0.08] text-xs text-center font-mono min-h-[48px] flex items-center justify-center text-[#6e6e73] dark:text-[#86868b]">
+                            Hover over any pin to inspect its multiplexed hardware functions.
+                        </div>
+                    </div>
+
+                    <!-- Sensor Wiring & Starter Driver -->
+                    <div class="lg:col-span-6 space-y-6">
+                        <div class="rounded-3xl liquid-glass p-6 sm:p-7 border border-white/30 dark:border-white/10 space-y-5">
+                            <div class="flex items-start justify-between gap-4">
+                                <div>
+                                    <span id="pinout-sensor-badge" class="px-2.5 py-0.5 rounded-md text-[10px] font-mono uppercase tracking-wider bg-[#0071e3]/10 text-[#0071e3] dark:text-[#2997ff] font-semibold">Sensor Profile</span>
+                                    <h3 id="pinout-sensor-title" class="text-xl font-semibold text-[#1d1d1f] dark:text-[#f5f5f7] mt-1">DHT11 Temperature &amp; Humidity</h3>
+                                    <p id="pinout-sensor-desc" class="text-xs text-[#6e6e73] dark:text-[#86868b] mt-1 leading-relaxed">Single-bus digital temperature and humidity sensor with calibrated signal output.</p>
+                                </div>
+                                <div class="text-right shrink-0">
+                                    <span id="pinout-sensor-voltage" class="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">3.3V Logic</span>
+                                </div>
+                            </div>
+
+                            <!-- Hardware Notice / Wiring Tip -->
+                            <div id="pinout-sensor-notice" class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2.5">
+                                <svg class="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                <span id="pinout-sensor-notice-text">Place a 4.7kΩ–10kΩ pull-up resistor between the DATA pin and 3.3V power line for reliable timing.</span>
+                            </div>
+
+                            <!-- Wiring Table -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead>
+                                        <tr class="border-b border-black/[0.08] dark:border-white/[0.08] text-[#6e6e73] dark:text-[#86868b]">
+                                            <th class="pb-2 font-medium">Wire</th>
+                                            <th class="pb-2 font-medium">Sensor Pin</th>
+                                            <th class="pb-2 font-medium">ESP32 Pin</th>
+                                            <th class="pb-2 font-medium">Function</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pinout-wiring-tbody" class="divide-y divide-black/[0.04] dark:divide-white/[0.04] font-mono">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Code Generator -->
+                            <div class="pt-2 border-t border-black/[0.06] dark:border-white/[0.08]">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="switchPinoutCodeLang('arduino')" id="pinout-lang-arduino" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#0071e3] text-white transition-colors">Arduino C++</button>
+                                        <button onclick="switchPinoutCodeLang('python')" id="pinout-lang-python" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-black/[0.04] dark:bg-white/[0.08] text-[#6e6e73] dark:text-[#86868b] transition-colors">MicroPython</button>
+                                    </div>
+                                    <button onclick="copyPinoutCode()" class="px-3 py-1 rounded-lg border border-black/[0.08] dark:border-white/[0.1] text-xs font-medium text-[#0071e3] dark:text-[#2997ff] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                        <span>Copy Code</span>
+                                    </button>
+                                </div>
+                                <pre class="p-3.5 rounded-2xl bg-[#090d13] text-[#e6edf3] font-mono text-[11px] leading-relaxed overflow-x-auto max-h-56 select-text"><code id="pinout-code-block">// Code will render here</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= TAB 3: BATTERY & DEEP-SLEEP ESTIMATOR PANE ================= -->
+            <div id="iot-pane-battery" class="iot-lab-pane hidden space-y-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Controls (Left) -->
+                    <div class="lg:col-span-7 rounded-3xl liquid-glass p-6 sm:p-8 border border-white/30 dark:border-white/10 space-y-6">
+                        <div class="space-y-1">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-[#0071e3] dark:text-[#2997ff]">POWER CALCULATOR</span>
+                            <h3 class="text-xl font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Battery Autonomy &amp; Sleep Model</h3>
+                            <p class="text-xs text-[#6e6e73] dark:text-[#86868b]">Simulate battery life across real-world ESP32 duty cycles, sleep states, and voltage regulator quiescent draw.</p>
+                        </div>
+
+                        <!-- Battery Presets -->
+                        <div class="space-y-2">
+                            <label class="text-xs font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Battery Chemistry Preset:</label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button onclick="setBatteryPreset(2600, '18650 Li-ion')" id="bat-preset-18650" class="battery-preset-btn active p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-left transition-all">
+                                    <div class="font-semibold text-xs text-[#1d1d1f] dark:text-[#f5f5f7]">18650 Li-ion</div>
+                                    <div class="text-[10px] text-[#86868b]">2600 mAh · 3.7V</div>
+                                </button>
+                                <button onclick="setBatteryPreset(2000, '2x AA Alkaline')" id="bat-preset-aa" class="battery-preset-btn p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-left transition-all">
+                                    <div class="font-semibold text-xs text-[#1d1d1f] dark:text-[#f5f5f7]">2x AA Cells</div>
+                                    <div class="text-[10px] text-[#86868b]">2000 mAh · 3.0V</div>
+                                </button>
+                                <button onclick="setBatteryPreset(1200, '1S LiPo Pouch')" id="bat-preset-lipo" class="battery-preset-btn p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-left transition-all">
+                                    <div class="font-semibold text-xs text-[#1d1d1f] dark:text-[#f5f5f7]">LiPo Pouch</div>
+                                    <div class="text-[10px] text-[#86868b]">1200 mAh · 3.7V</div>
+                                </button>
+                                <button onclick="setBatteryPreset(550, '9V Block Battery')" id="bat-preset-9v" class="battery-preset-btn p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-left transition-all">
+                                    <div class="font-semibold text-xs text-[#1d1d1f] dark:text-[#f5f5f7]">9V Block</div>
+                                    <div class="text-[10px] text-[#86868b]">550 mAh · 9.0V</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sliders -->
+                        <div class="space-y-4 pt-2">
+                            <!-- Capacity Slider -->
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between text-xs font-medium">
+                                    <span class="text-[#1d1d1f] dark:text-[#f5f5f7]">Battery Usable Capacity</span>
+                                    <span id="label-battery-capacity" class="font-mono text-[#0071e3] dark:text-[#2997ff] font-bold">2600 mAh</span>
+                                </div>
+                                <input type="range" id="input-battery-capacity" min="200" max="10000" step="50" value="2600" oninput="calculateBatteryLife()" class="w-full accent-[#0071e3]">
+                            </div>
+
+                            <!-- Active Draw & Time -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="space-y-1.5">
+                                    <div class="flex items-center justify-between text-xs font-medium">
+                                        <span class="text-[#1d1d1f] dark:text-[#f5f5f7]">Active Current (WiFi/CPU)</span>
+                                        <span id="label-active-current" class="font-mono text-[#0071e3] dark:text-[#2997ff] font-bold">160 mA</span>
+                                    </div>
+                                    <input type="range" id="input-active-current" min="20" max="350" step="5" value="160" oninput="calculateBatteryLife()" class="w-full accent-[#0071e3]">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <div class="flex items-center justify-between text-xs font-medium">
+                                        <span class="text-[#1d1d1f] dark:text-[#f5f5f7]">Active Duration</span>
+                                        <span id="label-active-time" class="font-mono text-[#0071e3] dark:text-[#2997ff] font-bold">3.0 s</span>
+                                    </div>
+                                    <input type="range" id="input-active-time" min="0.5" max="30" step="0.5" value="3.0" oninput="calculateBatteryLife()" class="w-full accent-[#0071e3]">
+                                </div>
+                            </div>
+
+                            <!-- Sleep Modes -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">Sleep Mode Current:</label>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                    <button onclick="setSleepCurrentPreset(10)" id="sleep-preset-deep" class="sleep-preset-btn active p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-center text-xs transition-all">
+                                        <div class="font-bold text-[#0071e3] dark:text-[#2997ff]">10 µA</div>
+                                        <div class="text-[10px] text-[#86868b]">Deep Sleep</div>
+                                    </button>
+                                    <button onclick="setSleepCurrentPreset(800)" id="sleep-preset-light" class="sleep-preset-btn p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-center text-xs transition-all">
+                                        <div class="font-bold">800 µA</div>
+                                        <div class="text-[10px] text-[#86868b]">Light Sleep</div>
+                                    </button>
+                                    <button onclick="setSleepCurrentPreset(20000)" id="sleep-preset-modem" class="sleep-preset-btn p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-center text-xs transition-all">
+                                        <div class="font-bold">20 mA</div>
+                                        <div class="text-[10px] text-[#86868b]">Modem Sleep</div>
+                                    </button>
+                                    <button onclick="setSleepCurrentPreset(80000)" id="sleep-preset-idle" class="sleep-preset-btn p-2.5 rounded-2xl border border-black/[0.08] dark:border-white/[0.1] text-center text-xs transition-all">
+                                        <div class="font-bold">80 mA</div>
+                                        <div class="text-[10px] text-[#86868b]">No Sleep (Idle)</div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Sleep Duration -->
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between text-xs font-medium">
+                                    <span class="text-[#1d1d1f] dark:text-[#f5f5f7]">Sleep Interval</span>
+                                    <span id="label-sleep-time" class="font-mono text-[#0071e3] dark:text-[#2997ff] font-bold">15 min</span>
+                                </div>
+                                <input type="range" id="input-sleep-time" min="1" max="120" step="1" value="15" oninput="calculateBatteryLife()" class="w-full accent-[#0071e3]">
+                            </div>
+
+                            <!-- Derating -->
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between text-xs font-medium">
+                                    <span class="text-[#1d1d1f] dark:text-[#f5f5f7]">Regulator &amp; Quiescent Derating</span>
+                                    <span id="label-derating" class="font-mono text-[#86868b]">10%</span>
+                                </div>
+                                <input type="range" id="input-derating" min="0" max="30" step="5" value="10" oninput="calculateBatteryLife()" class="w-full accent-[#0071e3]">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Column (Right) -->
+                    <div class="lg:col-span-5 rounded-3xl liquid-glass p-6 sm:p-8 border border-white/30 dark:border-white/10 flex flex-col justify-between space-y-6">
+                        <div class="text-center space-y-2">
+                            <span class="text-xs font-semibold tracking-wider text-[#6e6e73] dark:text-[#86868b] uppercase">ESTIMATED RUNTIME</span>
+                            
+                            <!-- Big Metric -->
+                            <div id="battery-result-autonomy" class="text-5xl sm:text-6xl font-extrabold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">
+                                241 <span class="text-2xl font-semibold text-[#0071e3] dark:text-[#2997ff]">Days</span>
+                            </div>
+                            
+                            <p id="battery-result-subtext" class="text-xs text-[#6e6e73] dark:text-[#86868b]">~7.9 Months of autonomous sensor telemetry</p>
+                        </div>
+
+                        <!-- Circular Gauge Ring -->
+                        <div class="relative w-44 h-44 mx-auto flex items-center justify-center">
+                            <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" class="text-black/[0.06] dark:text-white/[0.08]" stroke-width="10"/>
+                                <circle id="battery-ring-circle" cx="50" cy="50" r="42" fill="none" stroke="url(#battery-gauge-grad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="263.89" stroke-dashoffset="35" class="transition-all duration-700 ease-out"/>
+                                <defs>
+                                    <linearGradient id="battery-gauge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#34d399"/>
+                                        <stop offset="50%" stop-color="#10b981"/>
+                                        <stop offset="100%" stop-color="#059669"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="absolute text-center">
+                                <span id="battery-ring-percent" class="text-2xl font-bold font-mono text-[#1d1d1f] dark:text-[#f5f5f7]">94%</span>
+                                <div class="text-[9px] font-semibold text-[#86868b] uppercase tracking-wider">Autonomy Index</div>
+                            </div>
+                        </div>
+
+                        <!-- Secondary Metrics -->
+                        <div class="grid grid-cols-2 gap-3 text-xs pt-4 border-t border-black/[0.06] dark:border-white/[0.08]">
+                            <div class="p-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03]">
+                                <div class="text-[#86868b] text-[10px] uppercase font-semibold">Average Current</div>
+                                <div id="battery-result-avg-current" class="text-base font-bold font-mono text-[#1d1d1f] dark:text-[#f5f5f7] mt-0.5">0.38 mA</div>
+                            </div>
+                            <div class="p-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03]">
+                                <div class="text-[#86868b] text-[10px] uppercase font-semibold">Duty Cycle</div>
+                                <div id="battery-result-duty" class="text-base font-bold font-mono text-[#1d1d1f] dark:text-[#f5f5f7] mt-0.5">0.33 %</div>
+                            </div>
+                            <div class="p-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03]">
+                                <div class="text-[#86868b] text-[10px] uppercase font-semibold">Wake Cycles</div>
+                                <div id="battery-result-cycles" class="text-base font-bold font-mono text-[#1d1d1f] dark:text-[#f5f5f7] mt-0.5">23,150</div>
+                            </div>
+                            <div class="p-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03]">
+                                <div class="text-[#86868b] text-[10px] uppercase font-semibold">Sleep Energy Saved</div>
+                                <div id="battery-result-savings" class="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400 mt-0.5">99.7%</div>
+                            </div>
+                        </div>
+
+                        <!-- Advice Callout -->
+                        <div id="battery-advice-banner" class="p-3.5 rounded-2xl bg-[#0071e3]/10 dark:bg-[#2997ff]/10 text-xs text-[#0071e3] dark:text-[#2997ff] flex items-start gap-2.5">
+                            <svg class="w-4 h-4 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span id="battery-advice-text">Using ESP32 deep sleep (10µA) reduces power consumption by over 99%, providing multi-month battery autonomy.</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -5454,9 +5878,1495 @@ while True:
             });
         }
         
-    </script>
+    
+
+// =========================================================================
+// PHYSICAL COMPUTING & HARDWARE LAB JAVASCRIPT SUITE
+// =========================================================================
+
+// --- 1. Tab Switcher ---
+function switchIoTTab(tab) {
+    const tabs = ['serial', 'pinout', 'battery'];
+    tabs.forEach(t => {
+        const btn = document.getElementById(`iot-tab-${t}`);
+        const pane = document.getElementById(`iot-pane-${t}`);
+        if (btn) {
+            if (t === tab) {
+                btn.classList.add('active', 'bg-white', 'dark:bg-[#2c2c2e]', 'shadow-sm', 'text-[#1d1d1f]', 'dark:text-[#f5f5f7]');
+                btn.classList.remove('text-[#6e6e73]', 'dark:text-[#86868b]');
+            } else {
+                btn.classList.remove('active', 'bg-white', 'dark:bg-[#2c2c2e]', 'shadow-sm', 'text-[#1d1d1f]', 'dark:text-[#f5f5f7]');
+                btn.classList.add('text-[#6e6e73]', 'dark:text-[#86868b]');
+            }
+        }
+        if (pane) {
+            if (t === tab) {
+                pane.classList.remove('hidden');
+            } else {
+                pane.classList.add('hidden');
+            }
+        }
+    });
+
+    if (tab === 'pinout') {
+        renderEsp32InteractiveSvg();
+        selectPinoutSensor(selectedPinoutSensor);
+    } else if (tab === 'battery') {
+        calculateBatteryLife();
+    }
+}
+
+// --- 2. WebSerial Live Monitor ---
+let serialPort = null;
+let serialReader = null;
+let isSerialConnected = false;
+let isSerialSimulating = false;
+let serialSimInterval = null;
+let serialLineCount = 0;
+let serialTxHistory = [];
+let serialTxHistoryIndex = -1;
+
+function updateSerialStatus(status, text, dotColor) {
+    const statusText = document.getElementById('serial-status-text');
+    const statusDot = document.getElementById('serial-status-dot');
+    const connectBtn = document.getElementById('serial-connect-text');
+    const portLabel = document.getElementById('serial-port-name-label');
+
+    if (statusText) statusText.textContent = text;
+    if (statusDot) {
+        statusDot.className = `w-2.5 h-2.5 rounded-full ${dotColor} transition-colors`;
+    }
+    if (connectBtn) {
+        connectBtn.textContent = isSerialConnected ? 'Disconnect ESP32' : 'Connect USB ESP32';
+    }
+    if (portLabel) {
+        portLabel.textContent = isSerialConnected ? 'USB CDC / COM' : (isSerialSimulating ? 'Simulated Serial' : '/dev/ttyUSB0');
+    }
+}
+
+function onBaudRateChange() {
+    const select = document.getElementById('serial-baud-select');
+    const label = document.getElementById('serial-active-baud-label');
+    if (select && label) {
+        label.textContent = select.value;
+    }
+}
+
+function appendSerialLog(text, type = 'rx') {
+    const output = document.getElementById('serial-terminal-output');
+    if (!output) return;
+
+    serialLineCount++;
+    const lineCountEl = document.getElementById('serial-line-count');
+    if (lineCountEl) lineCountEl.textContent = `${serialLineCount} lines`;
+
+    const showTimestamps = document.getElementById('serial-timestamps-chk')?.checked ?? true;
+    const now = new Date();
+    const timeStr = showTimestamps ? `[${now.toTimeString().split(' ')[0]}.${String(now.getMilliseconds()).padStart(3, '0')}] ` : '';
+
+    const line = document.createElement('div');
+    line.className = 'font-mono text-xs flex items-start gap-1 break-all';
+
+    let colorClass = 'text-[#e6edf3]';
+    if (type === 'tx') colorClass = 'text-[#58a6ff] font-semibold';
+    else if (type === 'system') colorClass = 'text-[#e3b341]';
+    else if (type === 'error') colorClass = 'text-[#f85149]';
+
+    line.innerHTML = `<span class="text-[#8b949e] select-none text-[10px] w-20 shrink-0 font-mono">${timeStr}</span><span class="${colorClass}">${escapeHtml(text)}</span>`;
+    output.appendChild(line);
+
+    const autoscroll = document.getElementById('serial-autoscroll-chk')?.checked ?? true;
+    if (autoscroll) {
+        output.scrollTop = output.scrollHeight;
+    }
+}
+
+async function toggleWebSerialConnection() {
+    if (isSerialConnected) {
+        // Disconnect
+        try {
+            if (serialReader) {
+                await serialReader.cancel();
+                serialReader = null;
+            }
+            if (serialPort) {
+                await serialPort.close();
+                serialPort = null;
+            }
+        } catch (e) {
+            console.warn('Error during serial close:', e);
+        }
+        isSerialConnected = false;
+        updateSerialStatus('disconnected', 'Disconnected', 'bg-gray-400');
+        appendSerialLog('// Serial port disconnected.', 'system');
+        if (typeof showToast === 'function') showToast('ESP32 Disconnected');
+        return;
+    }
+
+    if (!('serial' in navigator)) {
+        appendSerialLog('// Web Serial API is not supported in this browser. Please use Google Chrome, Microsoft Edge, or Android Chrome.', 'error');
+        appendSerialLog('// Click "⚡ Try Simulator Demo" above to test all features with simulated telemetry!', 'system');
+        if (typeof showToast === 'function') showToast('Web Serial requires Chrome or Edge');
+        return;
+    }
+
+    try {
+        const baudRate = parseInt(document.getElementById('serial-baud-select')?.value || '115200', 10);
+        appendSerialLog(`// Requesting USB Port at ${baudRate} baud...`, 'system');
+        serialPort = await navigator.serial.requestPort();
+        await serialPort.open({ baudRate });
+        
+        isSerialConnected = true;
+        if (isSerialSimulating) toggleSerialSimulation(); // Stop simulation if hardware connects
+
+        updateSerialStatus('connected', `Connected (${baudRate} baud)`, 'bg-emerald-500 animate-pulse');
+        appendSerialLog(`// Port opened successfully at ${baudRate} 8-N-1. Streaming...`, 'system');
+        if (typeof showToast === 'function') showToast('ESP32 Connected via USB!');
+
+        readSerialStream();
+    } catch (err) {
+        isSerialConnected = false;
+        updateSerialStatus('disconnected', 'Disconnected', 'bg-gray-400');
+        appendSerialLog(`// Connection failed or cancelled: ${err.message}`, 'error');
+    }
+}
+
+async function readSerialStream() {
+    while (serialPort && serialPort.readable && isSerialConnected) {
+        const textDecoder = new TextDecoderStream();
+        const readableStreamClosed = serialPort.readable.pipeTo(textDecoder.writable);
+        serialReader = textDecoder.readable.getReader();
+        try {
+            let buffer = '';
+            while (true) {
+                const { value, done } = await serialReader.read();
+                if (done) break;
+                buffer += value;
+                const lines = buffer.split('\n');
+                buffer = lines.pop(); // Keep incomplete line
+                for (const line of lines) {
+                    appendSerialLog(line.replace(/\r$/, ''), 'rx');
+                }
+            }
+        } catch (err) {
+            console.warn('Serial stream read error:', err);
+        } finally {
+            serialReader.releaseLock();
+        }
+    }
+}
+
+function toggleSerialSimulation() {
+    const simBtn = document.getElementById('serial-sim-btn');
+    const simText = document.getElementById('serial-sim-text');
+
+    if (isSerialSimulating) {
+        // Stop simulation
+        clearInterval(serialSimInterval);
+        serialSimInterval = null;
+        isSerialSimulating = false;
+        if (simText) simText.textContent = '⚡ Try Simulator Demo';
+        updateSerialStatus('disconnected', 'Disconnected', 'bg-gray-400');
+        appendSerialLog('// Simulation stopped.', 'system');
+        return;
+    }
+
+    if (isSerialConnected) {
+        toggleWebSerialConnection(); // Disconnect real hardware first
+    }
+
+    isSerialSimulating = true;
+    if (simText) simText.textContent = '⏹ Stop Simulation';
+    updateSerialStatus('simulating', 'Simulating (ESP32-D0WDQ6)', 'bg-[#0071e3] animate-pulse');
+    appendSerialLog('// === ESP32-WROOM-32 SYSTEM BOOTLOADER INITIALIZED ===', 'system');
+
+    const bootSteps = [
+        'rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)',
+        'configsip: 0, SPIWP:0xee',
+        'clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00',
+        'mode:DIO, clock div:2',
+        'load:0x3fff0018,len:4',
+        'load:0x3fff001c,len:1044',
+        'load:0x40078000,len:10124',
+        'ho 0 tail 12 room 4',
+        'load:0x40080400,len:5828',
+        'entry 0x400806ac',
+        '[BOOT] CPU: ESP32-D0WDQ6 (240MHz Dual-Core Xtensa LX6)',
+        '[BOOT] Flash: 4MB QSPI | Free Heap: 298,420 bytes',
+        '[WIFI] Connecting to SSID: ScienceFair_Lab_Mesh...',
+        '[WIFI] Connected! IP: 192.168.1.142 | RSSI: -48 dBm',
+        '[I2C] Scanning bus at GPIO 21 (SDA) / 22 (SCL)...',
+        '[I2C] SSD1306 OLED (0x3C) and BME280 (0x76) ready.'
+    ];
+
+    let stepIdx = 0;
+    const bootTimer = setInterval(() => {
+        if (!isSerialSimulating) {
+            clearInterval(bootTimer);
+            return;
+        }
+        if (stepIdx < bootSteps.length) {
+            appendSerialLog(bootSteps[stepIdx], 'rx');
+            stepIdx++;
+        } else {
+            clearInterval(bootTimer);
+            startSimulatedTelemetry();
+        }
+    }, 120);
+}
+
+function startSimulatedTelemetry() {
+    let packetSeq = 1;
+    serialSimInterval = setInterval(() => {
+        if (!isSerialSimulating) return;
+        const temp = (23.5 + (Math.sin(packetSeq * 0.4) * 2.2) + (Math.random() * 0.4)).toFixed(1);
+        const hum = (52.0 + (Math.cos(packetSeq * 0.3) * 5.0) + (Math.random() * 0.8)).toFixed(1);
+        const pres = (1013.25 + (Math.sin(packetSeq * 0.1) * 1.5)).toFixed(2);
+        const battMv = 4120 - Math.floor(packetSeq * 0.8);
+        
+        appendSerialLog(`[TELEMETRY #${packetSeq}] T: ${temp}°C | RH: ${hum}% | P: ${pres} hPa | Vbatt: ${battMv}mV`, 'rx');
+        packetSeq++;
+    }, 2000);
+}
+
+function clearSerialTerminal() {
+    const output = document.getElementById('serial-terminal-output');
+    if (output) {
+        output.innerHTML = '<div class="text-[#8b949e] italic">// Terminal buffer cleared.</div>';
+    }
+    serialLineCount = 0;
+    const lineCountEl = document.getElementById('serial-line-count');
+    if (lineCountEl) lineCountEl.textContent = '0 lines';
+}
+
+function copySerialLogs() {
+    const output = document.getElementById('serial-terminal-output');
+    if (!output) return;
+    const text = output.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        if (typeof showToast === 'function') showToast('Serial logs copied to clipboard!');
+    });
+}
+
+async function sendSerialCommand() {
+    const input = document.getElementById('serial-tx-input');
+    if (!input || !input.value.trim()) return;
+
+    const cmd = input.value.trim();
+    const ending = document.getElementById('serial-line-ending')?.value ?? '\\r\\n';
+    const fullCmd = cmd + ending;
+
+    serialTxHistory.push(cmd);
+    serialTxHistoryIndex = serialTxHistory.length;
+    input.value = '';
+
+    appendSerialLog(`> ${cmd}`, 'tx');
+
+    if (isSerialConnected && serialPort && serialPort.writable) {
+        try {
+            const encoder = new TextEncoder();
+            const writer = serialPort.writable.getWriter();
+            await writer.write(encoder.encode(fullCmd));
+            writer.releaseLock();
+        } catch (e) {
+            appendSerialLog(`// Error writing command: ${e.message}`, 'error');
+        }
+    } else if (isSerialSimulating) {
+        // Simulated command response
+        setTimeout(() => {
+            if (cmd === 'AT') {
+                appendSerialLog('OK', 'rx');
+            } else if (cmd === 'AT+GMR') {
+                appendSerialLog('AT version:2.2.0.0\nSDK version:v4.4.2\ncompile time:Nov 2026\nOK', 'rx');
+            } else if (cmd === 'WiFi.status()') {
+                appendSerialLog('WL_CONNECTED (3) | RSSI: -48 dBm | IP: 192.168.1.142', 'rx');
+            } else if (cmd === 'ESP.restart()') {
+                appendSerialLog('Restarting ESP32 System via software watchdog...', 'system');
+                setTimeout(() => toggleSerialSimulation(), 300);
+            } else if (cmd === 'help') {
+                appendSerialLog('Available Demo Commands: AT, AT+GMR, WiFi.status(), ESP.restart(), help', 'rx');
+            } else {
+                appendSerialLog(`ESP32 Echo: "${cmd}" received (${cmd.length} bytes)`, 'rx');
+            }
+        }, 80);
+    } else {
+        appendSerialLog('// Port not open. Connect an ESP32 or click "⚡ Try Simulator Demo".', 'error');
+    }
+}
+
+function sendQuickSerialCommand(cmd) {
+    const input = document.getElementById('serial-tx-input');
+    if (input) {
+        input.value = cmd;
+        sendSerialCommand();
+    }
+}
+
+function handleSerialTxKeydown(e) {
+    if (e.key === 'Enter') {
+        sendSerialCommand();
+    } else if (e.key === 'ArrowUp') {
+        if (serialTxHistory.length > 0 && serialTxHistoryIndex > 0) {
+            serialTxHistoryIndex--;
+            e.target.value = serialTxHistory[serialTxHistoryIndex];
+        }
+    } else if (e.key === 'ArrowDown') {
+        if (serialTxHistoryIndex < serialTxHistory.length - 1) {
+            serialTxHistoryIndex++;
+            e.target.value = serialTxHistory[serialTxHistoryIndex];
+        } else {
+            serialTxHistoryIndex = serialTxHistory.length;
+            e.target.value = '';
+        }
+    }
+}
+
+// --- 3. Smart Pinout & Wiring Explorer ---
+const esp32PinoutCatalog = [
+    // Left side pins (top to bottom)
+    { id: '3V3', name: '3V3', label: '3V3', side: 'left', y: 40, type: ['power'], desc: '3.3V Regulated Output (Max ~500mA from LDO)' },
+    { id: 'EN', name: 'EN / RST', label: 'EN', side: 'left', y: 64, type: ['gpio'], desc: 'Chip Enable / Active-Low Reset (Connect to GND to reboot)' },
+    { id: 'VP', name: 'GPIO 36', label: 'VP (36)', side: 'left', y: 88, type: ['adc'], desc: 'SENSOR_VP · ADC1_CH0 · Input Only (No Internal Pullup)' },
+    { id: 'VN', name: 'GPIO 39', label: 'VN (39)', side: 'left', y: 112, type: ['adc'], desc: 'SENSOR_VN · ADC1_CH3 · Input Only (No Internal Pullup)' },
+    { id: 'D34', name: 'GPIO 34', label: 'D34', side: 'left', y: 136, type: ['adc'], desc: 'ADC1_CH6 · Input Only (Ideal for Analog Sensors / Battery Monitor)' },
+    { id: 'D35', name: 'GPIO 35', label: 'D35', side: 'left', y: 160, type: ['adc'], desc: 'ADC1_CH7 · Input Only (No Internal Pullup)' },
+    { id: 'D32', name: 'GPIO 32', label: 'D32', side: 'left', y: 184, type: ['adc', 'touch'], desc: 'ADC1_CH4 · Touch9 · RTC_GPIO9' },
+    { id: 'D33', name: 'GPIO 33', label: 'D33', side: 'left', y: 208, type: ['adc', 'touch'], desc: 'ADC1_CH5 · Touch8 · RTC_GPIO8' },
+    { id: 'D25', name: 'GPIO 25', label: 'D25', side: 'left', y: 232, type: ['adc', 'dac'], desc: 'DAC1 (Analog 8-Bit Voltage Out) · ADC2_CH8' },
+    { id: 'D26', name: 'GPIO 26', label: 'D26', side: 'left', y: 256, type: ['adc', 'dac'], desc: 'DAC2 (Analog 8-Bit Voltage Out) · ADC2_CH9' },
+    { id: 'D27', name: 'GPIO 27', label: 'D27', side: 'left', y: 280, type: ['adc', 'touch', 'pwm'], desc: 'Touch7 · ADC2_CH7 · PWM Capable' },
+    { id: 'D14', name: 'GPIO 14', label: 'D14', side: 'left', y: 304, type: ['adc', 'touch', 'i2c'], desc: 'Touch6 · ADC2_CH6 · HSPI_CLK' },
+    { id: 'D12', name: 'GPIO 12', label: 'D12', side: 'left', y: 328, type: ['adc', 'touch', 'i2c'], desc: 'Touch5 · ADC2_CH5 · HSPI_MISO (Boot strap pin)' },
+    { id: 'D13', name: 'GPIO 13', label: 'D13', side: 'left', y: 352, type: ['adc', 'touch', 'pwm'], desc: 'Touch4 · ADC2_CH4 · HSPI_MOSI · PWM' },
+    { id: 'GND_L', name: 'GND', label: 'GND', side: 'left', y: 376, type: ['power'], desc: 'System Ground Common Reference' },
+
+    // Right side pins (top to bottom)
+    { id: 'VIN', name: 'VIN (5V)', label: 'VIN', side: 'right', y: 40, type: ['power'], desc: 'External Power Input (5V - 12V DC input to onboard 3.3V LDO)' },
+    { id: 'GND_R', name: 'GND', label: 'GND', side: 'right', y: 64, type: ['power'], desc: 'System Ground Common Reference' },
+    { id: 'D15', name: 'GPIO 15', label: 'D15', side: 'right', y: 88, type: ['adc', 'touch', 'pwm'], desc: 'Touch3 · ADC2_CH3 · HSPI_CS · PWM' },
+    { id: 'D2', name: 'GPIO 2', label: 'D2', side: 'right', y: 112, type: ['adc', 'touch', 'pwm'], desc: 'Onboard Blue LED · Touch2 · ADC2_CH2' },
+    { id: 'D0', name: 'GPIO 0', label: 'D0', side: 'right', y: 136, type: ['adc', 'touch'], desc: 'BOOT Button · Touch1 · ADC2_CH1' },
+    { id: 'D4', name: 'GPIO 4', label: 'D4', side: 'right', y: 160, type: ['adc', 'touch', 'pwm'], desc: 'Touch0 · ADC2_CH0 · PWM (Default 1-Wire DHT Data)' },
+    { id: 'D16', name: 'GPIO 16', label: 'RX2 (16)', side: 'right', y: 184, type: ['i2c'], desc: 'UART2 RX · High-speed Hardware Serial' },
+    { id: 'D17', name: 'GPIO 17', label: 'TX2 (17)', side: 'right', y: 208, type: ['i2c'], desc: 'UART2 TX · High-speed Hardware Serial' },
+    { id: 'D5', name: 'GPIO 5', label: 'D5', side: 'right', y: 232, type: ['pwm', 'i2c'], desc: 'VSPI_CS · PWM Timer' },
+    { id: 'D18', name: 'GPIO 18', label: 'D18', side: 'right', y: 256, type: ['i2c', 'pwm'], desc: 'VSPI_SCK (SPI Clock) · PWM' },
+    { id: 'D19', name: 'GPIO 19', label: 'D19', side: 'right', y: 280, type: ['i2c', 'pwm'], desc: 'VSPI_MISO (Master In Slave Out) · PWM' },
+    { id: 'D21', name: 'GPIO 21', label: 'D21 (SDA)', side: 'right', y: 304, type: ['i2c'], desc: 'Default I2C Data (SDA) · Wire.begin()' },
+    { id: 'RX0', name: 'GPIO 3', label: 'RX0', side: 'right', y: 328, type: ['i2c'], desc: 'UART0 RX · Connected to USB-to-UART Bridge' },
+    { id: 'TX0', name: 'GPIO 1', label: 'TX0', side: 'right', y: 352, type: ['i2c'], desc: 'UART0 TX · Connected to USB-to-UART Bridge' },
+    { id: 'D22', name: 'GPIO 22', label: 'D22 (SCL)', side: 'right', y: 376, type: ['i2c'], desc: 'Default I2C Clock (SCL) · Wire.begin()' },
+    { id: 'D23', name: 'GPIO 23', label: 'D23 (MOSI)', side: 'right', y: 400, type: ['i2c'], desc: 'VSPI_MOSI (Master Out Slave In)' }
+];
+
+const sensorProfiles = {
+    dht11: {
+        title: 'DHT11 / DHT22 Temp & Humidity',
+        desc: 'Single-bus digital temperature and humidity sensor with calibrated signal output.',
+        voltage: '3.3V Logic',
+        notice: 'Place a 4.7kΩ–10kΩ pull-up resistor between DATA and 3.3V power line for reliable bus timing.',
+        highlightPins: ['3V3', 'GND_L', 'D4'],
+        connections: [
+            { wire: 'Red', pin: 'VCC (+)', esp: '3V3', role: '3.3V Power' },
+            { wire: 'Black', pin: 'GND (-)', esp: 'GND', role: 'Ground' },
+            { wire: 'Yellow', pin: 'DATA', esp: 'GPIO 4 (D4)', role: 'Single-Bus Bidirectional Signal' }
+        ],
+        arduino: `#include <DHT.h>
+#define DHTPIN 4
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  Serial.println("DHT11 sensor online");
+}
+
+void loop() {
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+  if (!isnan(temp) && !isnan(hum)) {
+    Serial.printf("Temperature: %.1f C | Humidity: %.1f %%\\n", temp, hum);
+  }
+  delay(2000);
+}`,
+        python: `import dht
+from machine import Pin
+import time
+
+sensor = dht.DHT11(Pin(4))
+
+while True:
+    try:
+        sensor.measure()
+        print("Temp: {} C, Humidity: {}%".format(sensor.temperature(), sensor.humidity()))
+    except OSError:
+        print("Sensor read error")
+    time.sleep(2)
+`
+    },
+    oled: {
+        title: 'SSD1306 0.96" I2C OLED (128x64)',
+        desc: 'Monochrome graphics display over standard high-speed 400kHz I2C protocol.',
+        voltage: '3.3V Logic',
+        notice: 'Default I2C address is 0x3C (or 0x3D). Connect directly to hardware I2C pins GPIO 21 and 22.',
+        highlightPins: ['3V3', 'GND_L', 'D21', 'D22'],
+        connections: [
+            { wire: 'Red', pin: 'VCC', esp: '3V3', role: 'Power' },
+            { wire: 'Black', pin: 'GND', esp: 'GND', role: 'Ground' },
+            { wire: 'Blue', pin: 'SDA', esp: 'GPIO 21 (D21)', role: 'I2C Serial Data' },
+            { wire: 'Yellow', pin: 'SCL', esp: 'GPIO 22 (D22)', role: 'I2C Serial Clock' }
+        ],
+        arduino: `#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22);
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println("SSD1306 allocation failed");
+    for(;;);
+  }
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(10, 20);
+  display.println("EduSphere 2.5");
+  display.display();
+}
+
+void loop() {}`,
+        python: `from machine import Pin, SoftI2C
+import ssd1306
+
+i2c = SoftI2C(scl=Pin(22), sda=Pin(21))
+oled = ssd1306.SSD1306_I2C(128, 64, i2c)
+oled.fill(0)
+oled.text("EduSphere 2.5", 10, 25)
+oled.show()
+`
+    },
+    ultrasonic: {
+        title: 'HC-SR04 Ultrasonic Distance Sensor',
+        desc: 'Precision sonar distance measurement sensor measuring time-of-flight echo return.',
+        voltage: '5V VCC / 3.3V Echo',
+        notice: 'CRITICAL: HC-SR04 Echo pin outputs 5V! Use a voltage divider (1kΩ + 2kΩ) to drop Echo to 3.3V before connecting to ESP32 GPIO 18.',
+        highlightPins: ['VIN', 'GND_R', 'D5', 'D18'],
+        connections: [
+            { wire: 'Red', pin: 'VCC', esp: 'VIN (5V)', role: '5V Power Supply' },
+            { wire: 'Black', pin: 'GND', esp: 'GND', role: 'Ground' },
+            { wire: 'Yellow', pin: 'TRIG', esp: 'GPIO 5 (D5)', role: '10µs Trigger Pulse Out' },
+            { wire: 'Blue', pin: 'ECHO', esp: 'GPIO 18 (via divider)', role: 'Echo In (Safe 3.3V)' }
+        ],
+        arduino: `#define TRIG_PIN 5
+#define ECHO_PIN 18
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+}
+
+void loop() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  long duration = pulseIn(ECHO_PIN, HIGH);
+  float distanceCm = duration * 0.034 / 2;
+  Serial.printf("Distance: %.1f cm\\n", distanceCm);
+  delay(500);
+}`,
+        python: `from machine import Pin, time_pulse_us
+import time
+
+trig = Pin(5, Pin.OUT)
+echo = Pin(18, Pin.IN)
+
+while True:
+    trig.value(0)
+    time.sleep_us(2)
+    trig.value(1)
+    time.sleep_us(10)
+    trig.value(0)
+    duration = time_pulse_us(echo, 1, 30000)
+    dist = (duration * 0.0343) / 2
+    print("Distance: {:.1f} cm".format(dist))
+    time.sleep(0.5)
+`
+    },
+    servo: {
+        title: 'SG90 Micro Servo (50Hz PWM)',
+        desc: '180-degree precision position servo driven by pulse-width modulation (1ms - 2ms).',
+        voltage: '5V VCC / 3.3V Signal',
+        notice: 'Power servo from VIN or external 5V supply. Driving high-current servos from 3.3V LDO causes ESP32 brownout reset.',
+        highlightPins: ['VIN', 'GND_R', 'D13'],
+        connections: [
+            { wire: 'Red', pin: 'VCC (+)', esp: 'VIN (5V)', role: '5V Servo Power' },
+            { wire: 'Brown', pin: 'GND (-)', esp: 'GND', role: 'Common Ground' },
+            { wire: 'Orange', pin: 'PWM Signal', esp: 'GPIO 13 (D13)', role: '50Hz PWM Signal' }
+        ],
+        arduino: `#include <ESP32Servo.h>
+
+Servo myServo;
+#define SERVO_PIN 13
+
+void setup() {
+  myServo.attach(SERVO_PIN);
+}
+
+void loop() {
+  myServo.write(0);
+  delay(1000);
+  myServo.write(90);
+  delay(1000);
+  myServo.write(180);
+  delay(1000);
+}`,
+        python: `from machine import Pin, PWM
+import time
+
+servo = PWM(Pin(13), freq=50)
+
+def set_angle(angle):
+    duty = int(40 + (angle / 180) * 75)
+    servo.duty(duty)
+
+while True:
+    set_angle(0)
+    time.sleep(1)
+    set_angle(90)
+    time.sleep(1)
+    set_angle(180)
+    time.sleep(1)
+`
+    },
+    neopixel: {
+        title: 'WS2812B NeoPixel RGB Ring/Strip',
+        desc: 'Single-wire individually addressable 24-bit truecolor RGB LED chain.',
+        voltage: '5V Power / 3.3V Data',
+        notice: 'Add a 330Ω resistor between GPIO 15 and the NeoPixel DIN pin to protect the first LED from voltage spikes.',
+        highlightPins: ['VIN', 'GND_R', 'D15'],
+        connections: [
+            { wire: 'Red', pin: '5V / VDD', esp: 'VIN (5V)', role: '5V Power' },
+            { wire: 'Black', pin: 'GND', esp: 'GND', role: 'Ground' },
+            { wire: 'Green', pin: 'DIN', esp: 'GPIO 15 (D15)', role: 'High-speed 800kHz Bitstream' }
+        ],
+        arduino: `#include <Adafruit_NeoPixel.h>
+#define PIN 15
+#define NUMPIXELS 8
+
+Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+  pixels.begin();
+}
+
+void loop() {
+  pixels.clear();
+  for(int i=0; i<NUMPIXELS; i++) {
+    pixels.setPixelColor(i, pixels.Color(0, 113, 227));
+    pixels.show();
+    delay(100);
+  }
+}`,
+        python: `from machine import Pin
+import neopixel, time
+
+np = neopixel.NeoPixel(Pin(15), 8)
+
+while True:
+    for i in range(8):
+        np[i] = (0, 113, 227)
+        np.show()
+        time.sleep(0.1)
+    np.fill((0, 0, 0))
+    np.show()
+    time.sleep(0.5)
+`
+    },
+    relay: {
+        title: '1-Channel 5V Optocoupled Relay Module',
+        desc: 'Electromechanical switch for high-voltage AC loads with galvanic optocoupler isolation.',
+        voltage: '5V VCC / 3.3V Control',
+        notice: 'Most modules are active-LOW: writing LOW energizes the coil and closes the Normally Open (NO) terminal.',
+        highlightPins: ['VIN', 'GND_R', 'D26'],
+        connections: [
+            { wire: 'Red', pin: 'VCC', esp: 'VIN (5V)', role: 'Coil Power' },
+            { wire: 'Black', pin: 'GND', esp: 'GND', role: 'Ground' },
+            { wire: 'Blue', pin: 'IN', esp: 'GPIO 26 (D26)', role: 'Optocoupler Gate Trigger' }
+        ],
+        arduino: `#define RELAY_PIN 26
+
+void setup() {
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, HIGH); // Relay OFF (Active LOW)
+}
+
+void loop() {
+  digitalWrite(RELAY_PIN, LOW);  // Turn ON
+  delay(3000);
+  digitalWrite(RELAY_PIN, HIGH); // Turn OFF
+  delay(3000);
+}`,
+        python: `from machine import Pin
+import time
+
+relay = Pin(26, Pin.OUT, value=1)
+
+while True:
+    relay.value(0) # ON
+    time.sleep(3)
+    relay.value(1) # OFF
+    time.sleep(3)
+`
+    },
+    potentiometer: {
+        title: 'Analog Potentiometer / LDR Voltage Divider',
+        desc: 'Continuous rotary analog potentiometer or Light Dependent Resistor on 12-bit ADC.',
+        voltage: '3.3V VCC / 0-3.3V ADC',
+        notice: 'Always use ADC1 channels (GPIO 32-39) when WiFi is active! ADC2 cannot be read while the WiFi stack is broadcasting.',
+        highlightPins: ['3V3', 'GND_L', 'D34'],
+        connections: [
+            { wire: 'Red', pin: 'Terminal 1', esp: '3V3', role: 'Reference Voltage' },
+            { wire: 'Black', pin: 'Terminal 3', esp: 'GND', role: 'Ground' },
+            { wire: 'Yellow', pin: 'Wiper (Out)', esp: 'GPIO 34 (ADC1_CH6)', role: '12-bit Analog In (0-4095)' }
+        ],
+        arduino: `#define POT_PIN 34
+
+void setup() {
+  Serial.begin(115200);
+  analogReadResolution(12); // 0-4095
+}
+
+void loop() {
+  int rawValue = analogRead(POT_PIN);
+  float voltage = (rawValue / 4095.0) * 3.3;
+  Serial.printf("Raw: %d | Voltage: %.2f V\\n", rawValue, voltage);
+  delay(300);
+}`,
+        python: `from machine import ADC, Pin
+import time
+
+pot = ADC(Pin(34))
+pot.atten(ADC.ATTN_11DB) # Full 0 - 3.3V range
+
+while True:
+    val = pot.read()
+    voltage = (val / 4095.0) * 3.3
+    print("ADC: {}, Voltage: {:.2f}V".format(val, voltage))
+    time.sleep(0.3)
+`
+    },
+    bme280: {
+        title: 'BME280 Precision Environmental (SPI/I2C)',
+        desc: 'Bosch combined temperature, barometric pressure, altitude, and humidity sensor.',
+        voltage: '3.3V Logic',
+        notice: 'Compatible with SPI at up to 10MHz or I2C at 0x76/0x77. Shown here in standard high-speed 4-wire VSPI.',
+        highlightPins: ['3V3', 'GND_L', 'D5', 'D18', 'D19', 'D23'],
+        connections: [
+            { wire: 'Red', pin: 'VCC', esp: '3V3', role: 'Power' },
+            { wire: 'Black', pin: 'GND', esp: 'GND', role: 'Ground' },
+            { wire: 'Yellow', pin: 'SCK', esp: 'GPIO 18', role: 'SPI Clock' },
+            { wire: 'Blue', pin: 'SDO (MISO)', esp: 'GPIO 19', role: 'SPI Master In' },
+            { wire: 'Green', pin: 'SDI (MOSI)', esp: 'GPIO 23', role: 'SPI Master Out' },
+            { wire: 'Orange', pin: 'CS', esp: 'GPIO 5', role: 'Chip Select' }
+        ],
+        arduino: `#include <Wire.h>
+#include <SPI.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
+
+#define BME_CS 5
+Adafruit_BME280 bme(BME_CS); // Hardware VSPI
+
+void setup() {
+  Serial.begin(115200);
+  if (!bme.begin()) {
+    Serial.println("BME280 not found");
+    while(1);
+  }
+}
+
+void loop() {
+  Serial.printf("T: %.1f C | P: %.1f hPa | Alt: %.1f m\\n",
+    bme.readTemperature(), bme.readPressure() / 100.0F, bme.readAltitude(1013.25));
+  delay(2000);
+}`,
+        python: `from machine import Pin, SPI
+import time
+
+# MicroPython BME280 SPI implementation
+spi = SPI(2, baudrate=10000000, polarity=0, phase=0, sck=Pin(18), mosi=Pin(23), miso=Pin(19))
+cs = Pin(5, Pin.OUT, value=1)
+print("BME280 SPI initialized")
+`
+    }
+};
+
+let selectedPinoutSensor = 'dht11';
+let selectedPinoutLang = 'arduino';
+
+function renderEsp32InteractiveSvg() {
+    const container = document.getElementById('esp32-interactive-svg-container');
+    if (!container) return;
+
+    const sensor = sensorProfiles[selectedPinoutSensor];
+    const highlightedPinIds = sensor ? sensor.highlightPins : [];
+
+    let leftPinsSvg = '';
+    let rightPinsSvg = '';
+
+    esp32PinoutCatalog.forEach(pin => {
+        const isHighlighted = highlightedPinIds.includes(pin.id);
+        const glowAttr = isHighlighted ? 'filter="url(#pin-glow)" stroke="#22d3ee" stroke-width="2.5"' : 'stroke="#475569" stroke-width="1"';
+        const fillCol = isHighlighted ? '#06b6d4' : (pin.type.includes('power') ? '#ef4444' : (pin.type.includes('adc') ? '#f59e0b' : '#334155'));
+
+        if (pin.side === 'left') {
+            leftPinsSvg += `
+                <g class="cursor-pointer pin-group" data-pin-id="${pin.id}" onmouseenter="onPinHover('${pin.id}')" onmouseleave="onPinLeave()" onclick="onPinClick('${pin.id}')">
+                    <line x1="20" y1="${pin.y}" x2="70" y2="${pin.y}" stroke="#64748b" stroke-width="1.5"/>
+                    <circle cx="20" cy="${pin.y}" r="${isHighlighted ? 6 : 4.5}" fill="${fillCol}" ${glowAttr} class="${isHighlighted ? 'pin-glow-active' : ''}"/>
+                    <text x="65" y="${pin.y + 3.5}" text-anchor="end" fill="#cbd5e1" font-size="8.5" font-family="monospace" font-weight="${isHighlighted ? 'bold' : 'normal'}">${pin.label}</text>
+                </g>
+            `;
+        } else {
+            rightPinsSvg += `
+                <g class="cursor-pointer pin-group" data-pin-id="${pin.id}" onmouseenter="onPinHover('${pin.id}')" onmouseleave="onPinLeave()" onclick="onPinClick('${pin.id}')">
+                    <line x1="210" y1="${pin.y}" x2="260" y2="${pin.y}" stroke="#64748b" stroke-width="1.5"/>
+                    <circle cx="260" cy="${pin.y}" r="${isHighlighted ? 6 : 4.5}" fill="${fillCol}" ${glowAttr} class="${isHighlighted ? 'pin-glow-active' : ''}"/>
+                    <text x="215" y="${pin.y + 3.5}" text-anchor="start" fill="#cbd5e1" font-size="8.5" font-family="monospace" font-weight="${isHighlighted ? 'bold' : 'normal'}">${pin.label}</text>
+                </g>
+            `;
+        }
+    });
+
+    container.innerHTML = `
+        <svg viewBox="0 0 280 440" class="w-full h-auto drop-shadow-xl" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="pin-glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+                    <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <linearGradient id="chip-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1e293b"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                </linearGradient>
+            </defs>
+
+            <!-- PCB Board Body -->
+            <rect x="70" y="15" width="140" height="410" rx="12" fill="url(#chip-grad)" stroke="#334155" stroke-width="2"/>
+
+            <!-- Antenna Copper Traces at Top -->
+            <rect x="85" y="24" width="110" height="36" rx="4" fill="#020617" stroke="#475569" stroke-width="1"/>
+            <path d="M95 32 h12 v20 h8 v-20 h8 v20 h8 v-20 h8 v20 h8 v-20 h8 v20 h8 v-20 h10" fill="none" stroke="#eab308" stroke-width="1.5" stroke-linecap="round"/>
+            <text x="140" y="52" text-anchor="middle" fill="#94a3b8" font-size="7" font-family="monospace">2.4GHz Wi-Fi / BLE</text>
+
+            <!-- Metal RF Shield Can -->
+            <rect x="85" y="70" width="110" height="110" rx="6" fill="#334155" stroke="#64748b" stroke-width="1.5"/>
+            <rect x="90" y="75" width="100" height="100" rx="4" fill="#1e293b"/>
+            <text x="140" y="115" text-anchor="middle" fill="#f8fafc" font-size="10" font-family="monospace" font-weight="bold">ESP-WROOM-32</text>
+            <text x="140" y="130" text-anchor="middle" fill="#64748b" font-size="7" font-family="monospace">Xtensa Dual-Core 240MHz</text>
+            <text x="140" y="145" text-anchor="middle" fill="#38bdf8" font-size="7" font-family="monospace">FCC ID: 2AC7Z-ESPWROOM32</text>
+
+            <!-- Onboard Micro-USB Port at Bottom -->
+            <rect x="115" y="410" width="50" height="15" rx="3" fill="#64748b" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="123" y="417" width="34" height="6" rx="1.5" fill="#0f172a"/>
+
+            <!-- Reset & Boot Buttons -->
+            <rect x="80" y="385" width="18" height="14" rx="2" fill="#020617" stroke="#475569" stroke-width="1"/>
+            <circle cx="89" cy="392" r="3.5" fill="#e2e8f0"/>
+            <text x="89" y="380" text-anchor="middle" fill="#64748b" font-size="6" font-family="monospace">EN</text>
+
+            <rect x="182" y="385" width="18" height="14" rx="2" fill="#020617" stroke="#475569" stroke-width="1"/>
+            <circle cx="191" cy="392" r="3.5" fill="#e2e8f0"/>
+            <text x="191" y="380" text-anchor="middle" fill="#64748b" font-size="6" font-family="monospace">BOOT</text>
+
+            <!-- Pins -->
+            ${leftPinsSvg}
+            ${rightPinsSvg}
+        </svg>
+    `;
+}
+
+function onPinHover(pinId) {
+    const pin = esp32PinoutCatalog.find(p => p.id === pinId);
+    const tooltip = document.getElementById('pin-hover-tooltip');
+    if (pin && tooltip) {
+        tooltip.innerHTML = `<span class="text-[#0071e3] dark:text-[#2997ff] font-bold">${pin.name}</span>: ${pin.desc}`;
+    }
+}
+
+function onPinLeave() {
+    const tooltip = document.getElementById('pin-hover-tooltip');
+    if (tooltip) {
+        tooltip.textContent = 'Hover over any pin to inspect its multiplexed hardware functions.';
+    }
+}
+
+function onPinClick(pinId) {
+    onPinHover(pinId);
+    if (typeof showToast === 'function') {
+        const pin = esp32PinoutCatalog.find(p => p.id === pinId);
+        if (pin) showToast(`${pin.name} copied info`);
+    }
+}
+
+function selectPinoutSensor(sensorKey) {
+    selectedPinoutSensor = sensorKey;
+    const profile = sensorProfiles[sensorKey];
+    if (!profile) return;
+
+    // Update active button state
+    document.querySelectorAll('.pinout-sensor-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-[#0071e3]', 'text-white', 'shadow-sm');
+        btn.classList.add('border', 'border-black/[0.08]', 'dark:border-white/[0.1]', 'text-[#6e6e73]', 'dark:text-[#86868b]');
+    });
+    const activeBtn = document.getElementById(`pinout-sensor-${sensorKey}`);
+    if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-[#0071e3]', 'text-white', 'shadow-sm');
+        activeBtn.classList.remove('border', 'text-[#6e6e73]', 'dark:text-[#86868b]');
+    }
+
+    // Update Details Card
+    const titleEl = document.getElementById('pinout-sensor-title');
+    const descEl = document.getElementById('pinout-sensor-desc');
+    const voltEl = document.getElementById('pinout-sensor-voltage');
+    const noticeEl = document.getElementById('pinout-sensor-notice-text');
+    const tbody = document.getElementById('pinout-wiring-tbody');
+
+    if (titleEl) titleEl.textContent = profile.title;
+    if (descEl) descEl.textContent = profile.desc;
+    if (voltEl) voltEl.textContent = profile.voltage;
+    if (noticeEl) noticeEl.textContent = profile.notice;
+
+    if (tbody) {
+        tbody.innerHTML = profile.connections.map(c => `
+            <tr class="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors">
+                <td class="py-2.5 px-3 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full inline-block" style="background-color: ${c.wire === 'Red' ? '#ef4444' : c.wire === 'Black' ? '#1d1d1f' : c.wire === 'Blue' ? '#0071e3' : c.wire === 'Yellow' ? '#eab308' : c.wire === 'Green' ? '#10b981' : c.wire === 'Orange' ? '#f97316' : '#8b5cf6'};"></span>
+                    <span class="font-medium text-xs text-[#1d1d1f] dark:text-[#f5f5f7]">${c.wire}</span>
+                </td>
+                <td class="py-2.5 px-3 font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">${c.pin}</td>
+                <td class="py-2.5 px-3 text-[#0071e3] dark:text-[#2997ff] font-bold">${c.esp}</td>
+                <td class="py-2.5 px-3 text-[#6e6e73] dark:text-[#86868b]">${c.role}</td>
+            </tr>
+        `).join('');
+    }
+
+    updatePinoutCodeView();
+    renderEsp32InteractiveSvg();
+}
+
+function highlightPinType(type) {
+    document.querySelectorAll('.pinout-type-btn').forEach(btn => btn.classList.remove('active', 'bg-black/[0.08]', 'dark:bg-white/[0.1]'));
+    const btn = document.getElementById(`pin-filter-${type}`);
+    if (btn) btn.classList.add('active', 'bg-black/[0.08]', 'dark:bg-white/[0.1]');
+
+    const tooltip = document.getElementById('pin-hover-tooltip');
+    if (type === 'all') {
+        renderEsp32InteractiveSvg();
+        if (tooltip) tooltip.textContent = 'Showing all pins. Hover over any pin for alternate functions.';
+        return;
+    }
+
+    const matches = esp32PinoutCatalog.filter(p => p.type.includes(type));
+    const ids = matches.map(p => p.id);
+    
+    // Temporarily highlight matching pins in SVG
+    const container = document.getElementById('esp32-interactive-svg-container');
+    if (!container) return;
+
+    container.querySelectorAll('.pin-group').forEach(group => {
+        const id = group.getAttribute('data-pin-id');
+        const circle = group.querySelector('circle');
+        if (ids.includes(id)) {
+            circle.setAttribute('r', '7');
+            circle.setAttribute('stroke', '#22d3ee');
+            circle.setAttribute('stroke-width', '2.5');
+            circle.classList.add('pin-glow-active');
+        } else {
+            circle.setAttribute('r', '3.5');
+            circle.setAttribute('stroke', '#334155');
+            circle.setAttribute('stroke-width', '1');
+            circle.classList.remove('pin-glow-active');
+        }
+    });
+
+    if (tooltip) {
+        tooltip.innerHTML = `Highlighted <span class="font-bold text-[#0071e3] dark:text-[#2997ff]">${matches.length} pins</span> matching filter <span class="font-mono uppercase">${type}</span>.`;
+    }
+}
+
+function switchPinoutCodeLang(lang) {
+    selectedPinoutLang = lang;
+    const ardBtn = document.getElementById('pinout-lang-arduino');
+    const pyBtn = document.getElementById('pinout-lang-python');
+
+    if (ardBtn && pyBtn) {
+        if (lang === 'arduino') {
+            ardBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#0071e3] text-white transition-colors';
+            pyBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-black/[0.04] dark:bg-white/[0.08] text-[#6e6e73] dark:text-[#86868b] transition-colors';
+        } else {
+            pyBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#0071e3] text-white transition-colors';
+            ardBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-black/[0.04] dark:bg-white/[0.08] text-[#6e6e73] dark:text-[#86868b] transition-colors';
+        }
+    }
+    updatePinoutCodeView();
+}
+
+function updatePinoutCodeView() {
+    const profile = sensorProfiles[selectedPinoutSensor];
+    const codeEl = document.getElementById('pinout-code-block');
+    if (profile && codeEl) {
+        codeEl.textContent = selectedPinoutLang === 'arduino' ? profile.arduino : profile.python;
+    }
+}
+
+function copyPinoutCode() {
+    const codeEl = document.getElementById('pinout-code-block');
+    if (codeEl) {
+        navigator.clipboard.writeText(codeEl.textContent).then(() => {
+            if (typeof showToast === 'function') showToast('Driver source code copied to clipboard!');
+        });
+    }
+}
+
+// --- 4. Battery & Deep-Sleep Estimator ---
+let batterySleepCurrentUa = 10; // Default 10µA deep sleep
+
+function setBatteryPreset(capacity, name) {
+    document.querySelectorAll('.battery-preset-btn').forEach(b => b.classList.remove('active', 'border-[#0071e3]', 'dark:border-[#2997ff]', 'bg-[#0071e3]/10', 'dark:bg-[#2997ff]/15'));
+    const input = document.getElementById('input-battery-capacity');
+    if (input) {
+        input.value = capacity;
+    }
+    calculateBatteryLife();
+}
+
+function setSleepCurrentPreset(currentUa) {
+    batterySleepCurrentUa = currentUa;
+    document.querySelectorAll('.sleep-preset-btn').forEach(b => b.classList.remove('active', 'border-[#0071e3]', 'dark:border-[#2997ff]', 'bg-[#0071e3]/10', 'dark:bg-[#2997ff]/15'));
+    calculateBatteryLife();
+}
+
+function calculateBatteryLife() {
+    const capInput = document.getElementById('input-battery-capacity');
+    const actCurInput = document.getElementById('input-active-current');
+    const actTimeInput = document.getElementById('input-active-time');
+    const sleepTimeInput = document.getElementById('input-sleep-time');
+    const deratingInput = document.getElementById('input-derating');
+
+    const capacity = parseFloat(capInput?.value || 2600);
+    const activeCurrent = parseFloat(actCurInput?.value || 160); // mA
+    const activeTime = parseFloat(actTimeInput?.value || 3.0); // seconds
+    const sleepCurrentMa = batterySleepCurrentUa / 1000; // convert µA to mA
+    const sleepTime = parseFloat(sleepTimeInput?.value || 15) * 60; // convert min to seconds
+    const derating = parseFloat(deratingInput?.value || 10) / 100;
+
+    // Update slider labels
+    const capLabel = document.getElementById('label-battery-capacity');
+    const actCurLabel = document.getElementById('label-active-current');
+    const actTimeLabel = document.getElementById('label-active-time');
+    const sleepTimeLabel = document.getElementById('label-sleep-time');
+    const deratingLabel = document.getElementById('label-derating');
+
+    if (capLabel) capLabel.textContent = `${capacity} mAh`;
+    if (actCurLabel) actCurLabel.textContent = `${activeCurrent} mA`;
+    if (actTimeLabel) actTimeLabel.textContent = `${activeTime.toFixed(1)} s`;
+    if (sleepTimeLabel) sleepTimeLabel.textContent = `${(sleepTime / 60).toFixed(0)} min`;
+    if (deratingLabel) deratingLabel.textContent = `${(derating * 100).toFixed(0)}%`;
+
+    // Math:
+    // Cycle duration in seconds:
+    const cycleTimeSec = activeTime + sleepTime;
+    
+    // Average current in mA:
+    const qActive = activeCurrent * (activeTime / 3600); // mAh per cycle
+    const qSleep = sleepCurrentMa * (sleepTime / 3600); // mAh per cycle
+    const qTotalCycle = qActive + qSleep;
+    const avgCurrentMa = qTotalCycle / (cycleTimeSec / 3600);
+
+    // Usable capacity:
+    const usableCapacity = capacity * (1 - derating);
+    const totalHours = usableCapacity / avgCurrentMa;
+    const totalDays = totalHours / 24;
+    const totalYears = totalDays / 365.25;
+
+    const dutyCycle = (activeTime / cycleTimeSec) * 100;
+    const totalWakeCycles = Math.floor((totalHours * 3600) / cycleTimeSec);
+
+    // Display formatted autonomy
+    const autonomyEl = document.getElementById('battery-result-autonomy');
+    const subtextEl = document.getElementById('battery-result-subtext');
+    const avgCurEl = document.getElementById('battery-result-avg-current');
+    const dutyEl = document.getElementById('battery-result-duty');
+    const cyclesEl = document.getElementById('battery-result-cycles');
+    const savingsEl = document.getElementById('battery-result-savings');
+    const ringCircle = document.getElementById('battery-ring-circle');
+    const ringPercent = document.getElementById('battery-ring-percent');
+    const adviceText = document.getElementById('battery-advice-text');
+
+    if (autonomyEl) {
+        if (totalYears >= 1.0) {
+            autonomyEl.innerHTML = `${totalYears.toFixed(1)} <span class="text-2xl font-semibold text-[#0071e3] dark:text-[#2997ff]">Years</span>`;
+        } else if (totalDays >= 1.0) {
+            autonomyEl.innerHTML = `${totalDays.toFixed(0)} <span class="text-2xl font-semibold text-[#0071e3] dark:text-[#2997ff]">Days</span>`;
+        } else {
+            autonomyEl.innerHTML = `${totalHours.toFixed(1)} <span class="text-2xl font-semibold text-[#0071e3] dark:text-[#2997ff]">Hours</span>`;
+        }
+    }
+
+    if (subtextEl) {
+        if (totalDays >= 30) {
+            subtextEl.textContent = `~${(totalDays / 30.4).toFixed(1)} Months of autonomous remote sensor operation`;
+        } else if (totalDays >= 1) {
+            subtextEl.textContent = `${(totalDays * 24).toFixed(0)} Hours before battery replacement`;
+        } else {
+            subtextEl.textContent = 'High active consumption; consider enabling deep sleep.';
+        }
+    }
+
+    if (avgCurEl) {
+        avgCurEl.textContent = avgCurrentMa < 1.0 ? `${(avgCurrentMa * 1000).toFixed(0)} µA` : `${avgCurrentMa.toFixed(2)} mA`;
+    }
+    if (dutyEl) dutyEl.textContent = `${dutyCycle.toFixed(2)} %`;
+    if (cyclesEl) cyclesEl.textContent = totalWakeCycles.toLocaleString();
+
+    // Baseline active-only draw without sleep:
+    const nonSleepHours = usableCapacity / activeCurrent;
+    const energySavedPct = Math.min(99.9, Math.max(0, ((totalHours - nonSleepHours) / totalHours) * 100));
+    if (savingsEl) savingsEl.textContent = `${energySavedPct.toFixed(1)}%`;
+
+    // Ring score: 0 to 100% based on 1-year target
+    const scorePct = Math.min(100, Math.max(2, (totalDays / 365) * 100));
+    if (ringPercent) ringPercent.textContent = `${Math.round(scorePct)}%`;
+    if (ringCircle) {
+        const circumference = 263.89;
+        const offset = circumference - (circumference * (scorePct / 100));
+        ringCircle.style.strokeDashoffset = String(offset);
+    }
+
+    if (adviceText) {
+        if (batterySleepCurrentUa <= 20) {
+            adviceText.textContent = `Deep sleep mode (${batterySleepCurrentUa}µA) enables stellar battery life of ${totalDays > 365 ? (totalDays/365).toFixed(1) + ' years' : totalDays.toFixed(0) + ' days'}. Optimize sensor wakeup time to under 2 seconds for best results.`;
+        } else if (batterySleepCurrentUa <= 1000) {
+            adviceText.textContent = 'Light sleep maintains RAM state while reducing CPU consumption to ~800µA. Switching to Deep Sleep (10µA) can multiply battery life by 12x.';
+        } else {
+            adviceText.textContent = 'ESP32 active idle consumes ~80mA, exhausting a 2600mAh cell in just ~30 hours. Use esp_deep_sleep_start() between readings.';
+        }
+    }
+}
+
+// --- 5. Science Fair Kiosk Mode ---
+let isKioskOpen = false;
+let kioskIntervalSec = 0; // 0 = off/manual
+let kioskTimer = null;
+let kioskProgressTimer = null;
+let kioskProgressVal = 0;
+let kioskSoundEnabled = true;
+let kioskAudioCtx = null;
+
+function openKioskMode() {
+    const modal = document.getElementById('kiosk-modal');
+    if (!modal) return;
+
+    isKioskOpen = true;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    playKioskChime(659.25, 0.4); // E5 welcome chime
+
+    // Request full screen if available
+    try {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        }
+    } catch(e) {}
+
+    renderKioskSlide();
+    if (typeof showToast === 'function') showToast('Exhibition Kiosk Mode Active (Press Esc to exit)');
+}
+
+function closeKioskMode() {
+    const modal = document.getElementById('kiosk-modal');
+    if (!modal) return;
+
+    isKioskOpen = false;
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+
+    stopKioskAutoAdvance();
+
+    try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+        }
+    } catch(e) {}
+}
+
+function renderKioskSlide() {
+    if (!heroDeck) {
+        if (typeof slides !== 'undefined' && slides.length > 0) {
+            heroDeck = slides[0];
+        }
+    }
+    if (!heroDeck) return;
+
+    const slidesList = heroDeck.slidesDeck || heroDeck.slides || [];
+    if (slidesList.length === 0) return;
+    if (heroSlideIndex >= slidesList.length) heroSlideIndex = 0;
+    const slide = slidesList[heroSlideIndex];
+    const total = slidesList.length;
+
+    const titleEl = document.getElementById('kiosk-slide-title');
+    const subEl = document.getElementById('kiosk-slide-subtitle');
+    const counterEl = document.getElementById('kiosk-slide-counter');
+    const bulletsEl = document.getElementById('kiosk-slide-bullets');
+    const takeawayEl = document.getElementById('kiosk-slide-takeaway');
+    const diagramEl = document.getElementById('kiosk-diagram-stage');
+    const deckTitleEl = document.getElementById('kiosk-deck-title');
+
+    if (deckTitleEl) deckTitleEl.textContent = heroDeck.title || 'Science Fair Showcase';
+    if (titleEl) titleEl.textContent = slide.title || heroDeck.title;
+    if (subEl) subEl.textContent = slide.subtitle || 'Exhibition Stage';
+    if (counterEl) counterEl.textContent = `SLIDE ${heroSlideIndex + 1} OF ${total}`;
+
+    if (bulletsEl) {
+        bulletsEl.innerHTML = (slide.bullets || []).map(b => `
+            <li class="flex items-start gap-3 text-sm sm:text-base text-white/80 leading-relaxed">
+                <span class="w-2 h-2 rounded-full bg-[#0071e3] mt-2 shrink-0"></span>
+                <span>${escapeHtml(b)}</span>
+            </li>
+        `).join('');
+    }
+
+    if (takeawayEl) {
+        takeawayEl.textContent = `"${slide.takeaway || slide.notes || 'Core architectural takeaway for judges and students.'}"`;
+    }
+
+    if (diagramEl && typeof getHeroSlideVisualDiagram === 'function') {
+        diagramEl.innerHTML = getHeroSlideVisualDiagram(heroSlideIndex, slide);
+    }
+}
+
+function nextKioskSlide() {
+    if (!heroDeck) return;
+    const slidesList = heroDeck.slidesDeck || heroDeck.slides || [];
+    if (slidesList.length === 0) return;
+
+    heroSlideIndex = (heroSlideIndex + 1) % slidesList.length;
+    playKioskChime(587.33, 0.25); // D5 chime
+    renderKioskSlide();
+    resetKioskProgressBar();
+}
+
+function prevKioskSlide() {
+    if (!heroDeck) return;
+    const slidesList = heroDeck.slidesDeck || heroDeck.slides || [];
+    if (slidesList.length === 0) return;
+
+    heroSlideIndex = (heroSlideIndex - 1 + slidesList.length) % slidesList.length;
+    playKioskChime(523.25, 0.25); // C5 chime
+    renderKioskSlide();
+    resetKioskProgressBar();
+}
+
+function setKioskInterval(sec) {
+    kioskIntervalSec = sec;
+    document.querySelectorAll('.kiosk-speed-btn').forEach(b => b.classList.remove('active', 'bg-white', 'text-black'));
+    const btn = document.getElementById(`kiosk-speed-${sec}`);
+    if (btn) btn.classList.add('active', 'bg-white', 'text-black');
+
+    stopKioskAutoAdvance();
+    if (sec > 0) {
+        startKioskAutoAdvance();
+    }
+}
+
+function toggleKioskPlay() {
+    if (kioskIntervalSec === 0) {
+        setKioskInterval(10);
+    } else {
+        setKioskInterval(0);
+    }
+}
+
+function startKioskAutoAdvance() {
+    stopKioskAutoAdvance();
+    if (kioskIntervalSec <= 0) return;
+
+    const playBtn = document.getElementById('kiosk-play-icon');
+    if (playBtn) {
+        playBtn.innerHTML = '<path d="M5 4h3v12H5V4zm7 0h3v12h-3V4z"></path>';
+    }
+
+    kioskProgressVal = 0;
+    const stepMs = 100;
+    const totalMs = kioskIntervalSec * 1000;
+    
+    kioskProgressTimer = setInterval(() => {
+        kioskProgressVal += (stepMs / totalMs) * 100;
+        const bar = document.getElementById('kiosk-progress-bar');
+        if (bar) bar.style.width = `${Math.min(100, kioskProgressVal)}%`;
+
+        if (kioskProgressVal >= 100) {
+            nextKioskSlide();
+        }
+    }, stepMs);
+}
+
+function stopKioskAutoAdvance() {
+    if (kioskProgressTimer) {
+        clearInterval(kioskProgressTimer);
+        kioskProgressTimer = null;
+    }
+    resetKioskProgressBar();
+    const playBtn = document.getElementById('kiosk-play-icon');
+    if (playBtn) {
+        playBtn.innerHTML = '<path d="M4 4l12 6-12 6z"></path>';
+    }
+}
+
+function resetKioskProgressBar() {
+    kioskProgressVal = 0;
+    const bar = document.getElementById('kiosk-progress-bar');
+    if (bar) bar.style.width = '0%';
+}
+
+function toggleKioskSound() {
+    kioskSoundEnabled = !kioskSoundEnabled;
+    const btn = document.getElementById('kiosk-sound-btn');
+    if (btn) {
+        btn.classList.toggle('text-white/40', !kioskSoundEnabled);
+    }
+    if (kioskSoundEnabled) playKioskChime(880, 0.2);
+}
+
+function playKioskChime(frequency = 587.33, duration = 0.3) {
+    if (!kioskSoundEnabled) return;
+    try {
+        if (!kioskAudioCtx) {
+            kioskAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (kioskAudioCtx.state === 'suspended') {
+            kioskAudioCtx.resume();
+        }
+        const osc = kioskAudioCtx.createOscillator();
+        const gain = kioskAudioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(frequency, kioskAudioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, kioskAudioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, kioskAudioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(kioskAudioCtx.destination);
+        osc.start();
+        osc.stop(kioskAudioCtx.currentTime + duration);
+    } catch(e) {}
+}
+
+function openTakeHomeModal() {
+    const modal = document.getElementById('kiosk-takehome-modal');
+    const qrImg = document.getElementById('kiosk-qr-img');
+    const urlInput = document.getElementById('kiosk-share-url');
+
+    if (!modal) return;
+    const currentUrl = window.location.href.split('#')[0];
+    if (urlInput) urlInput.value = currentUrl;
+
+    if (qrImg) {
+        const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(currentUrl)}&margin=10`;
+        qrImg.src = qrApi;
+    }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeTakeHomeModal() {
+    const modal = document.getElementById('kiosk-takehome-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+}
+
+function copyKioskProjectLink() {
+    const input = document.getElementById('kiosk-share-url');
+    if (input) {
+        navigator.clipboard.writeText(input.value).then(() => {
+            if (typeof showToast === 'function') showToast('Project URL copied to clipboard!');
+        });
+    }
+}
+
+// Global hotkeys for Kiosk
+window.addEventListener('keydown', (e) => {
+    if (!isKioskOpen) return;
+    if (e.key === 'Escape') {
+        const takeHomeModal = document.getElementById('kiosk-takehome-modal');
+        if (takeHomeModal && !takeHomeModal.classList.contains('hidden')) {
+            closeTakeHomeModal();
+        } else {
+            closeKioskMode();
+        }
+    } else if (e.key === 'ArrowRight' || e.key === 'Space') {
+        e.preventDefault();
+        nextKioskSlide();
+    } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevKioskSlide();
+    }
+});
+
+
+        // Initialize Hardware Lab & Pinout SVG
+        setTimeout(() => {
+            if (typeof renderEsp32InteractiveSvg === 'function') renderEsp32InteractiveSvg();
+            if (typeof calculateBatteryLife === 'function') calculateBatteryLife();
+        }, 300);
+
+</script>
 
     <!-- Virtual Laser Pointer Element -->
     <div id="slide-laser-pointer" class="hidden pointer-events-none fixed z-[999] w-3 h-3 rounded-full bg-red-500 shadow-[0_0_12px_4px_rgba(239,68,68,0.9)] -translate-x-1/2 -translate-y-1/2"></div>
+    <!-- SCIENCE FAIR EXHIBITION KIOSK MODAL -->
+    <div id="kiosk-modal" class="fixed inset-0 z-[100] hidden flex-col bg-[#07090e] text-white select-none overflow-hidden transition-all duration-300">
+        <!-- Top Navigation Bar -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.04] backdrop-blur-2xl">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold uppercase tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>Exhibition Kiosk</span>
+                </div>
+                <span id="kiosk-deck-title" class="text-sm font-semibold text-white/90 truncate max-w-xs sm:max-w-md">Academic Presentation Showcase</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <!-- Auto-Advance Speed Selector -->
+                <div class="hidden sm:flex items-center gap-1 bg-white/[0.06] p-1 rounded-full border border-white/10 text-xs">
+                    <span class="px-2 text-white/50 text-[11px]">Auto:</span>
+                    <button onclick="setKioskInterval(0)" id="kiosk-speed-0" class="kiosk-speed-btn active px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-colors">Off</button>
+                    <button onclick="setKioskInterval(5)" id="kiosk-speed-5" class="kiosk-speed-btn px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-colors">5s</button>
+                    <button onclick="setKioskInterval(10)" id="kiosk-speed-10" class="kiosk-speed-btn px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-colors">10s</button>
+                    <button onclick="setKioskInterval(15)" id="kiosk-speed-15" class="kiosk-speed-btn px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-colors">15s</button>
+                </div>
+
+                <!-- Play/Pause Button -->
+                <button onclick="toggleKioskPlay()" id="kiosk-play-btn" class="p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-white transition-colors" title="Play / Pause Auto-advance (Space)">
+                    <svg id="kiosk-play-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4l12 6-12 6z"></path></svg>
+                </button>
+
+                <!-- Sound Chimes Toggle -->
+                <button onclick="toggleKioskSound()" id="kiosk-sound-btn" class="p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-white transition-colors" title="Toggle Audio Chimes">
+                    <svg id="kiosk-sound-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                </button>
+
+                <!-- Take Project Home Button -->
+                <button onclick="openTakeHomeModal()" class="liquid-accent-btn px-4 py-1.5 rounded-full text-xs font-semibold text-white flex items-center gap-1.5 shadow-lg">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span>Take Project Home</span>
+                </button>
+
+                <!-- Close Kiosk Button -->
+                <button onclick="closeKioskMode()" class="p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-white/70 hover:text-white transition-colors" title="Exit Kiosk (Esc)">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Auto-Advance Linear Progress Bar -->
+        <div class="h-1 bg-white/10 w-full overflow-hidden">
+            <div id="kiosk-progress-bar" class="h-full bg-gradient-to-r from-[#0071e3] to-[#2997ff] w-0 transition-all duration-100 ease-linear"></div>
+        </div>
+
+        <!-- Main Presentation Showcase Stage -->
+        <div class="flex-1 flex flex-col justify-between p-6 sm:p-10 max-w-6xl mx-auto w-full relative overflow-y-auto">
+            <!-- Stage Center Area -->
+            <div class="flex-1 flex flex-col justify-center space-y-6">
+                <!-- Visual Stage Diagram Container -->
+                <div id="kiosk-diagram-stage" class="rounded-3xl bg-white/[0.03] border border-white/10 p-6 flex items-center justify-center min-h-[260px] sm:min-h-[340px] shadow-2xl relative overflow-hidden backdrop-blur-md">
+                    <!-- Dynamic diagram -->
+                </div>
+
+                <!-- Slide Title & Bullets -->
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <span id="kiosk-slide-counter" class="text-xs font-mono font-semibold uppercase tracking-widest text-[#2997ff]">SLIDE 1 OF 8</span>
+                        <span class="w-1 h-1 rounded-full bg-white/30"></span>
+                        <span id="kiosk-slide-subtitle" class="text-xs font-medium text-white/50">Core Concept</span>
+                    </div>
+                    <h2 id="kiosk-slide-title" class="text-2xl sm:text-4xl font-semibold tracking-tight text-white leading-tight">Presentation Slide Heading</h2>
+                    <ul id="kiosk-slide-bullets" class="space-y-2 max-w-3xl">
+                        <!-- Populated dynamically -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Nav Bar & Takeaway Note -->
+            <div class="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3 max-w-xl">
+                    <span class="shrink-0 p-2 rounded-xl bg-white/[0.06] text-[#2997ff]">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </span>
+                    <p id="kiosk-slide-takeaway" class="text-xs sm:text-sm text-white/70 italic">"Key takeaway for exhibition booth visitors."</p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="prevKioskSlide()" class="p-3 rounded-full bg-white/[0.08] hover:bg-white/[0.15] border border-white/10 text-white transition-all active:scale-95" title="Previous Slide (←)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <button onclick="nextKioskSlide()" class="p-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white transition-all shadow-lg shadow-[#0071e3]/40 active:scale-95" title="Next Slide (→ or Space)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- "TAKE THIS PROJECT HOME" MODAL -->
+    <div id="kiosk-takehome-modal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4 bg-black/80 backdrop-blur-xl">
+        <div class="relative w-full max-w-md rounded-3xl liquid-glass p-8 border border-white/30 dark:border-white/10 text-center space-y-6 shadow-2xl">
+            <button onclick="closeTakeHomeModal()" class="absolute top-4 right-4 p-2 rounded-full text-[#6e6e73] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <div class="space-y-1">
+                <span class="text-xs font-semibold uppercase tracking-wider text-[#0071e3] dark:text-[#2997ff]">VISITOR TAKEAWAY</span>
+                <h3 class="text-2xl font-bold text-[#1d1d1f] dark:text-[#f5f5f7]">Take This Project Home</h3>
+                <p class="text-xs text-[#6e6e73] dark:text-[#86868b]">Scan with your smartphone camera to access the live presentation, source code, and study guides.</p>
+            </div>
+
+            <!-- QR Code Box -->
+            <div class="p-4 rounded-2xl bg-white shadow-inner inline-block mx-auto border border-black/10">
+                <img id="kiosk-qr-img" class="w-48 h-48 mx-auto" alt="Project QR Code" src="" />
+            </div>
+
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 p-2 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.1] text-xs font-mono">
+                    <input type="text" id="kiosk-share-url" readonly class="flex-1 bg-transparent px-2 text-[#1d1d1f] dark:text-[#f5f5f7] truncate focus:outline-none" value="" />
+                    <button onclick="copyKioskProjectLink()" class="px-3 py-1 rounded-lg bg-[#0071e3] text-white font-medium hover:bg-[#0077ed] transition-colors shrink-0">
+                        Copy Link
+                    </button>
+                </div>
+
+                <p class="text-[11px] text-[#86868b]">Works 100% offline once opened on your phone as a Progressive Web App.</p>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
