@@ -3,3 +3,11 @@ __pycache__/
 *.pyo
 *.bak
 .wrangler/
+
+# ArtCraft Suite local downloads and extracted builds
+# (Ignored from Git to prevent exceeding GitHub 100MB and Cloudflare Pages 25MB limits)
+artcraft/zips/
+artcraft/apps/
+craft-launcher/
+artcraft_engine.wasm
+scratch_*.zip
