@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>MailCraft</title>
+  <link rel="icon" href="./io.github.billsecond.mailcraft-7256b1e165e2805e.png" integrity="sha384-TZy15JHIlBJ4i5+iPx8pcTsU9RgGhN+FVNeUA7UFikjHhIXy59G/PUJDmTcfmV0G"/>
+  
+<script type="module">
+import init, * as bindings from './mailcraft-web-64bf19086317d33b.js';
+const wasm = await init({ module_or_path: './mailcraft-web-64bf19086317d33b_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+  <style>
+    :root { color-scheme: light dark; }
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #e6e6e6; }
+    #mailcraft_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    #mailcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #555; font: 14px system-ui, sans-serif; pointer-events: none; }
+    /* Before the app paints: the page already follows the system's light or dark appearance. */
+    @media (prefers-color-scheme: dark) {
+      html, body { background: #1f1f1f; }
+      #mailcraft_loading { color: #aaa; }
+    }
+  </style>
+<link rel="modulepreload" href="./mailcraft-web-64bf19086317d33b.js" crossorigin="anonymous" integrity="sha384-y/uItnzzMeuysFSpbBzQz0+Cx2nzRc0tfJPg/e/JudZkjkZf046f9XNC0lkzcB90"><link rel="preload" href="./mailcraft-web-64bf19086317d33b_bg.wasm" crossorigin="anonymous" integrity="sha384-yaqCuP7ki0S/WKNP9vCKHWkUSF28DnpApBaMlXpONVjyk8JZXpx5PmojXQwVaISB" as="fetch" type="application/wasm"></head>
+<body>
+  <canvas id="mailcraft_canvas"></canvas>
+  <div id="mailcraft_loading">Loading MailCraft&hellip;</div>
+</body>
+</html>
