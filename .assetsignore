@@ -1,0 +1,7 @@
+.git/
+artcraft/
+craft-launcher/
+*.zip
+*.wasm
+node_modules/
+.wrangler/

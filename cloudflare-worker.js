@@ -96,6 +96,16 @@ export default {
       });
     }
 
+    // ArtCraft WebAssembly Suite: Route to GitHub Pages where the 19 compiled WASM packages are hosted
+    // (Bypasses Cloudflare's 25 MiB single-asset limit for large Rust/WASM binaries)
+    if (url.pathname.startsWith('/artcraft/')) {
+      const upstreamUrl = 'https://dhyankrishna24.github.io/esp32site' + url.pathname;
+      return fetch(upstreamUrl, {
+        method: request.method,
+        headers: request.headers,
+      });
+    }
+
     // Non-API requests: Serve static assets (index.html, about.html, slides-data.js, esp32/, etc.)
     if (env.ASSETS) {
       return env.ASSETS.fetch(request);
