@@ -4,11 +4,5 @@
   "compatibility_date": "2024-09-23",
   "assets": {
     "directory": "."
-  },
-  "r2_buckets": [
-    {
-      "binding": "ARTCRAFT_BUCKET",
-      "bucket_name": "esp32site-artcraft"
-    }
-  ]
+  }
 }
