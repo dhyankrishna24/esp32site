@@ -2,9 +2,10 @@
  * Cloudflare Pages & Workers Advanced Mode Handler
  * ==================================================
  * Handles:
- * 1. /artcraft/* -> Proxies dynamically to GitHub Pages (bypassing Cloudflare 25 MiB asset limit)
- * 2. /api/submissions -> KV submissions API
- * 3. * -> Serves static assets via env.ASSETS.fetch(request)
+ * 1. /artcraft/* -> Serves from Cloudflare R2 bucket (Zero egress fees, up to 5 TB files)
+ *                   with automatic transparent fallback to GitHub Pages CDN.
+ * 2. /api/submissions -> KV submissions API for student slide decks
+ * 3. * -> Serves static website assets (HTML, CSS, JS, fonts, ESP32)
  */
 
 const CORS_HEADERS = {
@@ -13,6 +14,21 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
+
+function getMimeType(path) {
+  const ext = path.split('.').pop().toLowerCase();
+  switch (ext) {
+    case 'wasm': return 'application/wasm';
+    case 'js':   return 'application/javascript';
+    case 'html': return 'text/html; charset=utf-8';
+    case 'json': return 'application/json';
+    case 'css':  return 'text/css';
+    case 'png':  return 'image/png';
+    case 'svg':  return 'image/svg+xml';
+    case 'zip':  return 'application/zip';
+    default:     return 'application/octet-stream';
+  }
+}
 
 export default {
   async fetch(request, env, ctx) {
@@ -94,13 +110,50 @@ export default {
       });
     }
 
-    // ArtCraft WebAssembly Suite: Route to GitHub Pages where the 19 compiled WASM packages are hosted
-    // (Bypasses Cloudflare's 25 MiB single-asset limit for large Rust/WASM binaries)
+    // ArtCraft WebAssembly Suite: Route /artcraft/*
     if (url.pathname.startsWith('/artcraft/')) {
+      const key = url.pathname.replace(/^\/+/, ''); // e.g. "artcraft/apps/deckcraft/index.html"
+
+      // 1. Primary: If Cloudflare R2 bucket is bound, serve directly from R2 at the edge!
+      const r2 = env.ARTCRAFT_BUCKET || env.R2_BUCKET;
+      if (r2) {
+        try {
+          const object = await r2.get(key);
+          if (object) {
+            const headers = new Headers();
+            object.writeHttpMetadata(headers);
+            headers.set('etag', object.httpEtag);
+            headers.set('Access-Control-Allow-Origin', '*');
+            headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+            headers.set('Content-Type', getMimeType(key));
+
+            // High-performance WebAssembly headers (COOP / COEP for SharedArrayBuffer)
+            headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+            headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
+
+            return new Response(object.body, { headers });
+          }
+        } catch (err) {
+          console.warn('[R2 Edge] Object read error, falling back to upstream CDN:', err);
+        }
+      }
+
+      // 2. Fallback: Stream directly from GitHub Pages CDN
       const upstreamUrl = 'https://dhyankrishna24.github.io/esp32site' + url.pathname;
-      return fetch(upstreamUrl, {
+      const upstreamRes = await fetch(upstreamUrl, {
         method: request.method,
         headers: request.headers,
+      });
+
+      // Pass through response with proper CORS & security headers
+      const resHeaders = new Headers(upstreamRes.headers);
+      resHeaders.set('Access-Control-Allow-Origin', '*');
+      if (key.endsWith('.wasm')) {
+        resHeaders.set('Content-Type', 'application/wasm');
+      }
+      return new Response(upstreamRes.body, {
+        status: upstreamRes.status,
+        headers: resHeaders,
       });
     }
 
