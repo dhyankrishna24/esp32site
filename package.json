@@ -1,0 +1,9 @@
+{
+  "name": "esp32site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EduSphere Academic & ESP32 Interactive Platform with ArtCraft Suite",
+  "scripts": {
+    "build": "node build-pages.js"
+  }
+}
