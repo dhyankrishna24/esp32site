@@ -698,6 +698,15 @@
                 <button data-category="Study Notes" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
                     Study Notes
                 </button>
+                <button data-category="English & Grammar" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                    English &amp; Grammar
+                </button>
+                <button data-category="English & Literature" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                    English Literature
+                </button>
+                <button data-category="History & Civics" class="category-btn rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-3 py-1.5 text-xs font-medium text-[#6e6e73] dark:text-[#86868b] hover:text-[#1d1d1f] dark:hover:text-[#f5f5f7] transition-colors">
+                    History &amp; Civics
+                </button>
             </div>
 
             <!-- Sorting & Secondary Search Toolbar -->
@@ -712,6 +721,7 @@
 
                     <select id="format-filter" class="rounded-lg border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] px-2.5 py-1 text-xs text-[#1d1d1f] dark:text-[#f5f5f7] focus:outline-none">
                         <option value="All">All Formats</option>
+                        <option value="DOCX">Word Worksheets (DOCX)</option>
                         <option value="PPTX">PowerPoint (PPTX)</option>
                         <option value="Interactive HTML">Interactive HTML</option>
                         <option value="PDF">PDF Documents</option>
@@ -4238,8 +4248,8 @@
                 return file;
             }
 
-            // PPTX / PPT slides
-            if (file.endsWith('.pptx') || file.endsWith('.ppt')) {
+            // PPTX / PPT slides & DOCX / Word worksheets
+            if (file.endsWith('.pptx') || file.endsWith('.ppt') || file.endsWith('.docx') || file.endsWith('.doc')) {
                 const fullTargetUrl = file.startsWith('http')
                     ? file
                     : `https://dhyankrishna24.github.io/esp32site/${encodeURI(file)}`;

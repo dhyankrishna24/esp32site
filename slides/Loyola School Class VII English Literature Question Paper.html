@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loyola School Thiruvananthapuram - Class VII ICSE English Literature</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&display=swap" rel="stylesheet">
+
+  <style>
+    /* Physical examination paper typography */
+    body {
+      font-family: 'Calibri', 'Arial', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #000000;
+      background-color: #f1f5f9;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .font-loyola-script {
+      font-family: 'Great Vibes', 'Alex Brush', cursive;
+    }
+
+    /* Thin authentic oval badge as seen on the physical paper */
+    .exam-oval {
+      border: 1px solid #000;
+      border-radius: 9999px;
+      padding: 1px 14px;
+      display: inline-block;
+      line-height: 1.25;
+    }
+
+    .vertical-session {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      letter-spacing: 0.05em;
+    }
+
+    /* Print styling to match authentic photocopy/printout */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .exam-sheet {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 6mm 10mm !important;
+      }
+    }
+  </style>
+</head>
+<body class="py-6">
+
+  <!-- Print & View Toolbar (hidden during print) -->
+  <div class="no-print max-w-3xl mx-auto mb-4 px-4 flex items-center justify-between">
+    <div class="text-xs text-slate-600 font-semibold tracking-wide flex items-center gap-1.5">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+      Loyola School Examination Template (Class VII ICSE)
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="window.print()" class="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white text-xs font-semibold rounded shadow-sm transition flex items-center gap-1.5">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        Print / PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- EXACT PHYSICAL QUESTION PAPER SHEET -->
+  <div class="exam-sheet max-w-[780px] mx-auto bg-white border border-neutral-300 shadow-md p-6 sm:p-9 text-[13px] leading-tight text-black">
+
+    <!-- HEADER SECTION (Exact match to photograph) -->
+    <header class="relative mb-2">
+      <div class="flex items-start justify-between">
+        
+        <!-- LEFT: QR Code + VII ICSE Oval + Date -->
+        <div class="flex flex-col items-center w-24 text-center pt-0.5">
+          <!-- QR Code box -->
+          <div class="w-12 h-12 border border-black p-0.5 mb-1.5 flex items-center justify-center bg-white">
+            <svg viewBox="0 0 45 45" class="w-full h-full" fill="currentColor">
+              <!-- Corner finder Top-Left -->
+              <rect x="0" y="0" width="13" height="13" />
+              <rect x="2" y="2" width="9" height="9" fill="white" />
+              <rect x="4" y="4" width="5" height="5" />
+              <!-- Corner finder Top-Right -->
+              <rect x="32" y="0" width="13" height="13" />
+              <rect x="34" y="2" width="9" height="9" fill="white" />
+              <rect x="36" y="4" width="5" height="5" />
+              <!-- Corner finder Bottom-Left -->
+              <rect x="0" y="32" width="13" height="13" />
+              <rect x="2" y="34" width="9" height="9" fill="white" />
+              <rect x="4" y="36" width="5" height="5" />
+              <!-- QR dot pattern -->
+              <rect x="16" y="2" width="4" height="4" />
+              <rect x="23" y="3" width="4" height="4" />
+              <rect x="18" y="9" width="6" height="4" />
+              <rect x="2" y="16" width="4" height="6" />
+              <rect x="8" y="21" width="4" height="4" />
+              <rect x="18" y="18" width="8" height="8" />
+              <rect x="32" y="16" width="4" height="4" />
+              <rect x="38" y="21" width="4" height="4" />
+              <rect x="16" y="32" width="4" height="4" />
+              <rect x="24" y="37" width="5" height="5" />
+              <rect x="34" y="34" width="4" height="4" />
+            </svg>
+          </div>
+
+          <!-- VII ICSE Oval Badge -->
+          <div class="exam-oval mb-0.5">
+            <span class="text-[11px] font-bold tracking-tight">VII ICSE</span>
+          </div>
+          <!-- Exam Date -->
+          <div class="text-[9.5px] font-medium tracking-tight">
+            08-07-2026
+          </div>
+        </div>
+
+        <!-- CENTER: School Name, Campus, Examination, Subject -->
+        <div class="flex-1 text-center px-1">
+          <!-- Loyola School Cursive Script -->
+          <h1 class="font-loyola-script text-4xl sm:text-[44px] leading-none font-normal text-black pt-1 mb-1">
+            Loyola School
+          </h1>
+          <p class="text-[11px] tracking-wide text-black mb-1">
+            Sreekariyam, Thiruvananthapuram-17
+          </p>
+          <h2 class="text-[13px] font-bold text-black tracking-normal">
+            First Mid-term Examination
+          </h2>
+          <h3 class="text-[16px] sm:text-[17px] font-bold text-black tracking-wide uppercase mt-0.5">
+            ENGLISH LITERATURE
+          </h3>
+        </div>
+
+        <!-- RIGHT: MAGIS + Loyola Crest + Marks Oval + Vertical Academic Year -->
+        <div class="flex items-start justify-end w-28 relative pt-0.5">
+          <!-- Vertical session year along outer right border -->
+          <div class="absolute -right-2 sm:-right-4 top-1 vertical-session text-[11px] font-bold">
+            2026-'27
+          </div>
+
+          <div class="flex flex-col items-center mr-2">
+            <!-- MAGIS Label -->
+            <span class="text-[9px] font-black tracking-[0.2em] uppercase mb-1">MAGIS</span>
+
+            <!-- Authentic Loyola School Thiruvananthapuram Crest -->
+            <div class="w-12 h-14 mb-1">
+              <svg viewBox="0 0 100 128" class="w-full h-full text-black" fill="currentColor">
+                <!-- Shield Base Outline -->
+                <path d="M 8 6 H 92 V 68 C 92 102 50 124 50 124 C 50 124 8 102 8 68 Z" fill="#000" stroke="#000" stroke-width="2" />
+                
+                <!-- TOP HALF: Seven Vertical Bars (Oñaz-Loyola Family Shield) -->
+                <rect x="11" y="9" width="78" height="42" fill="#fff" />
+                <!-- 7 vertical bars (alternating black stripes) -->
+                <rect x="17" y="9" width="7" height="42" fill="#000" />
+                <rect x="29" y="9" width="7" height="42" fill="#000" />
+                <rect x="41" y="9" width="7" height="42" fill="#000" />
+                <rect x="53" y="9" width="7" height="42" fill="#000" />
+                <rect x="65" y="9" width="7" height="42" fill="#000" />
+                <rect x="77" y="9" width="7" height="42" fill="#000" />
+                <line x1="8" y1="51" x2="92" y2="51" stroke="#fff" stroke-width="2" />
+
+                <!-- MIDDLE: Traditional Kerala Nilavilakku (Deepam / Lamp) -->
+                <!-- Multi-tier base of the Nilavilakku -->
+                <path d="M 36 100 C 40 96 60 96 64 100 Z" fill="#fff" />
+                <ellipse cx="50" cy="98" rx="12" ry="2.5" fill="#fff" />
+                <!-- Stem / Pillar -->
+                <rect x="48.5" y="70" width="3" height="27" fill="#fff" />
+                <ellipse cx="50" cy="88" rx="5" ry="1.8" fill="#fff" />
+                <ellipse cx="50" cy="79" rx="4" ry="1.5" fill="#fff" />
+                <!-- Oil Bowl / Thattu -->
+                <ellipse cx="50" cy="70" rx="14" ry="3.5" fill="#fff" />
+                <path d="M 37 70 Q 50 76 63 70 Z" fill="#fff" />
+                <!-- Top crown and flame of Nilavilakku -->
+                <path d="M 48 68 H 52 L 50 63 Z" fill="#fff" />
+                <path d="M 50 54 C 46 60 47 64 50 65 C 53 64 54 60 50 54 Z" fill="#fff" />
+
+                <!-- BOTTOM: Jesuit Christogram IHS flanking the lamp -->
+                <!-- Letter 'I' -->
+                <path d="M 22 79 H 28 M 25 79 V 92 M 22 92 H 28" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" />
+                <!-- Letter 'H' with cross -->
+                <path d="M 48 108 H 52 M 50 104 V 116 M 46 112 H 54" stroke="#fff" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                <text x="50" y="121" fill="#fff" font-family="'Times New Roman', serif" font-weight="bold" font-size="9" text-anchor="middle">IHS</text>
+                <!-- Letter 'S' -->
+                <path d="M 77 81 C 73 80 71 83 73 85 C 76 87 77 89 74 91 C 71 92 70 90 70 89" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" />
+              </svg>
+            </div>
+
+            <!-- Marks and Duration Oval Badge -->
+            <div class="exam-oval whitespace-nowrap">
+              <span class="text-[11px] font-bold">1 hr 30 min, 50 marks</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- NAME / DIV / ROLL NO LINE (Dashed fill line exactly as in photo) -->
+      <div class="mt-2.5 pt-1.5 flex items-baseline text-[12px] font-medium text-black">
+        <span class="mr-1.5 font-bold">Name:</span>
+        <span class="flex-1 border-b border-dashed border-black mr-4 h-3.5"></span>
+        <span class="mr-1.5 font-bold">Div:</span>
+        <span class="w-14 border-b border-dashed border-black mr-4 h-3.5"></span>
+        <span class="mr-1.5 font-bold">Roll No.</span>
+        <span class="w-14 border-b border-dashed border-black h-3.5"></span>
+      </div>
+    </header>
+
+    <!-- QUESTION SECTIONS (Formatted exactly like the test paper) -->
+    <main class="mt-3 space-y-4">
+
+      <!-- SECTION A: Objective & Vocabulary (15 Marks) -->
+      <div class="border-b border-black pb-1 mb-2 flex items-baseline justify-between font-bold text-[13px]">
+        <span>SECTION A: OBJECTIVE & VOCABULARY</span>
+        <span>(15 Marks)</span>
+      </div>
+
+      <!-- Part 1: Multiple Choice Questions -->
+      <section>
+        <div class="flex items-baseline justify-between font-bold text-[12.5px] mb-1.5">
+          <span>1. Multiple Choice Questions</span>
+          <span class="text-[11.5px] font-bold">[8 &times; 1 = 8 Marks]</span>
+        </div>
+
+        <div class="space-y-2 text-[12px]">
+          <!-- Q1 -->
+          <div>
+            <p>i. Munni had put aside the three rupees with the intention of:</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-0.5 pl-4 mt-0.5 text-[11.5px]">
+              <span>a) Paying off the shopkeeper</span>
+              <span>b) Buying a blanket</span>
+              <span>c) Purchasing seeds</span>
+              <span>d) Buying medicine</span>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div>
+            <p>ii. The Hindi name <i>Halku</i> comes from the word <i>halka</i>, which ironically means:</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-0.5 pl-4 mt-0.5 text-[11.5px]">
+              <span>a) Heavy</span>
+              <span>b) Light</span>
+              <span>c) Resolute</span>
+              <span>d) Wealthy</span>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div>
+            <p>iii. To keep himself warm after the cold wind grew fierce, Halku gathered dry leaves from:</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-0.5 pl-4 mt-0.5 text-[11.5px]">
+              <span>a) A mango grove</span>
+              <span>b) A bamboo thicket</span>
+              <span>c) A neem orchard</span>
+              <span>d) A banyan grove</span>
+            </div>
+          </div>
+
+          <!-- Q4 -->
+          <div>
+            <p>iv. In the poem <i>The Tide Rises, the Tide Falls</i>, which bird calls as twilight approaches?</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-0.5 pl-4 mt-0.5 text-[11.5px]">
+              <span>a) Curlew</span>
+              <span>b) Nightingale</span>
+              <span>c) Skylark</span>
+              <span>d) Seagull</span>
+            </div>
+          </div>
+
+          <!-- Q5 -->
+          <div>
+            <p>v. In Longfellow's poem, the personified waves efface footprints with their:</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-0.5 pl-4 mt-0.5 text-[11.5px]">
+              <span>a) Cold, blue fingers</span>
+              <span>b) Soft, white hands</span>
+              <span>c) Foamy green crests</span>
+              <span>d) Gentle salty spray</span>
+            </div>
+          </div>
+
+          <!-- Q6 -->
+          <div>
+            <p>vi. The French open tourer purchased by Dahl's family was a:</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-0.5 pl-4 mt-0.5 text-[11.5px]">
+              <span>a) Rolls-Royce Phantom</span>
+              <span>b) Austin Seven</span>
+              <span>c) De Dion-Bouton</span>
+              <span>d) Ford Model T</span>
+            </div>
+          </div>
+
+          <!-- Q7 -->
+          <div>
+            <p>vii. How many driving lessons had the ancient sister received from the delivery man?</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-0.5 pl-4 mt-0.5 text-[11.5px]">
+              <span>a) Two full one-hour lessons</span>
+              <span>b) Two full half-hour lessons</span>
+              <span>c) Six weeks of training</span>
+              <span>d) None at all</span>
+            </div>
+          </div>
+
+          <!-- Q8 -->
+          <div>
+            <p>viii. What reward did the narrator's mother place under his pillow for being brave?</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-0.5 pl-4 mt-0.5 text-[11.5px]">
+              <span>a) A silver medal</span>
+              <span>b) A golden sovereign</span>
+              <span>c) A ten-shilling note</span>
+              <span>d) A model motor car</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Part 2: Contextual Meanings / Vocabulary -->
+      <section>
+        <div class="flex items-baseline justify-between font-bold text-[12.5px] mb-1">
+          <span>2. Contextual Meanings</span>
+          <span class="text-[11.5px] font-bold">[4 &times; 1 = 4 Marks]</span>
+        </div>
+        <p class="text-[11.5px] italic mb-1 text-neutral-700">Give the precise contextual meaning of the following words as used in the lessons:</p>
+        <div class="grid grid-cols-2 gap-x-4 gap-y-1 pl-2 text-[12px]">
+          <div><b>a) Arrears:</b> ............................................................</div>
+          <div><b>b) Protracted:</b> ........................................................</div>
+          <div><b>c) Efface:</b> ................................................................</div>
+          <div><b>d) Meshed:</b> ............................................................</div>
+        </div>
+      </section>
+
+      <!-- Part 3: Who Said to Whom -->
+      <section>
+        <div class="flex items-baseline justify-between font-bold text-[12.5px] mb-1">
+          <span>3. Who Said to Whom?</span>
+          <span class="text-[11.5px] font-bold">[3 &times; 1 = 3 Marks]</span>
+        </div>
+
+        <div class="space-y-1 pl-1 text-[12px]">
+          <div class="flex items-baseline justify-between">
+            <p>a) <i>"Tell him we'll pay him after the harvest, not right now."</i></p>
+            <span class="text-[11px] font-semibold text-neutral-700">[1]</span>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <p>b) <i>"Don't you have to put your foot on the clutch?"</i></p>
+            <span class="text-[11px] font-semibold text-neutral-700">[1]</span>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <p>c) <i>"He can't go round without a nose for the rest of his life!"</i></p>
+            <span class="text-[11px] font-semibold text-neutral-700">[1]</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION B: Literature in Context (35 Marks) -->
+      <div class="border-b border-black pb-1 mb-1 mt-3 flex items-baseline justify-between font-bold text-[13px]">
+        <span>SECTION B: LITERATURE IN CONTEXT</span>
+        <span>(35 Marks)</span>
+      </div>
+
+      <!-- Extract I: January Night -->
+      <section class="space-y-1.5">
+        <p class="font-bold text-[12.5px]">I. <i>January Night</i> by Premchand <span class="font-normal text-[11.5px] float-right font-bold">[10 Marks]</span></p>
+        <p class="italic text-[11.5px] text-neutral-800 pl-2 py-0.5 border-l-2 border-black bg-neutral-50">
+          "Munni drew away from him. Her eyes angry, she said, 'You just tell me what other plan can be found. Is somebody going to give you a blanket? God knows how many debts are always left over that we can't pay off. What I say is give up this tenant farming! The work's killing you. Whatever you harvest goes to pay up the arrears, so why not finish with it?'"
+        </p>
+        <div class="space-y-1 pl-2 text-[12px]">
+          <div class="flex justify-between items-baseline">
+            <p>a) Why did Munni initially refuse to hand over the three rupees to Halku? What alternative livelihood did she propose?</p>
+            <span class="text-[11px] font-bold ml-2">[2]</span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <p>b) Describe Halku's feelings and physical posture as he went outside after taking the money from Munni.</p>
+            <span class="text-[11px] font-bold ml-2">[2]</span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <p>c) How did Halku and his dog Jabra comfort each other in the cane-leaf shelter against the biting January chill?</p>
+            <span class="text-[11px] font-bold ml-2">[3]</span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <p>d) Why did Halku fail to get up when wild animals ruined his crop? Why was he "content" the following morning?</p>
+            <span class="text-[11px] font-bold ml-2">[3]</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Extract II: The Tide Rises, the Tide Falls -->
+      <section class="space-y-1.5">
+        <p class="font-bold text-[12.5px]">II. <i>The Tide Rises, the Tide Falls</i> by H. W. Longfellow <span class="font-normal text-[11.5px] float-right font-bold">[8 Marks]</span></p>
+        <p class="italic text-[11.5px] text-neutral-800 pl-2 py-0.5 border-l-2 border-black bg-neutral-50">
+          "The morning breaks; the steeds in their stalls<br>
+          Stamp and neigh, as the hostler calls;<br>
+          The day returns, but nevermore<br>
+          Returns the traveller to the shore,<br>
+          And the tide rises, the tide falls."
+        </p>
+        <div class="space-y-1 pl-2 text-[12px]">
+          <div class="flex justify-between items-baseline">
+            <p>a) What signs of morning activity are described in this stanza? What do the steeds and hostler represent?</p>
+            <span class="text-[11px] font-bold ml-2">[2]</span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <p>b) Identify the poetic device in: <i>"The little waves, with their soft, white hands / Efface the footprints in the sands"</i>. Explain its deeper significance.</p>
+            <span class="text-[11px] font-bold ml-2">[2]</span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <p>c) What contrast does the poet draw between the transient existence of mortal human life and the eternal rhythm of nature?</p>
+            <span class="text-[11px] font-bold ml-2">[2]</span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <p>d) Why does the poet conclude each stanza with the refrain: <i>"And the tide rises, the tide falls"</i>?</p>
+            <span class="text-[11px] font-bold ml-2">[2]</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Extract III: A Drive in the Motor Car -->
+      <section class="space-y-1.5">
+        <p class="font-bold text-[12.5px]">III. <i>A Drive in the Motor Car</i> by Roald Dahl <span class="font-normal text-[11.5px] float-right font-bold">[10 Marks]</span></p>
+        <p class="italic text-[11.5px] text-neutral-800 pl-2 py-0.5 border-l-2 border-black bg-neutral-50">
+          "Spurred on by our shouts and taunts, the ancient sister began to increase the speed. The engine roared and the body vibrated. The driver was clutching the steering-wheel as though it was the hair of a drowning man, and we all watched the speedometer needle creeping up to twenty, then twenty-five, then thirty..."
+        </p>
+        <div class="space-y-1 pl-2 text-[12px]">
+          <div class="flex justify-between items-baseline">
+            <p>a) What special windscreen arrangement was fitted to this De Dion-Bouton open tourer to protect the rear passengers?</p>
+            <span class="text-[11px] font-bold ml-2">[2]</span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <p>b) What occurred when the vehicle reached the sharp bend at thirty-five miles per hour? Where did the passengers land?</p>
+            <span class="text-[11px] font-bold ml-2">[2]</span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <p>c) Describe the chaotic struggle when the sister tried to back the vehicle out of the hedge. How was the gear issue resolved?</p>
+            <span class="text-[11px] font-bold ml-2">[3]</span>
+          </div>
+          <div class="flex justify-between items-baseline">
+            <p>d) Describe the emergency surgery performed on Roald Dahl's severed nose at home on the nursery table.</p>
+            <span class="text-[11px] font-bold ml-2">[3]</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Part IV: Compare and Characterize -->
+      <section class="space-y-1.5 pt-1">
+        <div class="flex items-baseline justify-between font-bold text-[12.5px]">
+          <span>IV. Comparative Character Study</span>
+          <span class="text-[11.5px] font-bold">[7 Marks]</span>
+        </div>
+        <p class="text-[11.5px] italic text-neutral-700">Answer <b>either (a) OR (b)</b> in about 80–100 words:</p>
+        
+        <div class="pl-2 space-y-2 text-[12px]">
+          <div class="p-2 border border-neutral-300 rounded bg-neutral-50">
+            <p><b>(a) Compare and characterize Halku and Munni</b> in Premchand's <i>January Night</i>. Contrast Munni’s practical outrage against the landlord's continuous extortion with Halku’s submissive resignation and dread of public humiliation. How do their contrasting attitudes illustrate the helplessness and tragedy of tenant farmers?</p>
+          </div>
+          <div class="text-center font-bold text-[11px] text-neutral-600">— OR —</div>
+          <div class="p-2 border border-neutral-300 rounded bg-neutral-50">
+            <p><b>(b) Compare and characterize the "ancient sister" and the mother</b> in Roald Dahl's <i>A Drive in the Motor Car</i>. Contrast the sister's reckless overconfidence and panic behind the wheel with the mother’s calm authority and presence of mind when dealing with the accident and the author's injury.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-4 pt-1.5 border-t border-black flex justify-between text-[10.5px] font-semibold text-neutral-800">
+      <span>Loyola School, Trivandrum</span>
+      <span>Class VII ICSE — Terminal Examination</span>
+      <span>Total: 50 Marks</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>
